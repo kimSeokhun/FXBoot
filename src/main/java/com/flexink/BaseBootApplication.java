@@ -19,7 +19,6 @@ public class BaseBootApplication extends WebMvcConfigurerAdapter {
 	
 	@Override
 	public void addViewControllers(ViewControllerRegistry registry) {
-		System.out.println("AAAAAAAAAAAAAAAAA");
 		registry.addViewController("/login").setViewName("login");
 	}
 	
