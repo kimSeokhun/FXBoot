@@ -48,7 +48,8 @@ public class Reader implements UserDetails{
 	
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
-		return Arrays.asList(new SimpleGrantedAuthority("ROLE_READER"));
+		SimpleGrantedAuthority[] arr = {new SimpleGrantedAuthority("ROLE_READER"), new SimpleGrantedAuthority("ROLE_ACTUATOR")};
+		return Arrays.asList(arr);
 	}
 
 	@Override

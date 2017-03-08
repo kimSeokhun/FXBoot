@@ -1,15 +1,17 @@
 package com.flexink.project.web;
 
+import java.util.HashMap;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.flexink.project.config.AmazonProperties;
+import com.flexink.project.dao.CityMapper;
 import com.flexink.project.domain.Book;
 import com.flexink.project.domain.Reader;
 import com.flexink.project.domain.ReadingListRepository;
@@ -23,10 +25,13 @@ public class ReadingListController {
 	private ReadingListRepository readingListRepository;
 	private AmazonProperties amazonProperties;
 	
+	private final CityMapper cityMapper;
+	
 	@Autowired
-	public ReadingListController(ReadingListRepository readingListRepository, AmazonProperties amazonProperties) {
+	public ReadingListController(ReadingListRepository readingListRepository, AmazonProperties amazonProperties, CityMapper cityMapper) {
 		this.readingListRepository = readingListRepository;
 		this.amazonProperties = amazonProperties;
+		this.cityMapper = cityMapper;
 	}
 	
 	@RequestMapping(method=RequestMethod.GET)
@@ -47,6 +52,16 @@ public class ReadingListController {
 		book.setReader(reader);
 		readingListRepository.save(book);
 		return "redirect:/";
+	}
+	
+	@RequestMapping(value="/mybatis", method=RequestMethod.GET)
+	@ResponseBody
+	public String myBatis() {
+		System.out.println("MyBatis Select Start!");
+		HashMap<String, Object> result = cityMapper.findByReader();
+		System.out.println(result);
+		System.out.println("MyBatis Select End!");
+		return result.toString();
 	}
 	
 }
