@@ -37,7 +37,6 @@ public class ReadingListController {
 	@RequestMapping(method=RequestMethod.GET)
 	public String readersBooks(Reader reader, Model model) {
 		List<Book> readingList = readingListRepository.findByReader(reader);
-		System.out.println(readingList);
 		if(readingList != null) {
 			model.addAttribute("books", readingList);
 			model.addAttribute("reader", reader);
@@ -48,7 +47,6 @@ public class ReadingListController {
 	
 	@RequestMapping(method=RequestMethod.POST)
 	public String addToReadingList(Reader reader, Book book) {
-		System.out.println(book);
 		book.setReader(reader);
 		readingListRepository.save(book);
 		return "redirect:/";
@@ -57,10 +55,7 @@ public class ReadingListController {
 	@RequestMapping(value="/mybatis", method=RequestMethod.GET)
 	@ResponseBody
 	public String myBatis() {
-		System.out.println("MyBatis Select Start!");
 		HashMap<String, Object> result = cityMapper.findByReader();
-		System.out.println(result);
-		System.out.println("MyBatis Select End!");
 		return result.toString();
 	}
 	
