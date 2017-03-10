@@ -11,10 +11,10 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter
 import com.flexink.project.config.ReaderHandlerMethodArgumentResolver;
 
 @SpringBootApplication
-public class BaseBootApplication extends WebMvcConfigurerAdapter {
+public class FXBootApplication extends WebMvcConfigurerAdapter {
 
 	public static void main(String[] args) {
-		SpringApplication.run(BaseBootApplication.class, args);
+		SpringApplication.run(FXBootApplication.class, args);
 	}
 	
 	@Override

@@ -1,4 +1,4 @@
-package com.flexink.project.config;
+/*package com.flexink.project.config;
 
 import org.sitemesh.builder.SiteMeshFilterBuilder;
 import org.sitemesh.config.ConfigurableSiteMeshFilter;
@@ -12,3 +12,4 @@ public class CustomSiteMeshFilter extends ConfigurableSiteMeshFilter {
 			.addExcludedPath("/popup/**");
     }
 }
+*/

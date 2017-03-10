@@ -1,4 +1,4 @@
-package com.flexink.project.config;
+/*package com.flexink.project.config;
 
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
@@ -15,3 +15,4 @@ public class WebConfig extends WebMvcConfigurerAdapter {
         return siteMeshFilter;
     }
 }
+*/
