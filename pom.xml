@@ -51,10 +51,10 @@
 		    <groupId>org.springframework.boot</groupId>
 		    <artifactId>spring-boot-starter-cache</artifactId>
 		</dependency>
-		<dependency>
+		<!-- <dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-thymeleaf</artifactId>
-		</dependency>
+		</dependency> -->
 		
 		<!-- Database -->
 		<dependency>
@@ -73,7 +73,7 @@
 		</dependency>
 	    
 		<!-- View Template -->
-		<!-- <dependency>
+		<dependency>
 			<groupId>javax.servlet</groupId>
 			<artifactId>jstl</artifactId>
 		</dependency>
@@ -86,7 +86,7 @@
 		    <groupId>org.sitemesh</groupId>
 		    <artifactId>sitemesh</artifactId>
 		    <version>3.0.1</version>
-		</dependency> -->
+		</dependency>
 		
 		<!-- Cache -->
 		<dependency>
@@ -98,6 +98,10 @@
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-devtools</artifactId>
+		</dependency>
+		<dependency>
+		    <groupId>org.projectlombok</groupId>
+		    <artifactId>lombok</artifactId>
 		</dependency>
 		
 		<!-- TEST Module -->

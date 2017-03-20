@@ -12,7 +12,7 @@ import org.springframework.stereotype.Component;
 
 
 @Component
-@PropertySource("classpath:application.properties")
+@PropertySource("classpath:project.properties")
 public class ScheduledTasks {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(ScheduledTasks.class);

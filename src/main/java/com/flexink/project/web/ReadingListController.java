@@ -17,7 +17,7 @@ import com.flexink.project.domain.Reader;
 import com.flexink.project.domain.ReadingListRepository;
 
 @Controller
-@RequestMapping("/")
+@RequestMapping("/reading")
 public class ReadingListController {
 
 	//private static final String reader = "craig";

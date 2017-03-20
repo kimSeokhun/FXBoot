@@ -1,0 +1,119 @@
+
+spring:
+  h2:
+    console:
+      enabled: true
+      path: /h2-console
+  application:
+    name: FXBoot
+  http:
+    multipart:
+      enabled: true
+      max-file-size: 8192Mb
+      max-request-size: 8192Mb
+    encoding:
+      charset: UTF-8
+      enabled: true
+      force: true
+  mvc:
+    date-format: yyyy-MM-dd HH:mm:ss
+    dispatch-trace-request: true
+    dispatch-options-request: true
+    locale: ko_KR
+    servlet:
+      load-on-startup: 1
+    view:
+      prefix: /WEB-INF/view
+      suffix: .jsp
+  datasource:
+    url: jdbc:log4jdbc:h2:~/test/db
+    username: sa
+    password: 
+    type: com.zaxxer.hikari.HikariDataSource                    # Hikari 커텍션풀
+    driver-class-name: net.sf.log4jdbc.sql.jdbcapi.DriverSpy    # query로그 정렬
+    hikari:
+      idle-timeout: 10000
+      connection-init-sql: SELECT 1
+  profiles:
+    active: development
+      
+  #thymeleaf:
+  #  prefix: classpath:/templates/
+  #  suffix: .html
+security:
+  basic:
+    authorize-mode: role
+    enabled: false
+    path: /**
+    realm: Spring
+  filter-order: 0
+  filter-dispatcher-types: ASYNC, FORWARD, INCLUDE, REQUEST
+  enable-csrf: true
+  headers:
+    cache: true
+    content-type: true
+    frame: false
+    xss: false
+  require-ssl: false
+  sessions: stateless
+  user:
+    name: user
+    password: user
+    role: USER
+    
+management:
+  security:
+    enabled: true
+    
+mybatis:
+  mapper-locations: classpath:mapper/*.xml
+  type-aliases-package: com.flexink.project.domain
+  configuration:
+    call-setters-on-nulls: true 
+    cache-enabled: true
+    map-underscore-to-camel-case: true
+    default-statement-timeout: 30
+    
+    
+---
+
+spring:
+  profiles: development
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    show-sql: true
+  devtools:
+    livereload:
+      enabled: true
+    restart:
+      enabled: true
+  
+logging:
+  level:
+    root: ERROR
+    org.springframework.web: ERROR
+    org.hibernate.SQLQuery: DEBUG
+    com.flexink: DEBUG
+    jdbc.sqlonly: ERROR
+    jdbc.resultsettable: ERROR
+    
+---
+
+spring:
+  profiles: production
+  h2:
+    console:
+      enabled: false
+
+logging:
+  level:
+    root: WARN
+    org.springframework.web: WARN
+    org.hibernate: WARN
+    com.flexink: WARN
+    jdbc.sqlonly: ERROR
+    jdbc.resultsettable: ERROR
+
+    
+    

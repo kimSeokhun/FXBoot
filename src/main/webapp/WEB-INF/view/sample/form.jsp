@@ -1,5 +1,6 @@
-<%-- <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
@@ -8,30 +9,39 @@
 <title>Insert title here</title>
 </head>
 <body>
-	<form action="#" action="/" method="post" commandName="personForm">
+	${person}
+	${model}
+	<form:form action="valid" method="post" commandName="person">
 		<table>
 			<tr>
 				<td>Name:</td>
-				<td><input type="text" name="name" value="${personForm.name}"/></td>
-				<c:if test="${personForm.name == null}">
-					<td th:if="${#fields.hasErrors('name')}" th:errors="*{name}">Name Error</td>
-					<td>Name Error</td>
-				</c:if>
-				
+				<td>
+					<form:input path="name" /><form:errors path="name" />
+				</td>
 			</tr>
 			<tr>
 				<td>Age:</td>
-				<td><input type="text" name="name" value="${personForm.age}" /></td>
-				<c:if test="">
-					<td th:if="${#fields.hasErrors('age')}" th:errors="*{age}">Age Error</td>
-					<td th:if="${#fields.hasErrors('age')}" th:errors="*{age}">Age Error</td>
-				</c:if>
+				<td>
+					<form:input path="age" /><form:errors path="age" />
+				</td>
+			</tr>
+			<tr>
+				<td>Email:</td>
+				<td>
+					<form:input path="email" /><form:errors path="email" />
+				</td>
+			</tr>
+			<tr>
+				<td>Range:</td>
+				<td>
+					<form:input path="range" /><form:errors path="range" />
+				</td>
 			</tr>
 			<tr>
 				<td><button type="submit">Submit</button></td>
 			</tr>
 		</table>
-	</form>
+	</form:form>
 
 </body>
-</html> --%>
+</html>
