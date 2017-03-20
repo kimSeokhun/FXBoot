@@ -66,12 +66,12 @@ public class WebSecurityConfigureAdapter extends WebSecurityConfigurerAdapter {
     public static final String REMEMBER_ME_KEY             = "REMEBMER_ME_KEY";
     public static final String REMEMBER_ME_COOKE_NAME      = "REMEMBER_ME_COOKE";
 
-    public static final String[] ignorePages = new String[]{
+    public final String[] ignorePages = new String[]{
             "/resources/**",
             "/static/**",
             "/img/**",
             "/image/**",
-            "/h2-console/**"
+            h2ConsolePath+"/**"
     };
 
     @Autowired

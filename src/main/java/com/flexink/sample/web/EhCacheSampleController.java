@@ -1,7 +1,5 @@
 package com.flexink.sample.web;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -14,21 +12,34 @@ import com.flexink.sample.service.EhCacheSampleService;
 @RequestMapping("/sample/cache")
 public class EhCacheSampleController {
 
-	private static final Logger LOGGER = LoggerFactory.getLogger(EhCacheSampleController.class);
-	
 	@Autowired
 	EhCacheSampleService ehCacheSampleService;
 	
+	/********************************************************************
+	 * @메소드명	: getNoCache
+	 * @작성자	: KIMSEOKHOON
+	 * @메소드 내용	: 캐쉬 없음
+	 ********************************************************************/
 	@GetMapping("/getNoCache/{name}")
 	public String getNoCache(@PathVariable String name) throws Exception {
 		return ehCacheSampleService.getNoCache(name);
 	}
 	
+	/********************************************************************
+	 * @메소드명	: getCache
+	 * @작성자	: KIMSEOKHOON
+	 * @메소드 내용	: 캐쉬 호출
+	 ********************************************************************/
 	@GetMapping("/getCache/{name}")
 	public String getCache(@PathVariable String name) throws Exception {
 		return ehCacheSampleService.getCache(name);
 	}
 	
+	/********************************************************************
+	 * @메소드명	: getRefresh
+	 * @작성자	: KIMSEOKHOON
+	 * @메소드 내용	: 캐쉬 삭제
+	 ********************************************************************/
 	@GetMapping("/refresh/{name}")
 	public String getRefresh(@PathVariable String name) throws Exception {
 		return ehCacheSampleService.cacheRefresh(name);

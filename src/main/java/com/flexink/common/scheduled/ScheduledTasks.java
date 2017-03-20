@@ -1,4 +1,4 @@
-package com.flexink.project.common.scheduled;
+package com.flexink.common.scheduled;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;

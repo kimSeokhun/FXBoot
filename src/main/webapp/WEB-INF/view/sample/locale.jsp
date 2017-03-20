@@ -14,6 +14,7 @@ Locale
 Language : <a href="?language=en_US">English</a> | <a href="?language=ko_KR">Korea</a>
 <h3>
 Message : <spring:message code="test.test" text="default Text" />
+		  <spring:message code="test.xxxx" text="default Text" />
 </h3> 
 Current Locale : ${pageContext.response.locale}
 </body>
