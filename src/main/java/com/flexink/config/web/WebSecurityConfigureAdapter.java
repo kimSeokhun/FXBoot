@@ -29,10 +29,8 @@ import org.springframework.security.web.authentication.rememberme.TokenBasedReme
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 import com.flexink.config.web.security.AuthenticationFailureHandler;
-import com.flexink.config.web.security.AuthenticationProvider;
 import com.flexink.config.web.security.AuthenticationSuccessHandler;
 import com.flexink.config.web.security.FilterInvocationSecurityMetadataSource;
-import com.flexink.config.web.security.PasswordEncoder;
 import com.flexink.config.web.security.user.LoginUserDetailsService;
 import com.flexink.config.web.security.user.Role;
 import com.flexink.utils.PhaseUtils;
@@ -72,6 +70,7 @@ public class WebSecurityConfigureAdapter extends WebSecurityConfigurerAdapter {
             "/static/**",
             "/img/**",
             "/image/**",
+            "/webjars/**",
             h2ConsolePath+"/**"
     };
 
@@ -165,15 +164,6 @@ public class WebSecurityConfigureAdapter extends WebSecurityConfigurerAdapter {
         return daoAuthenticationProvider;
     }
     
-	@Bean
-	public AuthenticationProvider authenticationProvider(){
-		AuthenticationProvider provider = new AuthenticationProvider();
-		//provider.setPasswordEncoder(new BCryptPasswordEncoder());
-		provider.setPasswordEncoder(new PasswordEncoder());
-		return provider;
-	}
-
-
 
 
 	////////////////////////////////////////////////////////////////////////////////////////////////

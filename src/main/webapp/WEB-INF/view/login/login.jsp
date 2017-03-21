@@ -7,23 +7,25 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
+<script>
+</script>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Login</title>
 </head>
 <body onload='document.f.username.focus();'>
 	<div id="loginForm">
 		<h3>Login With Username and Password</h3>
-		<form:form name='f' action="<%= com.flexink.project.config.web.WebSecurityConfigureAdapter.LOGIN_PROCESSING_URL%>" method='POST'>
+		<form:form name='f' action="<%= com.flexink.config.web.WebSecurityConfigureAdapter.LOGIN_PROCESSING_URL%>" method='POST'>
 			<table>
 				<tr>
 					<td>User:</td>
-					<td><input type='text' name="<%= com.flexink.project.config.web.WebSecurityConfigureAdapter.USERNAME_PARAMETER%>" value='' /></td>
-					<td><form:errors path="<%= com.flexink.project.config.web.WebSecurityConfigureAdapter.USERNAME_PARAMETER%>" /></td>
+					<td><input type='text' name="<%= com.flexink.config.web.WebSecurityConfigureAdapter.USERNAME_PARAMETER%>" value='' /></td>
+					<td><form:errors path="<%= com.flexink.config.web.WebSecurityConfigureAdapter.USERNAME_PARAMETER%>" /></td>
 				</tr>
 				<tr>
 					<td>Password:</td>
-					<td><input type='password' name="<%= com.flexink.project.config.web.WebSecurityConfigureAdapter.PASSWORD_PARAMETER%>" /></td>
-					<td><form:errors path="<%= com.flexink.project.config.web.WebSecurityConfigureAdapter.PASSWORD_PARAMETER%>" /></td>
+					<td><input type='password' name="<%= com.flexink.config.web.WebSecurityConfigureAdapter.PASSWORD_PARAMETER%>" /></td>
+					<td><form:errors path="<%= com.flexink.config.web.WebSecurityConfigureAdapter.PASSWORD_PARAMETER%>" /></td>
 				</tr>
 				<tr>
 					<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />

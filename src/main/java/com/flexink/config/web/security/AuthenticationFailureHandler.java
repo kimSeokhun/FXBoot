@@ -31,6 +31,7 @@ public class AuthenticationFailureHandler
 
     @Override
     public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response, AuthenticationException exception) throws IOException, ServletException {
+    	
         redirectStrategy.sendRedirect(request, response, WebSecurityConfigureAdapter.FAILURE_URL);
     }
 
