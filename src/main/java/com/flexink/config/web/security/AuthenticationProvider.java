@@ -1,4 +1,4 @@
-package com.flexink.project.config.web.security;
+package com.flexink.config.web.security;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.support.MessageSourceAccessor;
@@ -9,8 +9,8 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import com.flexink.project.config.web.security.user.LoginUserDetails;
-import com.flexink.project.config.web.security.user.LoginUserDetailsService;
+import com.flexink.config.web.security.user.LoginUserDetails;
+import com.flexink.config.web.security.user.LoginUserDetailsService;
 import com.flexink.utils.PhaseUtils;
 
 import lombok.extern.slf4j.Slf4j;

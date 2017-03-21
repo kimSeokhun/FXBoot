@@ -10,7 +10,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
-import com.flexink.project.config.ReaderHandlerMethodArgumentResolver;
+import com.flexink.config.ReaderHandlerMethodArgumentResolver;
 
 @SpringBootApplication
 @EnableTransactionManagement

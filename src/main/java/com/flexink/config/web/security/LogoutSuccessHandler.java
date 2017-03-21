@@ -1,4 +1,4 @@
-package com.flexink.project.config.web.security;
+package com.flexink.config.web.security;
 
 import java.io.IOException;
 
@@ -10,7 +10,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.core.Authentication;
 
-import com.flexink.project.config.web.WebSecurityConfigureAdapter;
+import com.flexink.config.web.WebSecurityConfigureAdapter;
 
 import lombok.extern.slf4j.Slf4j;
 

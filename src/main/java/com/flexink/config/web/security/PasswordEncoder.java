@@ -1,4 +1,4 @@
-package com.flexink.project.config.web.security;
+package com.flexink.config.web.security;
 
 import org.springframework.stereotype.Component;
 

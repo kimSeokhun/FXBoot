@@ -1,4 +1,4 @@
-package com.flexink.project.config;
+package com.flexink.config;
 
 import org.sitemesh.builder.SiteMeshFilterBuilder;
 import org.sitemesh.config.ConfigurableSiteMeshFilter;

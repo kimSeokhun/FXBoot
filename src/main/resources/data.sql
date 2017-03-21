@@ -10,11 +10,7 @@ INSERT INTO AUTHORITY
 (USERNAME,		AUTHORITY) VALUES
 ('ksh',       	'ROLE_ADMIN'),
 ('ksh',       	'ROLE_USER'),
-('ksh',       	'AUTH_USER_C'),
-('ksh',       	'AUTH_USER_R'),
-('ksh',       	'AUTH_USER_U'),
-('ksh',       	'AUTH_USER_D'),
-('ksh',       	'AUTH_ADMIN_C'),
-('ksh',       	'AUTH_ADMIN_D'),
+('ksh',       	'ROLE_USER2'),
+('ksh',       	'ROLE_USER3'),
 ('visualkhh', 	'ROLE_USER'),
 ('hhk',       	'ROLE_USER');

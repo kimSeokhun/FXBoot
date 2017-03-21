@@ -1,4 +1,4 @@
-package com.flexink.project.config.web;
+package com.flexink.config.web;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,12 +28,13 @@ import org.springframework.security.web.authentication.RememberMeServices;
 import org.springframework.security.web.authentication.rememberme.TokenBasedRememberMeServices;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
-import com.flexink.project.config.web.security.AuthenticationFailureHandler;
-import com.flexink.project.config.web.security.AuthenticationProvider;
-import com.flexink.project.config.web.security.AuthenticationSuccessHandler;
-import com.flexink.project.config.web.security.FilterInvocationSecurityMetadataSource;
-import com.flexink.project.config.web.security.PasswordEncoder;
-import com.flexink.project.config.web.security.user.LoginUserDetailsService;
+import com.flexink.config.web.security.AuthenticationFailureHandler;
+import com.flexink.config.web.security.AuthenticationProvider;
+import com.flexink.config.web.security.AuthenticationSuccessHandler;
+import com.flexink.config.web.security.FilterInvocationSecurityMetadataSource;
+import com.flexink.config.web.security.PasswordEncoder;
+import com.flexink.config.web.security.user.LoginUserDetailsService;
+import com.flexink.config.web.security.user.Role;
 import com.flexink.utils.PhaseUtils;
 
 import lombok.extern.slf4j.Slf4j;
@@ -204,7 +205,7 @@ public class WebSecurityConfigureAdapter extends WebSecurityConfigurerAdapter {
 	@Bean
 	public RoleHierarchy roleHierarchy() {
 	   RoleHierarchyImpl roleHierarchy = new RoleHierarchyImpl();
-	   roleHierarchy.setHierarchy("ROLE_ADMIN > ROLE_USER");
+	   roleHierarchy.setHierarchy(Role.ROLE_ADMIN + " > " + Role.ROLE_USER + " > ROLE_USER3 > ROLE_USER2");
 	   return roleHierarchy;
 	}
 	

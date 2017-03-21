@@ -1,4 +1,4 @@
-package com.flexink.project.config.web.security;
+package com.flexink.config.web.security;
 
 import java.io.IOException;
 
@@ -14,7 +14,7 @@ import org.springframework.security.web.RedirectStrategy;
 import org.springframework.security.web.savedrequest.HttpSessionRequestCache;
 import org.springframework.security.web.savedrequest.RequestCache;
 
-import com.flexink.project.config.web.WebSecurityConfigureAdapter;
+import com.flexink.config.web.WebSecurityConfigureAdapter;
 
 public class AuthenticationFailureHandler
 		implements org.springframework.security.web.authentication.AuthenticationFailureHandler {

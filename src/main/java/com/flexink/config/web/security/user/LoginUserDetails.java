@@ -1,4 +1,4 @@
-package com.flexink.project.config.web.security.user;
+package com.flexink.config.web.security.user;
 
 import java.io.Serializable;
 import java.util.Collection;

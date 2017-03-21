@@ -1,5 +1,5 @@
 
-package com.flexink.project.config.web.security.user;
+package com.flexink.config.web.security.user;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 

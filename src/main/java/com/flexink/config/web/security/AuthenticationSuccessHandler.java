@@ -1,4 +1,4 @@
-package com.flexink.project.config.web.security;
+package com.flexink.config.web.security;
 
 import java.io.IOException;
 
@@ -18,7 +18,7 @@ import org.springframework.security.web.savedrequest.HttpSessionRequestCache;
 import org.springframework.security.web.savedrequest.RequestCache;
 import org.springframework.security.web.savedrequest.SavedRequest;
 
-import com.flexink.project.config.web.WebSecurityConfigureAdapter;
+import com.flexink.config.web.WebSecurityConfigureAdapter;
 
 import lombok.extern.slf4j.Slf4j;
 
