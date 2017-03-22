@@ -10,12 +10,13 @@ import org.springframework.context.annotation.PropertySource;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @Component
 @PropertySource("classpath:project.properties")
 public class ScheduledTasks {
 
-	private static final Logger LOGGER = LoggerFactory.getLogger(ScheduledTasks.class);
 	
 	private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("HH:mm:ss");
 	
@@ -27,12 +28,12 @@ public class ScheduledTasks {
 	
 	@Scheduled(cron="${scheduled.a}")
 	public void reportCurrentTimeA(){
-		LOGGER.debug("[cron={}]The time is now {}", scheduledA, DATE_FORMAT.format(new Date()));
+		log.debug("[cron={}]The time is now {}", scheduledA, DATE_FORMAT.format(new Date()));
 	}
 	
 	@Scheduled(fixedDelayString="${scheduled.b}")
 	public void reportCurrentTimeB(){
-		LOGGER.debug("[fixedRate={}]The time is now {}", scheduledB, DATE_FORMAT.format(new Date()));
+		log.debug("[fixedRate={}]The time is now {}", scheduledB, DATE_FORMAT.format(new Date()));
 	}
 	
 	

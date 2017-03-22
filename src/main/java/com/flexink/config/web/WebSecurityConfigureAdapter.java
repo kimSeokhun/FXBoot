@@ -105,6 +105,7 @@ public class WebSecurityConfigureAdapter extends WebSecurityConfigurerAdapter {
         		.antMatchers(ROOT_PATH).permitAll()
         		.antMatchers(HttpMethod.POST, LOGIN_PROCESSING_URL).permitAll()
         		.antMatchers(LOGIN_PAGE).permitAll()
+        		.antMatchers(SECURITY_PATH+"/register").permitAll()
 				.antMatchers("/admin/**")           .hasRole("ADMIN")
 				//.antMatchers("/board/**").hasAnyAuthority()
 				.anyRequest().authenticated()
