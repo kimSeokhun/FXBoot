@@ -39,12 +39,13 @@ public class LoginController {
 	 ********************************************************************/
 	@RequestMapping(WebSecurityConfigureAdapter.LOGIN_PAGE)
 	public String loginPage() {
-		
 		/*System.out.println(UserDetailsHelper.getAuthorities());
 		System.out.println(UserDetailsHelper.containsAuthority(Role.ROLE_ADMIN.toString()));
 		System.out.println(UserDetailsHelper.getRoleType());*/
 		
+		// 로그인된 사용자면 페이지 Redirect
 		if(UserDetailsHelper.isAuthenticated()) {
+			// 사용자 권한에 맞는 Page 이동
 			if(UserDetailsHelper.getRoleType().equals(Role.ROLE_ADMIN.toString())) {
 				log.debug("redirect To Admin Page");
 				return "redirect:/";
@@ -53,7 +54,6 @@ public class LoginController {
 				return "redirect:/";
 			}
 		}
-		
 		return "/login/login";
 	}
 	
@@ -61,6 +61,12 @@ public class LoginController {
 	public String registerPage(Model model) {
 		model.addAttribute("loginUserDetails", new LoginUserDetails());
 		return "/login/register";
+	}
+
+	@InitBinder
+	protected void initBinder(WebDataBinder binder) {
+		// Custom LoginUserValidator 적용
+		binder.setValidator(new LoginUserValidator());
 	}
 	
 	@PostMapping("/security/register")
@@ -71,14 +77,23 @@ public class LoginController {
         	log.debug("Validator Errors : {} ", bindingResult.getAllErrors());
             return "/login/register";
         }
-		System.out.println(user);
-		return "/login/register";
+
+        return "/login/register";
 	}
 	
-	@InitBinder
-	protected void initBinder(WebDataBinder binder) {
-		binder.setValidator(new LoginUserValidator());
-	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	
 	/********************************************************************
 	 * @메소드명	: encodePw
@@ -91,8 +106,6 @@ public class LoginController {
 		String encoded = new BCryptPasswordEncoder().encode(password);
 		return encoded;
 	}
-	
-	
 	
 	/********************************************************************
 	 * @메소드명	: matches

@@ -13,6 +13,15 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import lombok.extern.slf4j.Slf4j;
 
+/**************************************************************
+ * @FileName	: UserDetailsHelper.java
+ * @Project		: baseBoot
+ * @Package_Name: com.flexink.config.web.security.user
+ * @Date		: 2017. 3. 23. 
+ * @작성자		: KIMSEOKHOON
+ * @변경이력		:
+ * @프로그램 설명 	: Security 인증정보 Helper
+ **************************************************************/
 @Slf4j
 public class UserDetailsHelper {
 
