@@ -82,7 +82,7 @@ spring:
   jpa:
     hibernate:
       ddl-auto: create-drop
-    show-sql: true
+    show-sql: false
   devtools:
     livereload:
       enabled: true
@@ -95,8 +95,8 @@ logging:
     org.springframework.web: ERROR
     org.hibernate.SQLQuery: DEBUG
     com.flexink: DEBUG
-    jdbc.sqlonly: ERROR
-    jdbc.resultsettable: ERROR
+    jdbc.sqlonly: DEBUG
+    jdbc.resultsettable: DEBUG
     
 ---
 

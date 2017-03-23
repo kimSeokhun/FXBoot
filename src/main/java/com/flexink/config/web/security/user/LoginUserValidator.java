@@ -8,6 +8,15 @@ import org.springframework.validation.Errors;
 import org.springframework.validation.ValidationUtils;
 import org.springframework.validation.Validator;
 
+/**************************************************************
+ * @FileName	: LoginUserValidator.java
+ * @Project		: fxBoot
+ * @Package_Name: com.flexink.config.web.security.user
+ * @Date		: 2017. 3. 23. 
+ * @작성자		: KIMSEOKHOON
+ * @변경이력		:
+ * @프로그램 설명 	: 사용자 커스텀 validator
+ **************************************************************/
 public class LoginUserValidator implements Validator{
 
 	@Override
@@ -29,7 +38,6 @@ public class LoginUserValidator implements Validator{
 		}
 		
 		if(StringUtils.isNotBlank(user.getEmail())) {
-			System.out.println("########################");
 			// email 정규식 체크
 			String emailExp = "^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$";
 			Pattern pattern = Pattern.compile(emailExp);

@@ -1,6 +1,7 @@
 package com.flexink.config.web.security.user;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Collection;
 
 import javax.persistence.Column;
@@ -11,7 +12,6 @@ import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Transient;
-import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
@@ -26,6 +26,13 @@ import lombok.Data;
 public class LoginUserDetails implements UserDetails, Serializable{
 
 	private static final long serialVersionUID = -8507239908294868883L;
+	
+	/*public LoginUserDetails() {
+		this.accountNonExpired = true;
+		this.accountNonLocked = true;
+		this.credentialsNonExpired = true;
+		this.enabled = true;
+	}*/
 
 	@Size(min=2, max=20)
 	@NotNull
@@ -46,22 +53,27 @@ public class LoginUserDetails implements UserDetails, Serializable{
 	private String email;
 
 	@Column(name = "ACCOUNTNONEXPIRED")
-	private boolean accountNonExpired;
+	private boolean accountNonExpired;		// 계정 만료 여부 (true:만료되지 않음, false: 만료)
 
 	@Column(name = "ACCOUNTNONLOCKED")
-	private boolean accountNonLocked;
+	private boolean accountNonLocked;		// 계정 잠김 여부 (true:잠기지 않음, false: 잠김)
 
 	@Column(name = "CREDENTIALSNONEXPIRED")
-	private boolean credentialsNonExpired;
+	private boolean credentialsNonExpired;	// 패스워드 만료 여부 (true:만료되지 않음, false: 만료)
 
 	@Column(name = "ENABLED")
-	private boolean enabled;
+	private boolean enabled;				// 계정 사용 여부 (true:사용가능, false:사용불가능)
 
 
 	@OneToMany(fetch = FetchType.EAGER)
 	@JoinColumn(name="USERNAME")
 	private Collection<LoginUserGrantedAuthority> authorities;
 
-
+	public void addAuthorities(LoginUserGrantedAuthority authority) {
+		if(this.authorities == null) {
+			this.authorities = new ArrayList<LoginUserGrantedAuthority>();
+		}
+		authorities.add(authority);
+	}
 
 }

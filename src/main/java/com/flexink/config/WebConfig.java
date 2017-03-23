@@ -83,7 +83,7 @@ public class WebConfig extends WebMvcConfigurerAdapter {
 	 * @메소드 내용	: Locale 설정 기준
 	 ********************************************************************/
 	@Bean(name="localeResolver")
-	public LocaleResolver sessionLocaleResolver() {
+	public LocaleResolver localeResolver() {
 		// 세션 기준
 		SessionLocaleResolver localeResolver = new SessionLocaleResolver();
 		// 쿠키 기준

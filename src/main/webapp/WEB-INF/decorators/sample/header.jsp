@@ -33,7 +33,18 @@
   <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
   <![endif]-->
 
-
+	<script>
+	/* <c:out value="${sessionScope.LAST_USERNAME}"/> */
+	/* <c:if test="${not empty SPRING_SECURITY_LAST_EXCEPTION}"> 
+		<c:out value="${SPRING_SECURITY_LAST_EXCEPTION.message}"></c:out> 
+	</c:if>  */
+		$(function() {
+			var viewMessage = "${sessionScope.errorMessage}";
+			if(viewMessage != '' && viewMessage != null) {
+				//alert(viewMessage);
+			}
+		});
+	</script>
 </head>
 
 <body class="hold-transition register-page">
@@ -41,3 +52,4 @@
 </body>
 
 </html>
+<%-- <c:remove scope="session" var="SPRING_SECURITY_LAST_EXCEPTION"/> --%>

@@ -5,6 +5,8 @@ import java.util.Map;
 
 import javax.validation.Valid;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.support.MessageSourceAccessor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -18,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.flexink.common.login.service.LoginUserService;
 import com.flexink.config.web.WebSecurityConfigureAdapter;
 import com.flexink.config.web.security.user.LoginUserDetails;
 import com.flexink.config.web.security.user.LoginUserValidator;
@@ -26,12 +29,27 @@ import com.flexink.config.web.security.user.UserDetailsHelper;
 
 import lombok.extern.slf4j.Slf4j;
 
+/**************************************************************
+ * @FileName	: LoginController.java
+ * @Project		: fxBoot
+ * @Package_Name: com.flexink.common.login
+ * @Date		: 2017. 3. 23. 
+ * @작성자		: KIMSEOKHOON
+ * @변경이력		:
+ * @프로그램 설명 	: 로그인 및 사용자 관리
+ **************************************************************/
 @Slf4j
 @Controller
 @RequestMapping()
 public class LoginController {
 	
-
+	@Autowired
+	LoginUserService loginUserService;
+	
+	@Autowired
+	MessageSourceAccessor messageSource;
+	
+	
 	/********************************************************************
 	 * @메소드명	: loginPage
 	 * @작성자	: KIMSEOKHOON
@@ -54,9 +72,15 @@ public class LoginController {
 				return "redirect:/";
 			}
 		}
+		System.out.println(messageSource.getMessage("error.login.fail.disable"));
 		return "/login/login";
 	}
 	
+	/********************************************************************
+	 * @메소드명	: registerPage
+	 * @작성자	: KIMSEOKHOON
+	 * @메소드 내용	: 사용자 등록 페이지
+	 ********************************************************************/
 	@GetMapping("/security/register")
 	public String registerPage(Model model) {
 		model.addAttribute("loginUserDetails", new LoginUserDetails());
@@ -69,6 +93,11 @@ public class LoginController {
 		binder.setValidator(new LoginUserValidator());
 	}
 	
+	/********************************************************************
+	 * @메소드명	: registerMember
+	 * @작성자	: KIMSEOKHOON
+	 * @메소드 내용	: 사용자 신규 등록 Process
+	 ********************************************************************/
 	@PostMapping("/security/register")
 	public String registerMember(@Valid LoginUserDetails user, BindingResult bindingResult) {
 		
@@ -77,8 +106,9 @@ public class LoginController {
         	log.debug("Validator Errors : {} ", bindingResult.getAllErrors());
             return "/login/register";
         }
+        loginUserService.regUser(user);
 
-        return "/login/register";
+        return "redirect:/security/login";
 	}
 	
 	

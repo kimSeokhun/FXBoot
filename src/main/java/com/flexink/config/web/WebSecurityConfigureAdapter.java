@@ -106,6 +106,7 @@ public class WebSecurityConfigureAdapter extends WebSecurityConfigurerAdapter {
         		.antMatchers(HttpMethod.POST, LOGIN_PROCESSING_URL).permitAll()
         		.antMatchers(LOGIN_PAGE).permitAll()
         		.antMatchers(SECURITY_PATH+"/register").permitAll()
+        		.antMatchers("/sample/**").permitAll()
 				.antMatchers("/admin/**")           .hasRole("ADMIN")
 				//.antMatchers("/board/**").hasAnyAuthority()
 				.anyRequest().authenticated()
@@ -125,8 +126,8 @@ public class WebSecurityConfigureAdapter extends WebSecurityConfigurerAdapter {
                 .usernameParameter(USERNAME_PARAMETER)
                 .passwordParameter(PASSWORD_PARAMETER)
                 .defaultSuccessUrl(DEFAULT_SUCCESS_URL)
-                .failureHandler(new AuthenticationFailureHandler())
-                .successHandler(new AuthenticationSuccessHandler())
+                .failureHandler(authenticationFailureHandler())
+                .successHandler(authenticationSuccessHandler())
                 .permitAll()
                 .and()
             .csrf().disable()
@@ -165,6 +166,15 @@ public class WebSecurityConfigureAdapter extends WebSecurityConfigurerAdapter {
         return daoAuthenticationProvider;
     }
     
+    @Bean
+    public AuthenticationFailureHandler authenticationFailureHandler() {
+    	return new AuthenticationFailureHandler();
+    }
+    
+    @Bean
+    public AuthenticationSuccessHandler authenticationSuccessHandler() {
+    	return new AuthenticationSuccessHandler();
+    }
 
 
 	////////////////////////////////////////////////////////////////////////////////////////////////

@@ -17,10 +17,14 @@ public class LoginUserDetailsService implements UserDetailsService {
 
 	@Override
 	public LoginUserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-		LoginUserDetails userDetails = userRepository.findByUsername(username);
-		if (null == userDetails) {
-			throw new UsernameNotFoundException(messageSource.getMessage("error.login.fail"));
+		
+		
+		
+		LoginUserDetails userDetails = userRepository.findByUsername(username);//throw exception;
+		if(userDetails == null) {
+			throw new UsernameNotFoundException(messageSource.getMessage("error.login.fail.usernameNotFound"));
 		}
 		return userDetails;
+
 	}
 }

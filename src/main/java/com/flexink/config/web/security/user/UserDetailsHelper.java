@@ -15,7 +15,7 @@ import lombok.extern.slf4j.Slf4j;
 
 /**************************************************************
  * @FileName	: UserDetailsHelper.java
- * @Project		: baseBoot
+ * @Project		: fxBoot
  * @Package_Name: com.flexink.config.web.security.user
  * @Date		: 2017. 3. 23. 
  * @작성자		: KIMSEOKHOON
