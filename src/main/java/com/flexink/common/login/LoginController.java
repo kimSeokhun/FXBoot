@@ -55,12 +55,11 @@ public class LoginController {
 	 * @작성자	: KIMSEOKHOON
 	 * @메소드 내용	: 로그인 페이지
 	 ********************************************************************/
-	@RequestMapping(WebSecurityConfigureAdapter.LOGIN_PAGE)
+	@GetMapping("/security/login")
 	public String loginPage() {
 		/*System.out.println(UserDetailsHelper.getAuthorities());
 		System.out.println(UserDetailsHelper.containsAuthority(Role.ROLE_ADMIN.toString()));
 		System.out.println(UserDetailsHelper.getRoleType());*/
-		
 		// 로그인된 사용자면 페이지 Redirect
 		if(UserDetailsHelper.isAuthenticated()) {
 			// 사용자 권한에 맞는 Page 이동
@@ -72,7 +71,6 @@ public class LoginController {
 				return "redirect:/";
 			}
 		}
-		System.out.println(messageSource.getMessage("error.login.fail.disable"));
 		return "/login/login";
 	}
 	

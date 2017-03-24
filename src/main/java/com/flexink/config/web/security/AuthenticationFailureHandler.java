@@ -1,6 +1,7 @@
 package com.flexink.config.web.security;
 
 import java.io.IOException;
+import java.util.Locale;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -9,16 +10,10 @@ import javax.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.context.support.MessageSourceAccessor;
-import org.springframework.security.authentication.AccountExpiredException;
-import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.security.authentication.CredentialsExpiredException;
-import org.springframework.security.authentication.DisabledException;
-import org.springframework.security.authentication.LockedException;
 import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.web.DefaultRedirectStrategy;
 import org.springframework.security.web.RedirectStrategy;
-import org.springframework.security.web.authentication.session.SessionAuthenticationException;
+import org.springframework.web.servlet.LocaleResolver;
 
 import com.flexink.config.web.WebSecurityConfigureAdapter;
 
@@ -36,17 +31,24 @@ public class AuthenticationFailureHandler
 	public AuthenticationFailureHandler() {
 		redirectStrategy = new DefaultRedirectStrategy();
 	}
+	
+	LocaleResolver localeResolver= null;
+	
+	public void setLocaleResolver(LocaleResolver localeResolver){
+		this.localeResolver = localeResolver;
+	}
 
 	@Override
 	public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response,
 			AuthenticationException exception) throws IOException, ServletException {
 
 		log.debug("AuthenticationFailureHandler : {}", exception.getMessage());
-		System.out.println(request.getLocale());
+		
+		/*System.out.println(request.getLocale());
 		System.out.println(response.getLocale());
-		System.out.println(LocaleContextHolder.getLocale());
+		System.out.println(LocaleContextHolder.getLocale());*/
 
-		String failMessage = "";
+		/*String failMessage = "";
 
 		try {
 			throw exception;
@@ -66,10 +68,12 @@ public class AuthenticationFailureHandler
 			failMessage = messageSource.getMessage("error.login.fail.sessionAuth");
 		} catch (Exception e) {
 			failMessage = messageSource.getMessage("error.login.fail");
-		}
+		}*/
 
 		if (request.getSession(false) != null) {
-			request.getSession().setAttribute("errorMessage", failMessage);
+			//request.getSession().setAttribute("errorMessage", failMessage);
+			request.getSession().setAttribute("errorMessage", exception.getMessage());
+			//request.getSession().setAttribute("errorCode", "AnonymousAuthenticationProvider.incorrectKey");
 		}
 
 		redirectStrategy.sendRedirect(request, response, WebSecurityConfigureAdapter.LOGIN_PAGE);

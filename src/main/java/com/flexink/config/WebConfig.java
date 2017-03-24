@@ -11,6 +11,7 @@ import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.support.MessageSourceAccessor;
+import org.springframework.context.support.ReloadableResourceBundleMessageSource;
 import org.springframework.context.support.ResourceBundleMessageSource;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.web.csrf.CsrfToken;
@@ -24,6 +25,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 import org.springframework.web.servlet.i18n.LocaleChangeInterceptor;
 import org.springframework.web.servlet.i18n.SessionLocaleResolver;
+import org.springframework.web.servlet.mvc.annotation.DefaultAnnotationHandlerMapping;
 
 import com.flexink.common.error.ErrorController;
 import com.flexink.interceptor.MultipartInterceptor;
@@ -84,13 +86,15 @@ public class WebConfig extends WebMvcConfigurerAdapter {
 	 ********************************************************************/
 	@Bean(name="localeResolver")
 	public LocaleResolver localeResolver() {
+		// 헤더 기준
+		//AcceptHeaderLocaleResolver localeResolver = new AcceptHeaderLocaleResolver();
 		// 세션 기준
 		SessionLocaleResolver localeResolver = new SessionLocaleResolver();
 		// 쿠키 기준
 		// CookieLocaleResolver localeResolver = new CookieLocaleResolver();
 
-		// 최초 기본 로케일 강제 설정
-		// localeResolver.setDefaultLocale(new Locale("en_US"));
+		// 최초 기본 로케일 강제 설정 (헤더 리졸버 제외)
+		//localeResolver.setDefaultLocale(new Locale("ko_KR"));
 		return localeResolver;
 	}
 	
@@ -101,11 +105,20 @@ public class WebConfig extends WebMvcConfigurerAdapter {
 	 * @return
 	 * ResourceBundleMessageSource
 	 ********************************************************************/
-	@Bean
+	/*@Bean
 	public ResourceBundleMessageSource messageSource() {
 		ResourceBundleMessageSource messageSource = new ResourceBundleMessageSource();
 		messageSource.setBasename("messages/messages");
 		messageSource.setDefaultEncoding("UTF-8");
+		return messageSource;
+	}*/
+	
+	@Bean
+	public ReloadableResourceBundleMessageSource messageSource(){
+		ReloadableResourceBundleMessageSource messageSource = new ReloadableResourceBundleMessageSource();
+		messageSource.setBasename("classpath:messages/messages");
+		messageSource.setDefaultEncoding("UTF-8");
+		messageSource.setCacheSeconds(3600);
 		return messageSource;
 	}
 	
@@ -119,8 +132,9 @@ public class WebConfig extends WebMvcConfigurerAdapter {
 	 ********************************************************************/
 	@Bean
 	public MessageSourceAccessor messageSourceAccessor(){
-		ResourceBundleMessageSource resourceBundleMessageSource = messageSource();
-		return new MessageSourceAccessor(resourceBundleMessageSource);
+		//ResourceBundleMessageSource messageSource = messageSource();
+		ReloadableResourceBundleMessageSource messageSource = messageSource();
+		return new MessageSourceAccessor(messageSource);
 	}
 	
 	/*@Bean
@@ -167,7 +181,7 @@ public class WebConfig extends WebMvcConfigurerAdapter {
 	 ********************************************************************/
 	@Bean
     public EmbeddedServletContainerCustomizer containerCustomizer() {
-		class ErrorConfig implements EmbeddedServletContainerCustomizer {
+		return new EmbeddedServletContainerCustomizer() {
 			@Override
 			public void customize(ConfigurableEmbeddedServletContainer container) {
 				container.addErrorPages(
@@ -178,8 +192,7 @@ public class WebConfig extends WebMvcConfigurerAdapter {
 					new ErrorPage(Throwable.class, 					ErrorController.PATH_ROOT + ErrorController.PATH_ERROR_DEFAULT)
 				);
 			}
-		}
-		return new ErrorConfig();
+		};
     }
 	
 	/********************************************************************

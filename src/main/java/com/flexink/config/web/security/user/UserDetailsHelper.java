@@ -145,7 +145,7 @@ public class UserDetailsHelper {
         }
 
         String username = authentication.getName();
-        if (username.equals("anonymousUser")) {		// 기존 2.0.8의 경우 'roleAnonymous'
+        if (username.equals("anonymousUser")) {
         	log.debug("## username is {}", username);
             return Boolean.FALSE;
         }

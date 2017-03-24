@@ -71,7 +71,9 @@ public class WebSecurityConfigureAdapter extends WebSecurityConfigurerAdapter {
             "/img/**",
             "/image/**",
             "/webjars/**",
-            h2ConsolePath+"/**"
+            h2ConsolePath+"/**",
+            "/error/**",
+            //LOGIN_PAGE
     };
 
     @Autowired
@@ -109,7 +111,7 @@ public class WebSecurityConfigureAdapter extends WebSecurityConfigurerAdapter {
         		.antMatchers("/sample/**").permitAll()
 				.antMatchers("/admin/**")           .hasRole("ADMIN")
 				//.antMatchers("/board/**").hasAnyAuthority()
-				.anyRequest().authenticated()
+				//.anyRequest().authenticated()
 				.and()
             .sessionManagement()
 	            .maximumSessions(1)

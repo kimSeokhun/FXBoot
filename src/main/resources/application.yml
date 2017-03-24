@@ -73,8 +73,11 @@ mybatis:
     cache-enabled: true
     map-underscore-to-camel-case: true
     default-statement-timeout: 30
-    
-    
+
+axboot:
+  upload:
+    repository:
+      /data/tempDir
 ---
 
 spring:

@@ -41,7 +41,7 @@
 		$(function() {
 			var viewMessage = "${sessionScope.errorMessage}";
 			if(viewMessage != '' && viewMessage != null) {
-				//alert(viewMessage);
+				alert(viewMessage);
 			}
 		});
 	</script>
@@ -52,4 +52,4 @@
 </body>
 
 </html>
-<%-- <c:remove scope="session" var="SPRING_SECURITY_LAST_EXCEPTION"/> --%>
+<c:remove scope="session" var="errorMessage"/>

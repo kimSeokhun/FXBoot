@@ -18,13 +18,12 @@ public class LoginUserDetailsService implements UserDetailsService {
 	@Override
 	public LoginUserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 		
-		
+		// Security Locale 적용안됨.. 추후 수정 예정 (기본값 ko_KR)
 		
 		LoginUserDetails userDetails = userRepository.findByUsername(username);//throw exception;
 		if(userDetails == null) {
-			throw new UsernameNotFoundException(messageSource.getMessage("error.login.fail.usernameNotFound"));
+			throw new UsernameNotFoundException(messageSource.getMessage("DigestAuthenticationFilter.usernameNotFound", new Object[]{username}));
 		}
 		return userDetails;
-
 	}
 }
