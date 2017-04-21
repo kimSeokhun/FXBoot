@@ -1,14 +1,15 @@
 package com.flexink.common.domain;
 
 import java.io.Serializable;
-import java.time.Clock;
-import java.time.Instant;
+import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.MappedSuperclass;
 import javax.persistence.PostLoad;
 import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import javax.persistence.Transient;
 
 import org.hibernate.annotations.DynamicInsert;
@@ -27,7 +28,7 @@ import lombok.Setter;
 @MappedSuperclass
 @DynamicInsert
 @DynamicUpdate
-public abstract class BaseJpaModel<PK extends Serializable> implements Persistable<PK>, Serializable {
+public abstract class BaseJpaModel<PK extends Serializable> extends FxBootCrudModel implements Persistable<PK>, Serializable {
 	
 	@Override
     @JsonIgnore
@@ -35,34 +36,37 @@ public abstract class BaseJpaModel<PK extends Serializable> implements Persistab
         return null == getId();
     }
 
+	@Temporal(TemporalType.TIMESTAMP)
     @Column(name = "CREATED_AT", updatable = false)
-    protected Instant createdAt;
+    protected Date createdAt;
 
     @Column(name = "CREATED_BY", updatable = false)
     protected String createdBy;
 
+    @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "UPDATED_AT")
-    protected Instant updatedAt;
+    protected Date updatedAt;
 
     @Column(name = "UPDATED_BY")
     protected String updatedBy;
 
-    /*@Transient
-    protected User createdUser;
+    @Transient
+    protected LoginUserDetails createdUser;
 
     @Transient
-    protected User modifiedUser;*/
+    protected LoginUserDetails modifiedUser;
 
     @PrePersist
     protected void onPersist() {
         this.createdBy = this.updatedBy = getCurrentLoginUserCd();
-        this.createdAt = this.updatedAt = Instant.now(Clock.systemUTC());
+        this.createdAt = this.updatedAt = new Date();
+        //this.createdAt = this.updatedAt = Instant.now(Clock.systemUTC());
     }
 
     @PreUpdate
     protected void onUpdate() {
         this.updatedBy = getCurrentLoginUserCd();
-        this.updatedAt = Instant.now(Clock.systemUTC());
+        this.updatedAt = new Date();
     }
 
     @PostLoad

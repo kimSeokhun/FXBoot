@@ -5,32 +5,34 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
-  <script src="/webjars/jquery/3.2.0/jquery.min.js"></script>
-  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-  <title>Admin | <sitemesh:write property='title' /></title>
-  <sitemesh:write property='head' />
-  <!-- Tell the browser to be responsive to screen width -->
-  <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
-  <!-- Bootstrap 3.3.6 -->
-  <link rel="stylesheet" href="/webjars/AdminLTE/2.3.8/bootstrap/css/bootstrap.min.css">
-  <!-- Font Awesome -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.5.0/css/font-awesome.min.css">
-  <!-- Ionicons -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ionicons/2.0.1/css/ionicons.min.css">
-  <!-- Theme style -->
-  <link rel="stylesheet" href="/webjars/AdminLTE/2.3.8/dist/css/AdminLTE.min.css">
-  <!-- AdminLTE Skins. We have chosen the skin-blue for this starter
-        page. However, you can choose any other skin. Make sure you
-        apply the skin class to the body tag so the changes take effect.
-  -->
-  <link rel="stylesheet" href="/webjars/AdminLTE/2.3.8/dist/css/skins/skin-blue.min.css">
-
-  <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
-  <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
-  <!--[if lt IE 9]>
-  <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
-  <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
-  <![endif]-->
+	<script src="/webjars/jquery/1.12.4/jquery.min.js"></script>
+  
+	<!-- Tell the browser to be responsive to screen width -->
+	<meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+	<!-- Bootstrap 3.3.6 -->
+	<link rel="stylesheet" href="/webjars/AdminLTE/2.3.8/bootstrap/css/bootstrap.min.css">
+	<!-- Font Awesome -->
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.5.0/css/font-awesome.min.css">
+	<!-- Ionicons -->
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ionicons/2.0.1/css/ionicons.min.css">
+	<!-- Theme style -->
+	<link rel="stylesheet" href="/webjars/AdminLTE/2.3.8/dist/css/AdminLTE.min.css">
+	
+	<!-- AdminLTE Skins. We have chosen the skin-blue for this starter
+	      page. However, you can choose any other skin. Make sure you
+	      apply the skin class to the body tag so the changes take effect.
+	-->
+	<link rel="stylesheet" href="/webjars/AdminLTE/2.3.8/dist/css/skins/skin-blue.min.css">
+	
+	<!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+	<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+	<!--[if lt IE 9]>
+	<script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+	<script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+	<![endif]-->
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<title>Admin | <sitemesh:write property='title' /></title>
+	<sitemesh:write property='head' />
 </head>
 <!--
 BODY TAG OPTIONS:
@@ -262,7 +264,7 @@ desired effect
         <li class="active"><a href="/"><i class="fa fa-link"></i> <span>Main</span></a></li>
         <li><a href="/sample/locale"><i class="fa fa-link"></i> <span>Locale</span></a></li>
         <li><a href="/sample/valid"><i class="fa fa-link"></i> <span>Valid</span></a></li>
-        <li><a href="#"><i class="fa fa-link"></i> <span>Another Link</span></a></li>
+        <li><a href="/sample/code"><i class="fa fa-link"></i> <span>CommonCode Mng</span></a></li>
         <li class="treeview">
           <a href="#"><i class="fa fa-link"></i> <span>Cache</span>
             <span class="pull-right-container">
@@ -379,7 +381,7 @@ desired effect
 <!-- REQUIRED JS SCRIPTS -->
 
 <!-- jQuery 2.2.3 -->
-<script src="/webjars/AdminLTE/2.3.8/plugins/jQuery/jquery-2.2.3.min.js"></script>
+<!-- <script src="/webjars/AdminLTE/2.3.8/plugins/jQuery/jquery-2.2.3.min.js"></script> -->
 <!-- Bootstrap 3.3.6 -->
 <script src="/webjars/AdminLTE/2.3.8/bootstrap/js/bootstrap.min.js"></script>
 <!-- AdminLTE App -->

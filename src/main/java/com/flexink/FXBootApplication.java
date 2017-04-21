@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cache.annotation.EnableCaching;
+import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
@@ -16,6 +17,7 @@ import com.flexink.config.ReaderHandlerMethodArgumentResolver;
 @EnableTransactionManagement
 @EnableScheduling
 @EnableCaching
+@EnableJpaRepositories
 public class FXBootApplication extends WebMvcConfigurerAdapter {
 
 	public static void main(String[] args) {

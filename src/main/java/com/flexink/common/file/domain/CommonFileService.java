@@ -2,6 +2,10 @@ package com.flexink.common.file.domain;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 import javax.servlet.http.HttpServletResponse;
@@ -9,9 +13,13 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -21,7 +29,11 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.flexink.common.Types;
+import com.flexink.common.code.FxBootType;
+import com.flexink.common.domain.BaseService;
+import com.flexink.utils.ArrayUtils;
 import com.flexink.utils.EncodeUtils;
+import com.querydsl.core.BooleanBuilder;
 
 import lombok.extern.slf4j.Slf4j;
 import net.coobird.thumbnailator.Thumbnails;
@@ -30,14 +42,17 @@ import net.coobird.thumbnailator.name.Rename;
 
 @Service
 @Slf4j
-public class CommonFileService implements InitializingBean {
+public class CommonFileService extends BaseService<CommonFile, Long> implements InitializingBean {
     private CommonFileRepository commonFileRepository;
+    
+    QCommonFile qCommonFile = QCommonFile.commonFile;
 
     @Value("${axboot.upload.repository}")
     public String uploadRepository;
 
     @Autowired
     public CommonFileService(CommonFileRepository commonFileRepository) {
+    	super(CommonFile.class, commonFileRepository);
         this.commonFileRepository = commonFileRepository;
     }
 
@@ -113,7 +128,7 @@ public class CommonFileService implements InitializingBean {
         FileUtils.copyFile(uploadFile, file);
 
         if (deleteIfExist) {
-            //deleteByTargetTypeAndTargetId(targetType, targetId);
+            deleteByTargetTypeAndTargetId(targetType, targetId);
         }
 
         CommonFile commonFile = new CommonFile();
@@ -139,7 +154,7 @@ public class CommonFileService implements InitializingBean {
 
         FileUtils.deleteQuietly(uploadFile);
 
-        commonFileRepository.save(commonFile);
+        repository.save(commonFile);
 
         return commonFile;
     }
@@ -169,7 +184,8 @@ public class CommonFileService implements InitializingBean {
     }
 
     public ResponseEntity<byte[]> downloadByTargetTypeAndTargetId(String targetType, String targetId) throws IOException {
-        CommonFile commonFile = commonFileRepository.findByTargetTypeAndTargetId(targetType, targetId);
+        //CommonFile commonFile = commonFileRepository.findByTargetTypeAndTargetId(targetType, targetId);
+        CommonFile commonFile = from(qCommonFile).where(qCommonFile.targetType.eq(targetType).and(qCommonFile.targetId.eq(targetId))).fetchOne();
         return download(commonFile);
     }
 
@@ -255,7 +271,7 @@ public class CommonFileService implements InitializingBean {
         return FileUtils.readFileToByteArray(new File(getSavePath(saveName)));
     }
 
-    /*public Page<CommonFile> getList(RequestParams<CommonFile> requestParams) {
+    public Page<CommonFile> getList(RequestParams<CommonFile> requestParams) {
         String targetType = requestParams.getString("targetType", "");
         String targetId = requestParams.getString("targetId", "");
         String delYn = requestParams.getString("delYn", "");
@@ -266,40 +282,44 @@ public class CommonFileService implements InitializingBean {
         Pageable pageable = requestParams.getPageable();
 
         BooleanBuilder builder = new BooleanBuilder();
-
+        
         if (StringUtils.isNotEmpty(targetType)) {
-            builder.and(qCommonFile.targetType.eq(targetType));
+        	builder.and(qCommonFile.targetType.eq(targetType));
         }
 
         if (StringUtils.isNotEmpty(targetId)) {
-            builder.and(qCommonFile.targetId.eq(targetId));
+        	builder.and(qCommonFile.targetId.eq(targetId));
         }
 
         if (StringUtils.isNotEmpty(delYn)) {
-            AXBootTypes.Deleted deleted = AXBootTypes.Deleted.get(delYn);
-            builder.and(qCommonFile.delYn.eq(deleted));
+        	//FxBootType.Deleted deleted = FxBootType.Deleted.get(delYn);
+        	FxBootType.Deleted deleted = FxBootType.Deleted.valueOf(delYn);
+        	builder.and(qCommonFile.delYn.eq(deleted));
         }
 
         if (StringUtils.isNotEmpty(targetIds)) {
-            Set<String> _ids = Arrays.stream(targetIds.split(",")).collect(Collectors.toSet());
-            builder.and(qCommonFile.targetId.in(_ids));
+        	// Set<String> _ids = Arrays.stream(targetIds.split(",")).collect(Collectors.toSet());		// java8
+        	// java7
+        	String ids[] = targetIds.split(",");
+        	Set<String> _ids = new HashSet<String>(Arrays.asList(ids));
+        	builder.and(qCommonFile.targetId.in(_ids));
         }
 
-        return findAll(builder, pageable);
-    }*/
+        return commonFileRepository.findAll(builder, pageable);
+    }
 
-    /*public CommonFile get(RequestParams<CommonFile> requestParams) {
+    public CommonFile get(RequestParams<CommonFile> requestParams) {
         List<CommonFile> commonFiles = getList(requestParams).getContent();
-        return isEmpty(commonFiles) ? null : commonFiles.get(0);
-    }*/
+        return ArrayUtils.isEmpty(commonFiles) ? null : commonFiles.get(0);
+    }
 
-    /*public CommonFile get(String targetType, String targetId) {
+    public CommonFile get(String targetType, String targetId) {
         RequestParams<CommonFile> requestParams = new RequestParams<>(CommonFile.class);
         requestParams.put("targetType", targetType);
         requestParams.put("targetId", targetId);
 
         return get(requestParams);
-    }*/
+    }
 
     @Override
     public void afterPropertiesSet() throws Exception {
@@ -308,27 +328,32 @@ public class CommonFileService implements InitializingBean {
 
     @Transactional
     public void deleteFile(Long id) {
-        //delete(qCommonFile).where(qCommonFile.id.eq(id)).execute();
+    	commonFileRepository.delete(id);
     }
 
-    /*@Transactional
+    @Transactional
     public void deleteByTargetTypeAndTargetIds(String targetType, Set<String> targetIds) {
-        delete(qCommonFile).where(qCommonFile.targetType.eq(targetType).and(qCommonFile.targetId.in(targetIds))).execute();
-    }*/
+    	//Iterable<CommonFile> list = commonFileRepository.findAll(qCommonFile.targetType.eq(targetType).and(qCommonFile.targetId.in(targetIds)));
+    	//commonFileRepository.delete(list);
+    	delete(qCommonFile).where(qCommonFile.targetType.eq(targetType).and(qCommonFile.targetId.in(targetIds))).execute();
+    }
 
-    /*@Transactional
+    @Transactional
     private void deleteByTargetTypeAndTargetId(String targetType, String targetId) {
+        //CommonFile file = commonFileRepository.findOne(qCommonFile.targetType.eq(targetType).and(qCommonFile.targetId.eq(targetId)));
+        //commonFileRepository.delete(file);
         delete(qCommonFile).where(qCommonFile.targetType.eq(targetType).and(qCommonFile.targetId.eq(targetId))).execute();
-    }*/
+    }
 
-    /*@Transactional
+    @Transactional
     public void updateOrDelete(List<CommonFile> commonFileList) {
         for (CommonFile file : commonFileList) {
             if (file.isDeleted()) {
                 deleteFile(file.getId());
             } else {
-                update(qCommonFile).set(qCommonFile.targetType, file.getTargetType()).set(qCommonFile.targetId, file.getTargetId()).where(qCommonFile.id.eq(file.getId())).execute();
+                //commonFileRepository.updateCommonFile(file);
+        		update(qCommonFile).set(qCommonFile.targetType, file.getTargetType()).set(qCommonFile.targetId, file.getTargetId()).where(qCommonFile.id.eq(file.getId())).execute();
             }
         }
-    }*/
+    }
 }

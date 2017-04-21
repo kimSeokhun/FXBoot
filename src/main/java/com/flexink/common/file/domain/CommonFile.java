@@ -2,6 +2,7 @@ package com.flexink.common.file.domain;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -18,6 +19,7 @@ import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import com.flexink.common.code.FxBootType.Deleted;
 import com.flexink.common.domain.BaseJpaModel;
 
 import lombok.EqualsAndHashCode;
@@ -68,7 +70,7 @@ public class CommonFile extends BaseJpaModel<Long>{
     private Long fileSize;
 
     @Column(name = "DEL_YN", length = 1)
-    @Enumerated
+    @Enumerated(EnumType.STRING)
     //Comment(value = "삭제여부")
     private Deleted delYn = Deleted.N;
 
@@ -119,11 +121,6 @@ public class CommonFile extends BaseJpaModel<Long>{
     @Transient
     public String getThumbnailFileName() {
         return FilenameUtils.getBaseName(getSaveNm()) + "-thumbnail" + "." + FilenameUtils.getExtension(getSaveNm());
-    }
-
-    
-    public enum Deleted {
-        Y, N;
     }
     
 }

@@ -1,5 +1,7 @@
 package com.flexink.config;
 
+import java.util.List;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -12,9 +14,10 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.support.MessageSourceAccessor;
 import org.springframework.context.support.ReloadableResourceBundleMessageSource;
-import org.springframework.context.support.ResourceBundleMessageSource;
+import org.springframework.data.web.PageableHandlerMethodArgumentResolver;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.web.csrf.CsrfToken;
+import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.LocaleResolver;
 import org.springframework.web.servlet.ModelAndView;
@@ -25,9 +28,9 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 import org.springframework.web.servlet.i18n.LocaleChangeInterceptor;
 import org.springframework.web.servlet.i18n.SessionLocaleResolver;
-import org.springframework.web.servlet.mvc.annotation.DefaultAnnotationHandlerMapping;
 
 import com.flexink.common.error.ErrorController;
+import com.flexink.config.resolver.RequestParamsArgumentResolver;
 import com.flexink.interceptor.MultipartInterceptor;
 
 
@@ -208,6 +211,15 @@ public class WebConfig extends WebMvcConfigurerAdapter {
 		registry.addResourceHandler("/img/**")		.addResourceLocations("/img/");
 		registry.addResourceHandler("/image/**")	.addResourceLocations("/image/");
 		registry.addResourceHandler("/webjars/**")	.addResourceLocations("classpath:/META-INF/resources/webjars/");
+    }
+	
+	@Override
+    public void addArgumentResolvers(List<HandlerMethodArgumentResolver> argumentResolvers) {
+        PageableHandlerMethodArgumentResolver pageableHandlerMethodArgumentResolver = new PageableHandlerMethodArgumentResolver();
+        pageableHandlerMethodArgumentResolver.setPageParameterName("pageNumber");
+        pageableHandlerMethodArgumentResolver.setSizeParameterName("pageSize");
+        argumentResolvers.add(new RequestParamsArgumentResolver());
+        argumentResolvers.add(pageableHandlerMethodArgumentResolver);
     }
 
 }

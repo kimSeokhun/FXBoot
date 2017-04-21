@@ -1,14 +1,14 @@
 insert into Reader (username, password, fullname) values ('craig', 'password', 'Craig Walls');
 
 INSERT INTO USER
-(USERNAME, 		PASSWORD, 	ACCOUNTNONEXPIRED, 	ACCOUNTNONLOCKED,		CREDENTIALSNONEXPIRED, 		ENABLED) VALUES
-('ksh',       	'$2a$10$9Uraz7S4LZTFttdqJgE5v.rrIW54wZgFh3nQ7e0hCs9CiPhckfoG.', TRUE, TRUE, TRUE, TRUE),
-('aaa', 	'$2a$10$9Uraz7S4LZTFttdqJgE5v.rrIW54wZgFh3nQ7e0hCs9CiPhckfoG.', FALSE, TRUE, TRUE, TRUE),
-('bbb', 	'$2a$10$9Uraz7S4LZTFttdqJgE5v.rrIW54wZgFh3nQ7e0hCs9CiPhckfoG.', TRUE, FALSE, TRUE, TRUE),
-('ccc', 	'$2a$10$9Uraz7S4LZTFttdqJgE5v.rrIW54wZgFh3nQ7e0hCs9CiPhckfoG.', TRUE, TRUE, FALSE, TRUE),
-('ddd', 	'$2a$10$9Uraz7S4LZTFttdqJgE5v.rrIW54wZgFh3nQ7e0hCs9CiPhckfoG.', TRUE, TRUE, TRUE, FALSE),
-('visualkhh', 	'1234', TRUE, TRUE, TRUE, TRUE),
-('hhk',       	'1234', TRUE, TRUE, TRUE, TRUE);
+(USERNAME,		PASSWORD,		ACCOUNTNONEXPIRED,		ACCOUNTNONLOCKED,		CREDENTIALSNONEXPIRED,		ENABLED) VALUES
+('ksh',       	'$2a$10$9Uraz7S4LZTFttdqJgE5v.rrIW54wZgFh3nQ7e0hCs9CiPhckfoG.',	TRUE,	TRUE,	TRUE,	TRUE),
+('aaa', 		'$2a$10$9Uraz7S4LZTFttdqJgE5v.rrIW54wZgFh3nQ7e0hCs9CiPhckfoG.',	FALSE,	TRUE,	TRUE,	TRUE),
+('bbb', 		'$2a$10$9Uraz7S4LZTFttdqJgE5v.rrIW54wZgFh3nQ7e0hCs9CiPhckfoG.',	TRUE,	FALSE,	TRUE,	TRUE),
+('ccc', 		'$2a$10$9Uraz7S4LZTFttdqJgE5v.rrIW54wZgFh3nQ7e0hCs9CiPhckfoG.',	TRUE,	TRUE,	FALSE,	TRUE),
+('ddd', 		'$2a$10$9Uraz7S4LZTFttdqJgE5v.rrIW54wZgFh3nQ7e0hCs9CiPhckfoG.',	TRUE,	TRUE,	TRUE,	FALSE),
+('visualkhh',	'1234',	TRUE,	TRUE,	TRUE,	TRUE),
+('hhk',			'1234',	TRUE,	TRUE,	TRUE,	TRUE);
 
 INSERT INTO AUTHORITY
 (USERNAME,		AUTHORITY) VALUES
@@ -22,3 +22,9 @@ INSERT INTO AUTHORITY
 ('bbb',       	'ROLE_USER'),
 ('ccc',       	'ROLE_USER'),
 ('ddd',       	'ROLE_USER');
+
+
+INSERT INTO COMMON_CODE_M
+(GROUP_CD,		GROUP_NM,	CODE,			NAME,	SORT,	USE_YN) VALUES
+('USER_STATUS',	'계정상태',	'NORMAL',		'활성',	'1',	'Y'),
+('USER_STATUS',	'계정상태',	'ACCOUNT_LOCK',	'잠김',	'2',	'Y');

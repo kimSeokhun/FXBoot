@@ -1,6 +1,7 @@
 package com.flexink.common.file;
 
 import java.io.IOException;
+import java.util.List;
 
 import javax.servlet.http.HttpServletResponse;
 
@@ -8,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -67,11 +69,11 @@ public class FileUploadController {
         return Responses.PageResponse.of(files);
     }*/
 
-    /*@RequestMapping(method = RequestMethod.PUT, produces = "application/json; charset=UTF-8")
+    @RequestMapping(method = RequestMethod.PUT, produces = "application/json; charset=UTF-8")
     public List<CommonFile> updateOrDelete(@RequestBody List<CommonFile> file) {
         commonFileService.updateOrDelete(file);
         return file;
-    }*/
+    }
 
     @RequestMapping(value = "/preview", method = RequestMethod.GET)
     public void preview(HttpServletResponse response, @RequestParam Long id) throws IOException {

@@ -5,7 +5,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
-  <script src="/webjars/jquery/3.2.0/jquery.min.js"></script>
+  <script src="/webjars/jquery/1.12.4/jquery.min.js"></script>
   <!-- Bootstrap 3.3.6 -->
   <script src="/webjars/AdminLTE/2.3.8/bootstrap/js/bootstrap.min.js"></script>
   <!-- iCheck -->

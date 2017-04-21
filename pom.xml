@@ -71,11 +71,16 @@
 		    <artifactId>log4jdbc-log4j2-jdbc4</artifactId>
 		    <version>1.16</version>
 		</dependency>
+        <dependency>
+		    <groupId>com.querydsl</groupId>
+		    <artifactId>querydsl-jpa</artifactId>
+		</dependency>
 		<dependency>
             <groupId>com.querydsl</groupId>
             <artifactId>querydsl-apt</artifactId>
             <scope>provided</scope>
         </dependency>
+        
 	    
 		<!-- View Template -->
 		<dependency>
@@ -124,6 +129,10 @@
 		    <artifactId>thumbnailator</artifactId>
 		    <version>0.4.8</version>
 		</dependency>
+		<dependency>
+		    <groupId>joda-time</groupId>
+		    <artifactId>joda-time</artifactId>
+		</dependency>
 		
 		<!-- webjar -->
 		<dependency>
@@ -134,7 +143,33 @@
 		<dependency>
 		    <groupId>org.webjars</groupId>
 		    <artifactId>jquery</artifactId>
+		    <version>1.12.4</version>
+		</dependency>
+		<!-- <dependency>
+		    <groupId>org.webjars</groupId>
+		    <artifactId>jquery</artifactId>
 		    <version>3.2.0</version>
+		</dependency> -->
+		 	
+		<dependency>
+		    <groupId>org.webjars.npm</groupId>
+		    <artifactId>ax5core</artifactId>
+		    <version>1.4.20</version>
+		</dependency>
+		<dependency>
+		    <groupId>org.webjars.npm</groupId>
+		    <artifactId>ax5ui-grid</artifactId>
+		    <version>1.4.20</version>
+		</dependency>
+		<dependency>
+		    <groupId>org.webjars.npm</groupId>
+		    <artifactId>ax5ui-formatter</artifactId>
+		    <version>1.4.20</version>
+		</dependency>
+		<dependency>
+		    <groupId>org.webjars.npm</groupId>
+		    <artifactId>ax5ui-binder</artifactId>
+		    <version>1.4.20</version>
 		</dependency>
 		
 		
@@ -175,7 +210,7 @@
                             <goal>process</goal>
                         </goals>
                         <configuration>
-                            <outputDirectory>target/generated-sources/java</outputDirectory>
+                            <outputDirectory>target/generated-sources</outputDirectory>
                             <processor>com.querydsl.apt.jpa.JPAAnnotationProcessor</processor>
                         </configuration>
                     </execution>
