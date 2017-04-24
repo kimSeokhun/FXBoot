@@ -17,8 +17,8 @@ import org.hibernate.annotations.DynamicUpdate;
 import org.springframework.data.domain.Persistable;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.flexink.config.web.security.user.LoginUserDetails;
 import com.flexink.config.web.security.user.UserDetailsHelper;
+import com.flexink.domain.sec.LoginUserDetails;
 
 import lombok.Getter;
 import lombok.Setter;

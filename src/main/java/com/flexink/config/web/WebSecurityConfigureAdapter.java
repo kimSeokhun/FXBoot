@@ -28,12 +28,12 @@ import org.springframework.security.web.authentication.RememberMeServices;
 import org.springframework.security.web.authentication.rememberme.TokenBasedRememberMeServices;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
+import com.flexink.common.utils.PhaseUtils;
 import com.flexink.config.web.security.AuthenticationFailureHandler;
 import com.flexink.config.web.security.AuthenticationSuccessHandler;
 import com.flexink.config.web.security.FilterInvocationSecurityMetadataSource;
 import com.flexink.config.web.security.user.LoginUserDetailsService;
 import com.flexink.config.web.security.user.Role;
-import com.flexink.utils.PhaseUtils;
 
 import lombok.extern.slf4j.Slf4j;
 

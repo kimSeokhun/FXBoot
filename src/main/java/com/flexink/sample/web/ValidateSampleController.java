@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import com.flexink.sample.domain.Person;
+import com.flexink.domain.sample.Person;
 
 import lombok.extern.slf4j.Slf4j;
 

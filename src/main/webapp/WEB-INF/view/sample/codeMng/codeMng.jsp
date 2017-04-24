@@ -73,7 +73,6 @@
 		
 		fnObj.gridView = {
 				initView: function() {
-					//var _this = this;
 					this.target = new ax5.ui.grid();
 					this.target.setConfig({
 				    	showLineNumber: true,
@@ -93,15 +92,15 @@
 				        },
 				        page: {
 					        navigationItemCount: 9,
-		                    //height: 30,
+		                    height: 30,
 					        display: true,
-		                    /* firstIcon: '<i class="fa fa-step-backward" aria-hidden="true"></i>',
+		                    firstIcon: '<i class="fa fa-step-backward" aria-hidden="true"></i>',
 		                    prevIcon: '<i class="fa fa-caret-left" aria-hidden="true"></i>',
 		                    nextIcon: '<i class="fa fa-caret-right" aria-hidden="true"></i>',
-		                    lastIcon: '<i class="fa fa-step-forward" aria-hidden="true"></i>', */
+		                    lastIcon: '<i class="fa fa-step-forward" aria-hidden="true"></i>',
 					        onChange: function () {
-		                        //gridView.setData(this.page.selectPage);
-		                        console.log(this.page);
+					        	fnObj.gridView.setPageData(this.page);
+					        	ACTIONS.PAGE_SEARCH();
 		                    }
 					    },
 				        columns: [            
@@ -131,7 +130,17 @@
 			        pageSize: 10,
 			    },
 			    setData: function setData(_data) {
-			        this.target.setData(_data);
+			        this.target.setData({
+			        	list: _data.content,
+			        	page: {
+		                    currentPage: _data.number || 0,
+		                    pageSize: _data.size,
+		                    totalElements: _data.totalElements,
+		                    totalPages: _data.totalPages
+		                }
+			        });
+			        
+			        return this;
 			    },
 			    getData: function (_type) {
 			        var list = [];
@@ -166,10 +175,11 @@
 			            }
 			        });
 			    },
-			    setPageData: function setPageData(_page) {
+			    setPageData: function (_page) {
+			    	_page.pageNumber = _page.selectPage
 			        this.page = $.extend(this.page, _page);
 			    },
-			    getPageData: function getPageData() {
+			    getPageData: function () {
 			        return this.page;
 			    }
 		}
@@ -182,45 +192,32 @@
 		    },
 		    getData: function () {
 		        return {
-		            pageNumber: fnObj.gridView.page.pageNumber,
-		            pageSize: fnObj.gridView.page.pageSize,
 		            filter: this.filter.val()
 		        }
 		    }
 		};
 		
-		/* fnObj.pageButtonView = {
-		    initView: function () {
-		        axboot.buttonClick(this, "data-page-btn", {
-		            "search": function () {
-		                ACTIONS.dispatch(ACTIONS.PAGE_SEARCH);
-		            },
-		            "save": function () {
-		                ACTIONS.dispatch(ACTIONS.PAGE_SAVE);
-		            }
-		        });
-		    }
-		}; */
 		
 		var API_SERVER = "http://localhost:8080";
 		
 		var ACTIONS = {
-		   		PAGE_SEARCH: function (caller, act, data) {
+		   		PAGE_SEARCH: function (page) {
+		   			//console.log(page);
+		   			//console.log(fnObj.gridView.getPageData());
 		   	        $.ajax({
 		   	        	method: "GET",
 		   	            url: API_SERVER + "/api/v1/commonCodes",
-		   	            data: fnObj.searchView.getData(),
+		   	            //data: fnObj.searchView.getData(),
+		   	         	data: $.extend({}, fnObj.searchView.getData(), fnObj.gridView.getPageData()),
 		   	            success: function(res) {
-		   	            	console.log(res);
 		   	            	fnObj.gridView.setData(res);
 		   	            }
 		   	        });
 		   	        return false;
 		   	    },
-		   	    PAGE_SAVE: function (caller, act, data) {
+		   	    PAGE_SAVE: function () {
 		   	        var saveList = [].concat(fnObj.gridView.getData("modified"));
 		   	        saveList = saveList.concat(fnObj.gridView.getData("deleted"));
-					console.log(saveList);
 		   	        $.ajax({
 		   	        	method: "PUT",
 		   	            url: API_SERVER + "/api/v1/commonCodes",
@@ -231,22 +228,26 @@
 		   	            }
 		   	        });
 		   	    },
-		   	    ITEM_ADD: function (caller, act, data) {
+		   	    ITEM_ADD: function () {
 		   	    	fnObj.gridView.addRow();
 		   	    },
-		   	    ITEM_DEL: function (caller, act, data) {
+		   	    ITEM_DEL: function () {
 		   	     	fnObj.gridView.delRow("selected");
 		   	    }
+		}
+		
+		function gridInit() {
+			fnObj.gridView.initView();
+			fnObj.searchView.initView();
+			ACTIONS.PAGE_SEARCH();
 		}
 		    
 		    
 		$(function() {
-			fnObj.gridView.initView();
-			fnObj.searchView.initView();
-			//fnObj.pageButtonView.initView();
-			ACTIONS.PAGE_SEARCH();
+			// 그리드 시작
+			gridInit();
 			
-		    
+		    // Grid Row 추가 / 삭제
 		    $('[data-grid-control]').click(function () {
 		        switch (this.getAttribute("data-grid-control")) {
 		            case "row-add":
@@ -258,6 +259,7 @@
 		        }
 		    });
 		    
+		    // Grid search 및 저장
 		    $('[data-page-btn]').click(function () {
 		        switch (this.getAttribute("data-page-btn")) {
 		            case "search":

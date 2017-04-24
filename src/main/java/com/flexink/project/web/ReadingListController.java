@@ -10,11 +10,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.flexink.domain.sample.Book;
+import com.flexink.domain.sample.Reader;
+import com.flexink.domain.sample.ReadingListRepository;
 import com.flexink.project.config.AmazonProperties;
-import com.flexink.project.dao.CityMapper;
-import com.flexink.project.domain.Book;
-import com.flexink.project.domain.Reader;
-import com.flexink.project.domain.ReadingListRepository;
+import com.flexink.project.mapper.CityMapper;
 
 @Controller
 @RequestMapping("/reading")

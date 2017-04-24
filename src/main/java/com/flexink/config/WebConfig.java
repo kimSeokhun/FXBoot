@@ -30,8 +30,8 @@ import org.springframework.web.servlet.i18n.LocaleChangeInterceptor;
 import org.springframework.web.servlet.i18n.SessionLocaleResolver;
 
 import com.flexink.common.error.ErrorController;
+import com.flexink.common.interceptor.MultipartInterceptor;
 import com.flexink.config.resolver.RequestParamsArgumentResolver;
-import com.flexink.interceptor.MultipartInterceptor;
 
 
 @Configuration

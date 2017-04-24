@@ -11,6 +11,8 @@ import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
+import com.flexink.domain.sec.LoginUserDetails;
+
 import lombok.extern.slf4j.Slf4j;
 
 /**************************************************************

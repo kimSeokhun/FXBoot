@@ -14,8 +14,11 @@
 <!DOCTYPE mapper
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.flexink.project.mapper.CityMapper">
-    <select id="findByReader" resultType="HashMap">
-        select * from READER
+        
+<mapper namespace="com.flexink.sample.mapper.CommonCodeMapper">
+
+    <select id="readPage" resultType="egovMap" parameterType="RequestParams">
+        SELECT * FROM COMMON_CODE_M WHERE GROUP_CD LIKE CONCAT(#{map.filter}, '%')
     </select>
+    
 </mapper>

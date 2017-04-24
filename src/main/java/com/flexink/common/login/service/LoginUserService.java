@@ -5,11 +5,11 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.flexink.config.web.security.user.LoginUserDetails;
-import com.flexink.config.web.security.user.LoginUserGrantedAuthority;
-import com.flexink.config.web.security.user.LoginUserGrantedAuthorityRepository;
-import com.flexink.config.web.security.user.LoginUserRepository;
 import com.flexink.config.web.security.user.Role;
+import com.flexink.domain.sec.LoginUserDetails;
+import com.flexink.domain.sec.LoginUserGrantedAuthority;
+import com.flexink.domain.sec.LoginUserGrantedAuthorityRepository;
+import com.flexink.domain.sec.LoginUserRepository;
 
 import lombok.extern.slf4j.Slf4j;
 

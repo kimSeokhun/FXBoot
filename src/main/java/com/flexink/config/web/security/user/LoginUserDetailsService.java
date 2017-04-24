@@ -6,6 +6,9 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import com.flexink.domain.sec.LoginUserDetails;
+import com.flexink.domain.sec.LoginUserRepository;
+
 @Service
 public class LoginUserDetailsService implements UserDetailsService {
 

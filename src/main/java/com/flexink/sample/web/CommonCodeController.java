@@ -6,15 +6,18 @@ import javax.inject.Inject;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.flexink.common.file.domain.RequestParams;
-import com.flexink.sample.domain.CommonCode;
+import com.flexink.common.utils.RequestParams;
+import com.flexink.domain.code.CommonCode;
 import com.flexink.sample.service.CommonCodeService;
 
 @Controller
@@ -26,13 +29,17 @@ public class CommonCodeController {
 
     @RequestMapping(method = RequestMethod.GET, produces = "application/json; charset=UTF-8")
     @ResponseBody
-    public List<CommonCode> list(Pageable pageable, RequestParams<CommonCode> requestParams) {
+    public Page<CommonCode> list(Pageable pageable, RequestParams<CommonCode> requestParams) {
+    	PageRequest pq = new PageRequest(0, 10, new Sort(Sort.Direction.DESC, "groupCd"));
     	System.out.println(pageable.getPageNumber());
     	System.out.println(pageable.getPageSize());
     	/*System.out.println(requestParams.getString("filter"));
     	System.out.println(requestParams.getString("pageNumber"));
     	System.out.println(requestParams.getString("pageSize"));*/
-        List<CommonCode> basicCodes = basicCodeService.get(requestParams);
+        //List<CommonCode> basicCodes = basicCodeService.get(requestParams);
+    	Page<CommonCode> basicCodes = basicCodeService.get(requestParams);
+    	
+    	
         return basicCodes;
     }
 

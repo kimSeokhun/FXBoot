@@ -22,10 +22,10 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.flexink.common.login.service.LoginUserService;
 import com.flexink.config.web.WebSecurityConfigureAdapter;
-import com.flexink.config.web.security.user.LoginUserDetails;
 import com.flexink.config.web.security.user.LoginUserValidator;
 import com.flexink.config.web.security.user.Role;
 import com.flexink.config.web.security.user.UserDetailsHelper;
+import com.flexink.domain.sec.LoginUserDetails;
 
 import lombok.extern.slf4j.Slf4j;
 

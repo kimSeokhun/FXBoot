@@ -8,6 +8,8 @@ import org.springframework.validation.Errors;
 import org.springframework.validation.ValidationUtils;
 import org.springframework.validation.Validator;
 
+import com.flexink.domain.sec.LoginUserDetails;
+
 /**************************************************************
  * @FileName	: LoginUserValidator.java
  * @Project		: fxBoot

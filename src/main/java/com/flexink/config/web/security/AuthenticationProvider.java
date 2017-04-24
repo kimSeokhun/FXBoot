@@ -9,9 +9,9 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import com.flexink.config.web.security.user.LoginUserDetails;
+import com.flexink.common.utils.PhaseUtils;
 import com.flexink.config.web.security.user.LoginUserDetailsService;
-import com.flexink.utils.PhaseUtils;
+import com.flexink.domain.sec.LoginUserDetails;
 
 import lombok.extern.slf4j.Slf4j;
 

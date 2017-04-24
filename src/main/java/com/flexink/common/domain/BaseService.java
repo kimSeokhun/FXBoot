@@ -93,7 +93,7 @@ public class BaseService<T, ID extends Serializable> extends QueryDslRepositoryS
 		if (pageable == null) {
 			return readPage(query, new QPageRequest(0, Integer.MAX_VALUE));
 		}
-        long total = query.clone(super.getEntityManager()).fetchCount(); // need to clone to have a second query, otherwise all items would be in the list
+        long total = query.clone(super.getEntityManager()).fetchCount();
 		JPQLQuery<T> pagedQuery = getQuerydsl().applyPagination(pageable, query);
 		List<T> content = total > pageable.getOffset() ? pagedQuery.fetch() : Collections.<T>emptyList();
 		return new PageImpl<>(content, pageable, total);

@@ -16,9 +16,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.flexink.common.file.domain.CommonFile;
-import com.flexink.common.file.domain.CommonFileService;
-import com.flexink.common.file.domain.UploadParameters;
+import com.flexink.common.file.service.CommonFileService;
+import com.flexink.domain.file.CommonFile;
+import com.flexink.vo.file.UploadParameters;
 
 import lombok.extern.slf4j.Slf4j;
 
