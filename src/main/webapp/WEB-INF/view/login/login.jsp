@@ -1,9 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
-<%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
+<%@ include file="/WEB-INF/jspf/inc_taglib.jspf" %>
 
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
@@ -19,11 +16,11 @@
 
     <form:form name='f' action="<%= com.flexink.config.web.WebSecurityConfigureAdapter.LOGIN_PROCESSING_URL%>" method='POST'>
       <div class="form-group has-feedback">
-        <input type='text' class="form-control" placeholder="Email" name="<%= com.flexink.config.web.WebSecurityConfigureAdapter.USERNAME_PARAMETER%>" value='' />
+        <input type='text' class="form-control" placeholder="Email" name="${securityUsername}" value='' />
         <span class="glyphicon glyphicon-envelope form-control-feedback"></span>
       </div>
       <div class="form-group has-feedback">
-        <input type='password' class="form-control" placeholder="Password" name="<%= com.flexink.config.web.WebSecurityConfigureAdapter.PASSWORD_PARAMETER%>" />
+        <input type='password' class="form-control" placeholder="Password" name="${securityPassword}" />
         <span class="glyphicon glyphicon-lock form-control-feedback"></span>
       </div>
       <div class="row">

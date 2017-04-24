@@ -31,12 +31,12 @@ import org.springframework.web.multipart.MultipartFile;
 import com.flexink.common.code.FxBootType;
 import com.flexink.common.code.Types;
 import com.flexink.common.domain.BaseService;
-import com.flexink.common.file.domain.QCommonFile;
 import com.flexink.common.utils.ArrayUtils;
 import com.flexink.common.utils.EncodeUtils;
 import com.flexink.common.utils.RequestParams;
 import com.flexink.domain.file.CommonFile;
 import com.flexink.domain.file.CommonFileRepository;
+import com.flexink.domain.file.QCommonFile;
 import com.flexink.vo.file.UploadParameters;
 import com.querydsl.core.BooleanBuilder;
 

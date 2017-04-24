@@ -1,20 +1,15 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
+<%@ include file="/WEB-INF/jspf/inc_taglib.jspf" %>
 
 <!DOCTYPE html>
 <html>
 <head>
 
-
 <link rel="stylesheet" href="/webjars/ax5ui-grid/1.4.20/dist/ax5grid.css">
-
 <script src="/webjars/ax5core/1.4.20/dist/ax5core.min.js"></script>
-<script src="/webjars/ax5ui-formatter/1.4.20/dist/ax5formatter.js"></script>
-<script type="text/javascript" src="https://cdn.rawgit.com/ax5ui/ax5ui-picker/master/dist/ax5picker.min.js"></script>
-<script type="text/javascript" src="https://cdn.rawgit.com/ax5ui/ax5ui-select/master/dist/ax5select.min.js"></script>
-<script src="/webjars/ax5ui-binder/1.4.20/dist/ax5binder.min.js"></script>
 <script src="/webjars/ax5ui-grid/1.4.20/dist/ax5grid.js"></script>
-
+<script src="/webjars/ax5ui-formatter/1.4.20/dist/ax5formatter.js"></script>
 
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Code</title>
@@ -34,7 +29,6 @@
 			</ol>
 		</section>
 		<section class="content">
-			
 			<div class="row">
 	        	<div class="col-lg-6 col-xs-6">
 	        		<form name="searchForm" id="searchForm" method="post" onsubmit="return ACTIONS.PAGE_SEARCH();" style="">
@@ -127,9 +121,10 @@
 				},
 				page: {
 			        pageNumber: 0,
-			        pageSize: 10,
+			        pageSize: 20,
 			    },
 			    setData: function setData(_data) {
+			    	console.log(_data);
 			        this.target.setData({
 			        	list: _data.content,
 			        	page: {
@@ -198,7 +193,7 @@
 		};
 		
 		
-		var API_SERVER = "http://localhost:8080";
+		var API_SERVER = "${contextPath}";//"http://localhost:8080";
 		
 		var ACTIONS = {
 		   		PAGE_SEARCH: function (page) {
@@ -273,9 +268,6 @@
 		    
 		    
 		});
-	</script>
-	<script type="text/javascript">
-	   
 	</script>
 </body>
 </html>

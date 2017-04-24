@@ -16,7 +16,7 @@ import com.flexink.common.utils.RequestParams;
 import com.flexink.domain.code.CommonCode;
 import com.flexink.domain.code.CommonCodeId;
 import com.flexink.domain.code.CommonCodeRepository;
-import com.flexink.sample.domain.QCommonCode;
+import com.flexink.domain.code.QCommonCode;
 import com.flexink.sample.mapper.CommonCodeMapper;
 import com.querydsl.core.BooleanBuilder;
 
@@ -44,14 +44,10 @@ public class CommonCodeService extends BaseService<CommonCode, CommonCodeId> {
         String filter = requestParams.getString("filter");
 
         BooleanBuilder builder = new BooleanBuilder();
-
+        builder.and(qCommonCode.useYn.eq(FxBootType.Used.valueOf("Y")));
+        
         if (StringUtils.isNotEmpty(groupCd)) {
             builder.and(qCommonCode.groupCd.eq(groupCd));
-        }
-
-        if (StringUtils.isNotEmpty(useYn)) {
-            FxBootType.Used used = FxBootType.Used.valueOf(useYn);
-            builder.and(qCommonCode.useYn.eq(used));
         }
         
         if (StringUtils.isNotEmpty(filter)) {
@@ -61,8 +57,8 @@ public class CommonCodeService extends BaseService<CommonCode, CommonCodeId> {
             		.or(qCommonCode.name.like("%"+filter+"%")));
         }
         //Projections
-        requestParams.addSort("groupCd", Sort.Direction.ASC);
-        requestParams.addSort("sort", Sort.Direction.ASC);
+        //requestParams.addSort("groupCd", Sort.Direction.ASC);
+        //requestParams.addSort("sort", Sort.Direction.ASC);
         
         Page<CommonCode> list = readPage(query().from(qCommonCode).where(builder), requestParams.getPageable());
         

@@ -1,6 +1,7 @@
 package com.flexink.config;
 
 import java.util.List;
+import java.util.Locale;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -97,7 +98,7 @@ public class WebConfig extends WebMvcConfigurerAdapter {
 		// CookieLocaleResolver localeResolver = new CookieLocaleResolver();
 
 		// 최초 기본 로케일 강제 설정 (헤더 리졸버 제외)
-		//localeResolver.setDefaultLocale(new Locale("ko_KR"));
+		localeResolver.setDefaultLocale(new Locale("ko_KR"));
 		return localeResolver;
 	}
 	
@@ -210,6 +211,9 @@ public class WebConfig extends WebMvcConfigurerAdapter {
 		registry.addResourceHandler("/static/**")	.addResourceLocations("/static/");
 		registry.addResourceHandler("/img/**")		.addResourceLocations("/img/");
 		registry.addResourceHandler("/image/**")	.addResourceLocations("/image/");
+		registry.addResourceHandler("/images/**")	.addResourceLocations("/images/");
+		registry.addResourceHandler("/css/**")		.addResourceLocations("/css/");
+		registry.addResourceHandler("/style/**")	.addResourceLocations("/style/");
 		registry.addResourceHandler("/webjars/**")	.addResourceLocations("classpath:/META-INF/resources/webjars/");
     }
 	
