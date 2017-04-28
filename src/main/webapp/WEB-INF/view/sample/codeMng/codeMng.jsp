@@ -121,10 +121,9 @@
 				},
 				page: {
 			        pageNumber: 0,
-			        pageSize: 20,
+			        pageSize: 10,
 			    },
 			    setData: function setData(_data) {
-			    	console.log(_data);
 			        this.target.setData({
 			        	list: _data.content,
 			        	page: {
@@ -196,15 +195,14 @@
 		var API_SERVER = "${contextPath}";//"http://localhost:8080";
 		
 		var ACTIONS = {
-		   		PAGE_SEARCH: function (page) {
-		   			//console.log(page);
-		   			//console.log(fnObj.gridView.getPageData());
+		   		PAGE_SEARCH: function () {
 		   	        $.ajax({
 		   	        	method: "GET",
 		   	            url: API_SERVER + "/api/v1/commonCodes",
-		   	            //data: fnObj.searchView.getData(),
 		   	         	data: $.extend({}, fnObj.searchView.getData(), fnObj.gridView.getPageData()),
 		   	            success: function(res) {
+		   	            	console.log(res);
+		   	            	console.log(res.first);
 		   	            	fnObj.gridView.setData(res);
 		   	            }
 		   	        });

@@ -2,22 +2,14 @@ package com.flexink.common.utils;
 
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
-import org.apache.commons.lang3.ClassUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-
-import com.querydsl.core.BooleanBuilder;
-import com.querydsl.core.types.Predicate;
-import com.querydsl.core.types.dsl.EntityPathBase;
-import com.querydsl.core.types.dsl.PathBuilder;
 
 public class RequestParams<T> {
 
@@ -43,7 +35,6 @@ public class RequestParams<T> {
     public void setParameterMap(Map<String, String[]> map) {
         for (String key : map.keySet()) {
             String[] values = map.get(key);
-
             //String value = Arrays.stream(values).collect(Collectors.joining(","));
             String value = "";
             for(int i=0; i < values.length; i++) {
@@ -52,7 +43,6 @@ public class RequestParams<T> {
             		value += ",";
             	}
             }
-            
             put(key, value);
         }
     }

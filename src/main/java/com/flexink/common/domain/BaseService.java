@@ -31,13 +31,13 @@ public class BaseService<T, ID extends Serializable> extends QueryDslRepositoryS
 	}
 	
 	/********************************************************************
-	 * @메소드명	: query
+	 * @메소드명	: queryDsl
 	 * @작성자	: KIMSEOKHOON
 	 * @메소드 내용	: JPAQuery 객체 반환
 	 * @return
 	 * JPAQuery<T>
 	 ********************************************************************/
-	public JPAQuery<T> query() {
+	public JPAQuery<T> queryDsl() {
 		JPAQuery<T> query = new JPAQuery<T>(getEntityManager());
 		return query;
 	}
@@ -83,7 +83,7 @@ public class BaseService<T, ID extends Serializable> extends QueryDslRepositoryS
 	/********************************************************************
 	 * @메소드명	: readPage
 	 * @작성자	: KIMSEOKHOON
-	 * @메소드 내용	: 페이징 처리용
+	 * @메소드 내용	: QueryDSL 페이징 처리용
 	 * @param query
 	 * @param pageable
 	 * @return

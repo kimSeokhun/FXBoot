@@ -1,14 +1,21 @@
 package com.flexink.common.file;
 
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
+import java.io.PrintWriter;
 import java.util.List;
 
 import javax.servlet.http.HttpServletResponse;
+import javax.websocket.server.PathParam;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -18,22 +25,18 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.flexink.common.file.service.CommonFileService;
 import com.flexink.domain.file.CommonFile;
+import com.flexink.vo.ParamsVo;
 import com.flexink.vo.file.UploadParameters;
 
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Controller
-@RequestMapping(value = "/sample/files")
+@RequestMapping(value = "/files")
 public class FileUploadController {
 
     @Autowired
     private CommonFileService commonFileService;
-    
-    @GetMapping("/")
-    public String filePage() {
-    	return "/sample/file";
-    }
     
     @RequestMapping(value = "/upload", method = RequestMethod.POST, produces = "application/json; charset=UTF-8")
     @ResponseBody
@@ -59,17 +62,25 @@ public class FileUploadController {
         uploadParameters.setThumbnail(thumbnail);
         uploadParameters.setThumbnailWidth(thumbnailWidth);
         uploadParameters.setThumbnailHeight(thumbnailHeight);
-
+        
         return commonFileService.upload(uploadParameters);
     }
 
-    /*@RequestMapping(method = RequestMethod.GET, produces = "application/json; charset=UTF-8")
-    public Responses.PageResponse list(RequestParams<CommonFile> requestParams) {
-        Page<CommonFile> files = commonFileService.getList(requestParams);
-        return Responses.PageResponse.of(files);
-    }*/
+    @RequestMapping(method = RequestMethod.GET, produces = "application/json; charset=UTF-8")	
+    @ResponseBody
+    public Page<CommonFile> list(ParamsVo paramsVo) {
+        Page<CommonFile> files = commonFileService.getList(paramsVo);
+        return files;
+    }
+    
+    @DeleteMapping
+    public ResponseEntity<CommonFile> delete(@RequestBody List<CommonFile> files) throws IOException {
+    	commonFileService.deleteFiles(files);
+    	return new ResponseEntity<>(HttpStatus.OK);
+    }
 
     @RequestMapping(method = RequestMethod.PUT, produces = "application/json; charset=UTF-8")
+    @ResponseBody
     public List<CommonFile> updateOrDelete(@RequestBody List<CommonFile> file) {
         commonFileService.updateOrDelete(file);
         return file;
@@ -94,4 +105,30 @@ public class FileUploadController {
     public ResponseEntity<byte[]> downloadByTargetTypeAndTargetId(@RequestParam String targetType, @RequestParam String targetId) throws IOException {
         return commonFileService.downloadByTargetTypeAndTargetId(targetType, targetId);
     }
+    
+    @PostMapping(value="/ckeditorImageUplaod")
+    public void ckeditorImageUpload(HttpServletResponse response, @RequestParam(value = "upload") MultipartFile multipartFile, ParamsVo params) throws IOException {
+    	
+    	UploadParameters uploadParameters = new UploadParameters();
+        uploadParameters.setMultipartFile(multipartFile);
+        CommonFile file = commonFileService.upload(uploadParameters);
+        String fileUrl = "/files/preview?id=" + file.getId();
+        
+        
+        response.setCharacterEncoding("UTF-8");
+        response.setContentType("text/html;charset=UTF-8");
+        PrintWriter writer = response.getWriter();
+        
+        String print = "<script type='text/javascript'>window.parent.CKEDITOR.tools.callFunction("
+        		+ params.getString("CKEditorFuncNum") + ",'" + fileUrl + "','이미지를 업로드 하였습니다.')</script>";
+        
+        writer.println(print);
+        writer.flush();
+    }
+    
+    /*@RequestMapping(value = "/preview/{id}", method = RequestMethod.GET)
+    public void previews(HttpServletResponse response, @PathParam("id") Long id) throws IOException {
+    	System.out.println("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$");
+        commonFileService.preview(response, id);
+    }*/
 }

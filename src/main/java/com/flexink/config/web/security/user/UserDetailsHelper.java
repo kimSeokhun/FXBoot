@@ -27,10 +27,12 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class UserDetailsHelper {
 
-    /**
-     * 인증된 사용자객체를 VO형식으로 가져온다.
-     * @return 사용자 ValueObject
-     */
+    /********************************************************************
+     * @메소드명	: getAuthenticatedUser
+     * @작성자	: KIMSEOKHOON
+     * @메소드 내용	: 인증된 사용자객체를 VO형식으로 가져온다.
+     * @return	: 사용자 ValueObject
+     ********************************************************************/
     public static Object getAuthenticatedUser() {
         SecurityContext context = SecurityContextHolder.getContext();
         Authentication authentication = context.getAuthentication();
@@ -52,15 +54,17 @@ public class UserDetailsHelper {
         }
     }
 
-    /**
-     * 인증된 사용자의 권한 정보를 가져온다.
+    /********************************************************************
+     * @메소드명	: getAuthorities
+     * @작성자	: KIMSEOKHOON
+     * @메소드 내용	: 인증된 사용자의 권한 정보 반환
+     * @return	: 사용자 권한정보 목록
      * 예) [ROLE_ADMIN, ROLE_USER,
      * ROLE_A, ROLE_B, ROLE_RESTRICTED,
      * IS_AUTHENTICATED_FULLY,
      * IS_AUTHENTICATED_REMEMBERED,
      * IS_AUTHENTICATED_ANONYMOUSLY]
-     * @return 사용자 권한정보 목록
-     */
+     ********************************************************************/
     public static List<String> getAuthorities() {
         List<String> listAuth = new ArrayList<String>();
 
@@ -113,6 +117,11 @@ public class UserDetailsHelper {
         return listAuth.contains(role);
     }
     
+    /********************************************************************
+     * @메소드명	: getRoleType
+     * @작성자	: KIMSEOKHOON
+     * @메소드 내용	: 최상위 Role 타입 반환
+     ********************************************************************/
     public static String getRoleType() {
     	SecurityContext context = SecurityContextHolder.getContext();
         Authentication authentication = context.getAuthentication();
@@ -133,10 +142,11 @@ public class UserDetailsHelper {
 		return auth.getAuthority();
     }
 
-    /**
-     * 인증된 사용자 여부를 체크한다.
-     * @return 인증된 사용자 여부(TRUE / FALSE)
-     */
+    /********************************************************************
+     * @메소드명	: isAuthenticated
+     * @작성자	: KIMSEOKHOON
+     * @메소드 내용	: 인증된 사용자 여부
+     ********************************************************************/
     public static Boolean isAuthenticated() {
         SecurityContext context = SecurityContextHolder.getContext();
         Authentication authentication = context.getAuthentication();

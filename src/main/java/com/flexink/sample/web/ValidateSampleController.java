@@ -38,13 +38,13 @@ public class ValidateSampleController {
      * @작성자	: KIMSEOKHOON
      * @메소드 내용	: 유효성 검증 및 리다이렉트
      ********************************************************************/
-    @PostMapping("/valid")
+    @PostMapping("/valid")			// @Valid 객체는 BindingResult 바로 앞에 선언
     public String checkPersonInfo(@Valid Person person, BindingResult bindingResult, RedirectAttributes redirectAttr) {
 
     	// 유효성 검증
         if (bindingResult.hasErrors()) {
         	log.debug("Validator Errors : {} ", bindingResult.getAllErrors());
-            return "/sample/form";
+            return "/sample/form";	// jsp경로 지정. (서버 URL 아님) 
         }
         
         // Redirect Post 전송

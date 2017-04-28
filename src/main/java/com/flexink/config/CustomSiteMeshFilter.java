@@ -15,6 +15,7 @@ public class CustomSiteMeshFilter extends ConfigurableSiteMeshFilter {
 			.addDecoratorPath("/error/**", "/WEB-INF/decorators/sample/header.jsp")
 			.addExcludedPath("/h2-console/**")
 			.addExcludedPath("/security/**")
-			.addExcludedPath("/popup/**");
+			.addExcludedPath("/popup/**")
+			.addExcludedPath("/files/**");
     }
 }

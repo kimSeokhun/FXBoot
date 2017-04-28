@@ -17,20 +17,14 @@ public class EhCacheSampleService {
 	private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("HH:mm:ss");
 
 	public String getNoCache(String name) throws Exception {
-		long start = System.currentTimeMillis();
 		slowQuery(5000);
-		long end = System.currentTimeMillis();
-		String result = name + "의 NoCache 수행시간 : " + Long.toString(end-start) + " --- Cache 요청시간 : " + DATE_FORMAT.format(new Date());
-		return result;
+		return " --- Cache 요청시간 : " + DATE_FORMAT.format(new Date());
 	}
 
 	@Cacheable(cacheNames = "SampleCache", key="#name")
 	public String getCache(String name) throws Exception {
-		long start = System.currentTimeMillis();
 		slowQuery(5000);
-		long end = System.currentTimeMillis();
-		String result = name + "의 Cache 수행시간 : " + Long.toString(end-start) + " --- Cache 요청시간 : " + DATE_FORMAT.format(new Date());
-		return result;
+		return " --- Cache 요청시간 : " + DATE_FORMAT.format(new Date());
 	}
 
 	@CacheEvict(cacheNames = "SampleCache", key="#name")

@@ -145,12 +145,11 @@
 		    <artifactId>jquery</artifactId>
 		    <version>1.12.4</version>
 		</dependency>
-		<!-- <dependency>
-		    <groupId>org.webjars</groupId>
-		    <artifactId>jquery</artifactId>
-		    <version>3.2.0</version>
-		</dependency> -->
-		 	
+		<dependency>
+		    <groupId>org.webjars.bower</groupId>
+		    <artifactId>uri.js</artifactId>
+		    <version>1.17.1</version>
+		</dependency>
 		<dependency>
 		    <groupId>org.webjars.npm</groupId>
 		    <artifactId>ax5core</artifactId>
@@ -170,6 +169,21 @@
 		    <groupId>org.webjars.npm</groupId>
 		    <artifactId>ax5ui-binder</artifactId>
 		    <version>1.4.20</version>
+		</dependency>
+		<dependency>
+		    <groupId>org.webjars.npm</groupId>
+		    <artifactId>ax5ui-uploader</artifactId>
+		    <version>1.4.20</version>
+		</dependency>
+		<dependency>
+		    <groupId>org.webjars.npm</groupId>
+		    <artifactId>ax5ui-dialog</artifactId>
+		    <version>1.4.20</version>
+		</dependency>
+		<dependency>
+		    <groupId>org.webjars</groupId>
+		    <artifactId>ckeditor</artifactId>
+		    <version>4.6.2</version>
 		</dependency>
 		
 		

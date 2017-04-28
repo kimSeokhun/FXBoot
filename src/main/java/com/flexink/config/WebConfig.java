@@ -32,6 +32,8 @@ import org.springframework.web.servlet.i18n.SessionLocaleResolver;
 
 import com.flexink.common.error.ErrorController;
 import com.flexink.common.interceptor.MultipartInterceptor;
+import com.flexink.config.resolver.ParamsVoArgumentResolver;
+import com.flexink.config.resolver.ReaderHandlerMethodArgumentResolver;
 import com.flexink.config.resolver.RequestParamsArgumentResolver;
 
 
@@ -44,7 +46,7 @@ public class WebConfig extends WebMvcConfigurerAdapter {
 	@Override
 	public void addViewControllers(ViewControllerRegistry registry) {
 		//registry.addViewController("/security/login").setViewName("/login/login");
-		registry.addViewController("/").setViewName("/sample/main");
+		//registry.addViewController("/").setViewName("/sample/main");
 	}
 
 	/********************************************************************
@@ -222,8 +224,9 @@ public class WebConfig extends WebMvcConfigurerAdapter {
         PageableHandlerMethodArgumentResolver pageableHandlerMethodArgumentResolver = new PageableHandlerMethodArgumentResolver();
         pageableHandlerMethodArgumentResolver.setPageParameterName("pageNumber");
         pageableHandlerMethodArgumentResolver.setSizeParameterName("pageSize");
-        argumentResolvers.add(new RequestParamsArgumentResolver());
         argumentResolvers.add(pageableHandlerMethodArgumentResolver);
+        argumentResolvers.add(new RequestParamsArgumentResolver());
+        argumentResolvers.add(new ParamsVoArgumentResolver());
     }
 
 }

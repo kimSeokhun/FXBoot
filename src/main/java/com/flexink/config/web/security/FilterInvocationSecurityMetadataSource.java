@@ -5,8 +5,6 @@ import java.util.Collection;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.security.access.ConfigAttribute;
 import org.springframework.security.web.FilterInvocation;
 
@@ -18,8 +16,7 @@ public class FilterInvocationSecurityMetadataSource
 
 	@Override
 	public Collection<ConfigAttribute> getAttributes(Object object) throws IllegalArgumentException {
-
-		log.debug("FilterInvocationSecurityMetadataSource  "+object.toString());
+		/*log.debug("FilterInvocationSecurityMetadataSource  "+object.toString());*/
 		FilterInvocation fi = (FilterInvocation) object;
 		HttpServletRequest request 		= fi.getHttpRequest();
 		HttpServletResponse response 	= fi.getResponse();

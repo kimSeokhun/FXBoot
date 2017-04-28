@@ -9,22 +9,18 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.flexink.common.code.FxBootType;
 import com.flexink.common.domain.BaseService;
-import com.flexink.common.utils.EgovMap;
-import com.flexink.common.utils.RequestParams;
 import com.flexink.domain.code.CommonCode;
 import com.flexink.domain.code.CommonCodeId;
 import com.flexink.domain.code.CommonCodeRepository;
 import com.flexink.domain.code.QCommonCode;
 import com.flexink.sample.mapper.CommonCodeMapper;
+import com.flexink.vo.ParamsVo;
 import com.querydsl.core.BooleanBuilder;
 
 @Service
 public class CommonCodeService extends BaseService<CommonCode, CommonCodeId> {
 
-    private CommonCodeRepository basicCodeRepository;
-    
     private QCommonCode qCommonCode = QCommonCode.commonCode;
     
     @Autowired
@@ -33,22 +29,17 @@ public class CommonCodeService extends BaseService<CommonCode, CommonCodeId> {
     @Autowired
     public CommonCodeService(CommonCodeRepository basicCodeRepository) {
         super(CommonCode.class, basicCodeRepository);
-        this.basicCodeRepository = basicCodeRepository;
     }
 
     
-    public Page<CommonCode> get(RequestParams<CommonCode> requestParams) {
-        String groupCd = requestParams.getString("groupCd", "");
-        String useYn = requestParams.getString("useYn", "");
+    public Page<CommonCode> get(ParamsVo paramsVo) {
+    	
+    	paramsVo.addSort("groupCd", Sort.Direction.ASC);
+        paramsVo.addSort("sort", Sort.Direction.ASC);
 
-        String filter = requestParams.getString("filter");
-
-        BooleanBuilder builder = new BooleanBuilder();
-        builder.and(qCommonCode.useYn.eq(FxBootType.Used.valueOf("Y")));
+        String filter = paramsVo.getString("filter");
         
-        if (StringUtils.isNotEmpty(groupCd)) {
-            builder.and(qCommonCode.groupCd.eq(groupCd));
-        }
+        BooleanBuilder builder = new BooleanBuilder();
         
         if (StringUtils.isNotEmpty(filter)) {
             builder.and(qCommonCode.groupCd.like("%"+filter+"%")
@@ -56,16 +47,33 @@ public class CommonCodeService extends BaseService<CommonCode, CommonCodeId> {
             		.or(qCommonCode.code.like("%"+filter+"%"))
             		.or(qCommonCode.name.like("%"+filter+"%")));
         }
-        //Projections
-        //requestParams.addSort("groupCd", Sort.Direction.ASC);
-        //requestParams.addSort("sort", Sort.Direction.ASC);
         
-        Page<CommonCode> list = readPage(query().from(qCommonCode).where(builder), requestParams.getPageable());
         
-        // Mybatis 테스트
-        List<EgovMap> list2 = commonCodeMapper.readPage(requestParams);
-        System.out.println(list2);
+        // NATIVE QUERY
+        //List<CommonCode> list = getEntityManager().createNativeQuery("select * from common_code_m where group_cd = 'user'", CommonCode.class).getResultList();
         
+        // JPQL
+        //List<CommonCode> list2 = getEntityManager().createQuery("SELECT C FROM COMMON_CODE_M C WHERE C.GROUP_CD = 'USER'", CommonCode.class).getResultList();
+        
+        // Criteria
+        /*CriteriaBuilder cb = getEntityManager().getCriteriaBuilder();
+        CriteriaQuery<CommonCode> cQuery = cb.createQuery(CommonCode.class);
+        Root<CommonCode> c = cQuery.from(CommonCode.class);
+        CriteriaQuery<CommonCode> cQuery2 = cQuery.select(c).where(cb.equal(c.get("group_cd"), "user"));
+        List<CommonCode> list3 = cQuery2.createQuery(cQuery2).getResualtList();*/
+
+        // Spring Data Jpa
+        //List<CommonCode> list4 = repository.findByGroupCdEquals("user");
+        
+        // QueryDSL
+        //List<CommonCode> list5 = queryDsl().from(qCommonCode).where(qCommonCode.groupCd.eq("user")).fetch();
+        
+        // Mybatis
+        //List<EgovMap> list6 = commonCodeMapper.readPage(paramsVo);
+        
+        //List<Tuple> result = queryDsl().select(qCommonCode.data1, qCommonCode.data2).from(qCommonCode).fetch();
+        
+        Page<CommonCode> list = readPage(queryDsl().from(qCommonCode).where(builder), paramsVo.getPageable());
         return list;
     }
 

@@ -25,8 +25,9 @@ import com.flexink.common.domain.BaseJpaModel;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
-
+@ToString
 @Setter
 @Getter
 @DynamicInsert
@@ -97,7 +98,7 @@ public class CommonFile extends BaseJpaModel<Long>{
     @JsonProperty("preview")
     public String preview() {
         if (StringUtils.isEmpty(_preview)) {
-            return "/sample/files/preview?id=" + getId();
+            return "/files/preview?id=" + getId();
         }
         return _preview;
     }
@@ -105,7 +106,7 @@ public class CommonFile extends BaseJpaModel<Long>{
     @JsonProperty("thumbnail")
     public String thumbnail() {
         if (StringUtils.isEmpty(_thumbnail)) {
-            return "/sample/files/thumbnail?id=" + getId();
+            return "/files/thumbnail?id=" + getId();
         }
         return _thumbnail;
     }
@@ -113,7 +114,7 @@ public class CommonFile extends BaseJpaModel<Long>{
     @JsonProperty("download")
     public String download() {
         if (StringUtils.isEmpty(_download)) {
-            return "/sample/files/download?id=" + getId();
+            return "/files/download?id=" + getId();
         }
         return _download;
     }

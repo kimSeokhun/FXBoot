@@ -18,7 +18,10 @@
 <mapper namespace="com.flexink.sample.mapper.CommonCodeMapper">
 
     <select id="readPage" resultType="egovMap" parameterType="RequestParams">
-        SELECT * FROM COMMON_CODE_M WHERE GROUP_CD LIKE CONCAT(#{map.filter}, '%')
+        SELECT * FROM COMMON_CODE_M
+        <if test="map.filter != ''">
+        	WHERE GROUP_CD LIKE CONCAT(#{map.filter}, '%')
+        </if>
     </select>
     
 </mapper>

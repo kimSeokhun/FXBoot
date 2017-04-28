@@ -20,11 +20,12 @@
 		</section>
 		<section class="content">
 			${person} ${model}
+												<!-- commandName = @Valid 객체 이름 -->
 			<form:form action="valid" method="post" commandName="person">
 				<table>
 					<tr>
 						<td>Name:</td>
-						<td><form:input path="name" />
+						<td><form:input path="name" />	<!-- path == name -->
 							<form:errors path="name" /></td>
 					</tr>
 					<tr>

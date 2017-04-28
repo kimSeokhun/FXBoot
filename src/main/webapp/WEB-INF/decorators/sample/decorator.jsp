@@ -76,6 +76,25 @@ desired effect
       </a>
       <!-- Navbar Right Menu -->
       <div class="navbar-custom-menu">
+     	<ul class="nav navbar-nav">
+			<!-- 로그인하지 않았을때 -->
+			<sec:authorize access="isAnonymous()">
+				<li><a href="#">회원가입</a></li>
+				<li><a href="/security/login">로그인</a></li>
+			</sec:authorize>
+			<!-- 회원 권한이 있을 때 -->
+			<sec:authorize access="isAuthenticated()">
+				<li><a href="/security/logout">로그아웃</a></li>
+			</sec:authorize>
+			<!-- 권한체크 -->
+			<sec:authorize access="hasRole('ROLE_ADMIN')">
+				<li><a href="#">관리자 페이지</a></li>
+			</sec:authorize>
+			<!-- 여러 권한 체크 -->
+			<sec:authorize access="hasAnyRole('ROLE_USER, ROLE_ADMIN')">
+				<li><a href="#">정보수정</a></li>
+			</sec:authorize>
+		</ul>
         <ul class="nav navbar-nav">
           <!-- Messages: style can be found in dropdown.less-->
           <li class="dropdown messages-menu">
@@ -262,10 +281,13 @@ desired effect
         <li class="header">HEADER</li>
         <!-- Optionally, you can add icons to the links -->
         <li class="active"><a href="/"><i class="fa fa-link"></i> <span>Main</span></a></li>
+        <li><a href="/sample/board?type=SAMPLE"><i class="fa fa-link"></i> <span>Board</span></a></li>
+        <li><a href="/sample/paging"><i class="fa fa-link"></i> <span>Pagination</span></a></li>
         <li><a href="/sample/locale"><i class="fa fa-link"></i> <span>Locale</span></a></li>
         <li><a href="/sample/valid"><i class="fa fa-link"></i> <span>Valid</span></a></li>
         <li><a href="/sample/code"><i class="fa fa-link"></i> <span>CommonCode Mng</span></a></li>
-        <li class="treeview">
+        <li><a href="/sample/cache"><i class="fa fa-link"></i> <span>EhCache</span></a></li>
+        <!-- <li class="treeview">
           <a href="#"><i class="fa fa-link"></i> <span>Cache</span>
             <span class="pull-right-container">
               <i class="fa fa-angle-left pull-right"></i>
@@ -278,7 +300,9 @@ desired effect
             <li><a href="/sample/cache/refresh/1">refresh-1</a></li>
             <li><a href="/sample/cache/refresh/2">refresh-2</a></li>
           </ul>
-        </li>
+        </li> -->
+        <li><a href="/sample/file"><i class="fa fa-link"></i> <span>file</span></a></li>
+        <li><a href="/h2-console" target="_blank"><i class="fa fa-link"></i> <span>H2 Console</span></a></li>
       </ul>
       <!-- /.sidebar-menu -->
     </section>

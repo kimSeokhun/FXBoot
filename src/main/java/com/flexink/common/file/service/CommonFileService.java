@@ -33,10 +33,10 @@ import com.flexink.common.code.Types;
 import com.flexink.common.domain.BaseService;
 import com.flexink.common.utils.ArrayUtils;
 import com.flexink.common.utils.EncodeUtils;
-import com.flexink.common.utils.RequestParams;
 import com.flexink.domain.file.CommonFile;
 import com.flexink.domain.file.CommonFileRepository;
 import com.flexink.domain.file.QCommonFile;
+import com.flexink.vo.ParamsVo;
 import com.flexink.vo.file.UploadParameters;
 import com.querydsl.core.BooleanBuilder;
 
@@ -276,15 +276,15 @@ public class CommonFileService extends BaseService<CommonFile, Long> implements 
         return FileUtils.readFileToByteArray(new File(getSavePath(saveName)));
     }
 
-    public Page<CommonFile> getList(RequestParams<CommonFile> requestParams) {
-        String targetType = requestParams.getString("targetType", "");
-        String targetId = requestParams.getString("targetId", "");
-        String delYn = requestParams.getString("delYn", "");
-        String targetIds = requestParams.getString("targetIds", "");
-        requestParams.addSort("sort", Sort.Direction.ASC);
-        requestParams.addSort("id", Sort.Direction.DESC);
+    public Page<CommonFile> getList(ParamsVo paramsVo) {
+        String targetType = paramsVo.getString("targetType", "");
+        String targetId = paramsVo.getString("targetId", "");
+        String delYn = paramsVo.getString("delYn", "");
+        String targetIds = paramsVo.getString("targetIds", "");
+        paramsVo.addSort("sort", Sort.Direction.ASC);
+        paramsVo.addSort("id", Sort.Direction.DESC);
 
-        Pageable pageable = requestParams.getPageable();
+        Pageable pageable = paramsVo.getPageable();
 
         BooleanBuilder builder = new BooleanBuilder();
         
@@ -297,7 +297,6 @@ public class CommonFileService extends BaseService<CommonFile, Long> implements 
         }
 
         if (StringUtils.isNotEmpty(delYn)) {
-        	//FxBootType.Deleted deleted = FxBootType.Deleted.get(delYn);
         	FxBootType.Deleted deleted = FxBootType.Deleted.valueOf(delYn);
         	builder.and(qCommonFile.delYn.eq(deleted));
         }
@@ -313,13 +312,13 @@ public class CommonFileService extends BaseService<CommonFile, Long> implements 
         return commonFileRepository.findAll(builder, pageable);
     }
 
-    public CommonFile get(RequestParams<CommonFile> requestParams) {
-        List<CommonFile> commonFiles = getList(requestParams).getContent();
+    public CommonFile get(ParamsVo paramsVo) {
+        List<CommonFile> commonFiles = getList(paramsVo).getContent();
         return ArrayUtils.isEmpty(commonFiles) ? null : commonFiles.get(0);
     }
 
     public CommonFile get(String targetType, String targetId) {
-        RequestParams<CommonFile> requestParams = new RequestParams<>(CommonFile.class);
+    	ParamsVo requestParams = new ParamsVo();
         requestParams.put("targetType", targetType);
         requestParams.put("targetId", targetId);
 
@@ -329,6 +328,13 @@ public class CommonFileService extends BaseService<CommonFile, Long> implements 
     @Override
     public void afterPropertiesSet() throws Exception {
         createBaseDirectory();
+    }
+    
+    @Transactional
+    public void deleteFiles(List<CommonFile> files) {
+    	for(CommonFile file : files) {
+    		deleteFile(file.getId());
+    	}
     }
 
     @Transactional
