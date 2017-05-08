@@ -4,12 +4,12 @@
 
 <html>
 <head>
-<link rel="stylesheet" href="/webjars/ax5ui-uploader/1.4.20/dist/ax5uploader.css">
-<link rel="stylesheet" href="/webjars/ax5ui-dialog/1.4.20/dist/ax5dialog.css">
+<link rel="stylesheet" href="${contextPath}/webjars/ax5ui-uploader/1.4.20/dist/ax5uploader.css">
+<link rel="stylesheet" href="${contextPath}/webjars/ax5ui-dialog/1.4.20/dist/ax5dialog.css">
 
-<script src="/webjars/ax5core/1.4.20/dist/ax5core.min.js"></script>
-<script src="/webjars/ax5ui-uploader/1.4.20/dist/ax5uploader.min.js"></script>
-<script src="/webjars/ax5ui-dialog/1.4.20/dist/ax5dialog.min.js"></script>
+<script src="${contextPath}/webjars/ax5core/1.4.20/dist/ax5core.min.js"></script>
+<script src="${contextPath}/webjars/ax5ui-uploader/1.4.20/dist/ax5uploader.min.js"></script>
+<script src="${contextPath}/webjars/ax5ui-dialog/1.4.20/dist/ax5dialog.min.js"></script>
 <script src="https://cdn.rawgit.com/thomasJang/jquery-direct/master/dist/jquery-direct.min.js"></script>
 
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">

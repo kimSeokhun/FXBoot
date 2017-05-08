@@ -6,10 +6,10 @@
 <html>
 <head>
 
-<link rel="stylesheet" href="/webjars/ax5ui-grid/1.4.20/dist/ax5grid.css">
-<script src="/webjars/ax5core/1.4.20/dist/ax5core.min.js"></script>
-<script src="/webjars/ax5ui-grid/1.4.20/dist/ax5grid.js"></script>
-<script src="/webjars/ax5ui-formatter/1.4.20/dist/ax5formatter.js"></script>
+<link rel="stylesheet" href="${contextPath}/webjars/ax5ui-grid/1.4.20/dist/ax5grid.css">
+<script src="${contextPath}/webjars/ax5core/1.4.20/dist/ax5core.min.js"></script>
+<script src="${contextPath}/webjars/ax5ui-grid/1.4.20/dist/ax5grid.js"></script>
+<script src="${contextPath}/webjars/ax5ui-formatter/1.4.20/dist/ax5formatter.js"></script>
 
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Code</title>

@@ -1,13 +1,11 @@
 package com.flexink.common.file;
 
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.websocket.server.PathParam;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -15,6 +13,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -28,6 +27,7 @@ import com.flexink.domain.file.CommonFile;
 import com.flexink.vo.ParamsVo;
 import com.flexink.vo.file.UploadParameters;
 
+import lombok.Cleanup;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -90,15 +90,30 @@ public class FileUploadController {
     public void preview(HttpServletResponse response, @RequestParam Long id) throws IOException {
         commonFileService.preview(response, id);
     }
+    
+    @RequestMapping(value = "/preview/{id}", method = RequestMethod.GET)
+    public void previews(HttpServletResponse response, @PathVariable("id") Long id) throws IOException {
+        commonFileService.preview(response, id);
+    }
 
     @RequestMapping(value = "/thumbnail", method = RequestMethod.GET)
     public void thumbnail(HttpServletResponse response, @RequestParam Long id) throws IOException {
         commonFileService.thumbnail(response, id);
     }
+    
+    @RequestMapping(value = "/thumbnail/{id}", method = RequestMethod.GET)
+    public void thumbnails(HttpServletResponse response, @PathVariable("id") Long id) throws IOException {
+    	commonFileService.thumbnail(response, id);
+    }
 
     @RequestMapping(value = "/download", method = RequestMethod.GET)
     public ResponseEntity<byte[]> download(@RequestParam Long id) throws IOException {
         return commonFileService.downloadById(id);
+    }
+    
+    @RequestMapping(value = "/download/{id}", method = RequestMethod.GET)
+    public ResponseEntity<byte[]> downloads(@PathVariable("id") Long id) throws IOException {
+    	return commonFileService.downloadById(id);
     }
 
     @RequestMapping(value = "/download", method = RequestMethod.GET, params = {"targetType", "targetId"})
@@ -107,17 +122,17 @@ public class FileUploadController {
     }
     
     @PostMapping(value="/ckeditorImageUplaod")
-    public void ckeditorImageUpload(HttpServletResponse response, @RequestParam(value = "upload") MultipartFile multipartFile, ParamsVo params) throws IOException {
+    public void ckeditorImageUpload(HttpServletRequest request, HttpServletResponse response, @RequestParam(value = "upload") MultipartFile multipartFile, ParamsVo params) throws IOException {
     	
     	UploadParameters uploadParameters = new UploadParameters();
         uploadParameters.setMultipartFile(multipartFile);
         CommonFile file = commonFileService.upload(uploadParameters);
-        String fileUrl = "/files/preview?id=" + file.getId();
-        
+        String fileUrl = request.getContextPath() + "/files/preview/" + file.getId();
+        //String fileUrl = "/files/preview?id=" + file.getId();
         
         response.setCharacterEncoding("UTF-8");
         response.setContentType("text/html;charset=UTF-8");
-        PrintWriter writer = response.getWriter();
+        @Cleanup PrintWriter writer = response.getWriter();
         
         String print = "<script type='text/javascript'>window.parent.CKEDITOR.tools.callFunction("
         		+ params.getString("CKEditorFuncNum") + ",'" + fileUrl + "','이미지를 업로드 하였습니다.')</script>";
@@ -126,9 +141,5 @@ public class FileUploadController {
         writer.flush();
     }
     
-    /*@RequestMapping(value = "/preview/{id}", method = RequestMethod.GET)
-    public void previews(HttpServletResponse response, @PathParam("id") Long id) throws IOException {
-    	System.out.println("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$");
-        commonFileService.preview(response, id);
-    }*/
+    
 }

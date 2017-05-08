@@ -6,6 +6,7 @@ import javax.inject.Inject;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -24,7 +25,7 @@ import lombok.extern.slf4j.Slf4j;
 @RequestMapping(value = "/api/v1/commonCodes")
 public class CommonCodeController {
 
-    @Inject
+    @Autowired
     private CommonCodeService basicCodeService;
 
     @RequestMapping(method = RequestMethod.GET, produces = "application/json; charset=UTF-8")
@@ -45,6 +46,7 @@ public class CommonCodeController {
     	System.out.println(requestParams.getString("pageNumber"));
     	System.out.println(requestParams.getString("pageSize"));*/
         //List<CommonCode> basicCodes = basicCodeService.get(requestParams);
+    	System.out.println(basicCodeService);
     	Page<CommonCode> basicCodes = basicCodeService.get(paramsVo);
     	System.out.println(basicCodes.hasNext());
     	System.out.println(basicCodes.hasPrevious());
@@ -55,7 +57,6 @@ public class CommonCodeController {
     @RequestMapping(method = {RequestMethod.PUT}, produces = "application/json; charset=UTF-8")
     @ResponseBody
     public boolean save(@Valid @NotNull @RequestBody List<CommonCode> basicCodes) {
-    	System.out.println(basicCodes);
         basicCodeService.saveCommonCode(basicCodes);
         return true;
     }

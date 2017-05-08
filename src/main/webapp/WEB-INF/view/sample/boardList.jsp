@@ -1,7 +1,7 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-	pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ include file="/WEB-INF/jspf/inc_taglib.jspf" %>
 
+<!DOCTYPE html>
 <html>
 <head>
 <script>
@@ -33,15 +33,6 @@ function search() {
 			            <div class="box-header with-border">
 			              <h3 class="box-title">Board Sample</h3>
 			              
-			              <form>
-				              <div class="input-group input-group-sm col-xs-4">
-				                <input type="text" class="form-control" id="filter" name="filter" value="${filter}">
-				                    <span class="input-group-btn">
-				                      <button type="button" class="btn btn-info btn-flat" onclick="search();">Search!</button>
-				                    </span>
-				              </div>
-			              </form>
-			              
 			            </div>
 			            <div class="box-body">
 			              <table class="table table-bordered">
@@ -49,7 +40,6 @@ function search() {
 				                <tr>
 				                  <th style="width: 12px">#</th>
 				                  <th>Title</th>
-				                  <th>Content</th>
 				                  <th>Writer</th>
 				                  <th>View</th>
 				                  <th>Date</th>
@@ -59,22 +49,36 @@ function search() {
 			                		<tr>
 					                  <td><fx:rowNumberDesc totalElements="${list.totalElements}" number="${list.number}" size="${list.size}" count="${status.count}"/></td>
 					                  <%-- <td><fx:rowNumberAsc number="${data.number}" size="${data.size}" count="${status.count}"/></td> --%>
-					                  <td>${row.title}</td>
-					                  <td><a href="viewArticle?id=${row.id}">${row.content}</a></td>
+					                  <td><a href="viewArticle?id=${row.id}"><p>${row.title}</p></a></td>
 					                  <td>${row.createdBy}</td>
 					                  <td>${row.viewCount}</td>
-					                  <td>${row.createdAt}</td>
+					                  <td><fmt:formatDate pattern="yyyy-MM-dd H:m:s" value="${row.createdAt}" /></td>
 					                </tr>
 					                
 			                	</c:forEach>
 				          	</tbody>
 			              </table>
-			              <div class="box-footer">
-								<button type="submit" class="btn btn-primary" onclick="location.href='article?type=${type}'">글쓰기</button>
+		              		<div class="box-footer">
+		              			<div class="row">
+		              				<div class="col-md-4"></div>
+		              				<div class="col-md-4">
+		              					<form>
+							              <div class="input-group input-group-sm">
+							                <input type="text" class="form-control" id="filter" name="filter" value="${filter}">
+							                    <span class="input-group-btn">
+							                      <button type="button" class="btn btn-info btn-flat" onclick="search();">Search!</button>
+							                    </span>
+							              </div>
+							        	</form>
+					              	</div>
+					              	<div class="col-md-4 text-right">
+										<button type="submit" class="btn btn-primary" onclick="location.href='article?type=${type}'">글쓰기</button>
+									</div>
+								</div>
 							</div>
 			            </div>
 			            <!-- /.box-body -->
-			            <div class="box-footer clearfix">
+			            <div class="box-footer clearfix text-center ">
 			            	<!-- 페이징 view -->
 			            	<fx:pagination pageViewCount="9" totalPages="${list.totalPages}" number="${list.number}" />
 			            </div>

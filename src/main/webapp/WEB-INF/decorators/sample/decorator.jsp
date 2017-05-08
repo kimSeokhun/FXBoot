@@ -5,24 +5,24 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
-	<script src="/webjars/jquery/1.12.4/jquery.min.js"></script>
+	<script src="${contextPath}/webjars/jquery/1.12.4/jquery.min.js"></script>
   
 	<!-- Tell the browser to be responsive to screen width -->
 	<meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
 	<!-- Bootstrap 3.3.6 -->
-	<link rel="stylesheet" href="/webjars/AdminLTE/2.3.8/bootstrap/css/bootstrap.min.css">
+	<link rel="stylesheet" href="${contextPath}/webjars/AdminLTE/2.3.8/bootstrap/css/bootstrap.min.css">
 	<!-- Font Awesome -->
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.5.0/css/font-awesome.min.css">
 	<!-- Ionicons -->
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ionicons/2.0.1/css/ionicons.min.css">
 	<!-- Theme style -->
-	<link rel="stylesheet" href="/webjars/AdminLTE/2.3.8/dist/css/AdminLTE.min.css">
+	<link rel="stylesheet" href="${contextPath}/webjars/AdminLTE/2.3.8/dist/css/AdminLTE.min.css">
 	
 	<!-- AdminLTE Skins. We have chosen the skin-blue for this starter
 	      page. However, you can choose any other skin. Make sure you
 	      apply the skin class to the body tag so the changes take effect.
 	-->
-	<link rel="stylesheet" href="/webjars/AdminLTE/2.3.8/dist/css/skins/skin-blue.min.css">
+	<link rel="stylesheet" href="${contextPath}/webjars/AdminLTE/2.3.8/dist/css/skins/skin-blue.min.css">
 	
 	<!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
 	<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -30,6 +30,9 @@
 	<script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
 	<script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
 	<![endif]-->
+	<script>
+		var contextPath = "${contextPath}";
+	</script>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 	<title>Admin | <sitemesh:write property='title' /></title>
 	<sitemesh:write property='head' />
@@ -80,11 +83,11 @@ desired effect
 			<!-- 로그인하지 않았을때 -->
 			<sec:authorize access="isAnonymous()">
 				<li><a href="#">회원가입</a></li>
-				<li><a href="/security/login">로그인</a></li>
+				<li><a href="${contextPath}/security/login">로그인</a></li>
 			</sec:authorize>
 			<!-- 회원 권한이 있을 때 -->
 			<sec:authorize access="isAuthenticated()">
-				<li><a href="/security/logout">로그아웃</a></li>
+				<li><a href="${contextPath}/security/logout">로그아웃</a></li>
 			</sec:authorize>
 			<!-- 권한체크 -->
 			<sec:authorize access="hasRole('ROLE_ADMIN')">
@@ -112,7 +115,7 @@ desired effect
                     <a href="#">
                       <div class="pull-left">
                         <!-- User Image -->
-                        <img src="/webjars/AdminLTE/2.3.8/dist/img/user2-160x160.jpg" class="img-circle" alt="User Image">
+                        <img src="${contextPath}/webjars/AdminLTE/2.3.8/dist/img/user2-160x160.jpg" class="img-circle" alt="User Image">
                       </div>
                       <!-- Message title and timestamp -->
                       <h4>
@@ -196,14 +199,14 @@ desired effect
             <!-- Menu Toggle Button -->
             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
               <!-- The user image in the navbar-->
-              <img src="/webjars/AdminLTE/2.3.8/dist/img/user2-160x160.jpg" class="user-image" alt="User Image">
+              <img src="${contextPath}/webjars/AdminLTE/2.3.8/dist/img/user2-160x160.jpg" class="user-image" alt="User Image">
               <!-- hidden-xs hides the username on small devices so only the image appears. -->
               <span class="hidden-xs">Alexander Pierce</span>
             </a>
             <ul class="dropdown-menu">
               <!-- The user image in the menu -->
               <li class="user-header">
-                <img src="/webjars/AdminLTE/2.3.8/dist/img/user2-160x160.jpg" class="img-circle" alt="User Image">
+                <img src="${contextPath}/webjars/AdminLTE/2.3.8/dist/img/user2-160x160.jpg" class="img-circle" alt="User Image">
 
                 <p>
                   Alexander Pierce - Web Developer
@@ -232,7 +235,7 @@ desired effect
                 </div>
                 <div class="pull-right">
                 	<sec:authorize access="isAuthenticated()">
-                  		<a href="/security/logout" class="btn btn-default btn-flat">Sign out</a>
+                  		<a href="${contextPath}/security/logout" class="btn btn-default btn-flat">Sign out</a>
                   	</sec:authorize>
                 </div>
               </li>
@@ -255,7 +258,7 @@ desired effect
       <!-- Sidebar user panel (optional) -->
       <div class="user-panel">
         <div class="pull-left image">
-          <img src="/webjars/AdminLTE/2.3.8/dist/img/user2-160x160.jpg" class="img-circle" alt="User Image">
+          <img src="${contextPath}/webjars/AdminLTE/2.3.8/dist/img/user2-160x160.jpg" class="img-circle" alt="User Image">
         </div>
         <div class="pull-left info">
           <p>Alexander Pierce</p>
@@ -280,13 +283,13 @@ desired effect
       <ul class="sidebar-menu">
         <li class="header">HEADER</li>
         <!-- Optionally, you can add icons to the links -->
-        <li class="active"><a href="/"><i class="fa fa-link"></i> <span>Main</span></a></li>
-        <li><a href="/sample/board?type=SAMPLE"><i class="fa fa-link"></i> <span>Board</span></a></li>
-        <li><a href="/sample/paging"><i class="fa fa-link"></i> <span>Pagination</span></a></li>
-        <li><a href="/sample/locale"><i class="fa fa-link"></i> <span>Locale</span></a></li>
-        <li><a href="/sample/valid"><i class="fa fa-link"></i> <span>Valid</span></a></li>
-        <li><a href="/sample/code"><i class="fa fa-link"></i> <span>CommonCode Mng</span></a></li>
-        <li><a href="/sample/cache"><i class="fa fa-link"></i> <span>EhCache</span></a></li>
+        <li class="active"><a href="${contextPath}/"><i class="fa fa-link"></i> <span>Main</span></a></li>
+        <li><a href="${contextPath}/sample/board?type=SAMPLE"><i class="fa fa-link"></i> <span>Board</span></a></li>
+        <li><a href="${contextPath}/sample/paging"><i class="fa fa-link"></i> <span>Pagination</span></a></li>
+        <li><a href="${contextPath}/sample/locale"><i class="fa fa-link"></i> <span>Locale</span></a></li>
+        <li><a href="${contextPath}/sample/valid"><i class="fa fa-link"></i> <span>Valid</span></a></li>
+        <li><a href="${contextPath}/sample/code"><i class="fa fa-link"></i> <span>CommonCode Mng</span></a></li>
+        <li><a href="${contextPath}/sample/cache"><i class="fa fa-link"></i> <span>EhCache</span></a></li>
         <!-- <li class="treeview">
           <a href="#"><i class="fa fa-link"></i> <span>Cache</span>
             <span class="pull-right-container">
@@ -301,8 +304,8 @@ desired effect
             <li><a href="/sample/cache/refresh/2">refresh-2</a></li>
           </ul>
         </li> -->
-        <li><a href="/sample/file"><i class="fa fa-link"></i> <span>file</span></a></li>
-        <li><a href="/h2-console" target="_blank"><i class="fa fa-link"></i> <span>H2 Console</span></a></li>
+        <li><a href="${contextPath}/sample/file"><i class="fa fa-link"></i> <span>file</span></a></li>
+        <li><a href="${contextPath}/h2-console" target="_blank"><i class="fa fa-link"></i> <span>H2 Console</span></a></li>
       </ul>
       <!-- /.sidebar-menu -->
     </section>
@@ -407,9 +410,9 @@ desired effect
 <!-- jQuery 2.2.3 -->
 <!-- <script src="/webjars/AdminLTE/2.3.8/plugins/jQuery/jquery-2.2.3.min.js"></script> -->
 <!-- Bootstrap 3.3.6 -->
-<script src="/webjars/AdminLTE/2.3.8/bootstrap/js/bootstrap.min.js"></script>
+<script src="${contextPath}/webjars/AdminLTE/2.3.8/bootstrap/js/bootstrap.min.js"></script>
 <!-- AdminLTE App -->
-<script src="/webjars/AdminLTE/2.3.8/dist/js/app.min.js"></script>
+<script src="${contextPath}/webjars/AdminLTE/2.3.8/dist/js/app.min.js"></script>
 
 <!-- Optionally, you can add Slimscroll and FastClick plugins.
      Both of these plugins are recommended to enhance the

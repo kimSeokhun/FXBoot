@@ -31,72 +31,44 @@
 			            </div>
 			            <!-- /.box-header -->
 			            <!-- form start -->
-			            <form class="form-horizontal">
-			              <div class="box-body">
+			            <form method="get" action="${contextPath}/sample/article?id=${article.id}" class="form-horizontal">
+			            	<input type="hidden" name="id" value="${article.id}" />
+			            	<div class="box-body">
+				                <div class="form-group">
+				                  <label for="title" class="col-sm-2 control-label">Title</label>
+				                  <div class="col-sm-10">
+				                    <input type="text" class="form-control" name="title" placeholder="Title" value="${article.title}" disabled="disabled"/>
+				                  </div>
+				                </div>
+				                
+				                <div class="form-group">
+				                  <label for="inputContent" class="col-sm-2 control-label">Content</label>
+				                  <div class="col-sm-10">
+				                    <!-- <input type="text" class="form-control" id="inputContent" placeholder=""> -->
+				                    
+				                    <!-- <textarea name="content" id="editor" rows="10" cols="80" > -->
+				                    	${article.content}
+				                    <!-- </textarea> -->
+				                  </div>
+				                </div>
+		              		</div>
 			              
-			                <div class="form-group">
-			                  <label for="title" class="col-sm-2 control-label">Title</label>
-			                  <div class="col-sm-10">
-			                    <input type="text" class="form-control" name="title" placeholder="Title" value="${article.title}"/>
-			                  </div>
-			                </div>
-			                
-			                <div class="form-group">
-			                  <label for="inputContent" class="col-sm-2 control-label">Content</label>
-			                  <div class="col-sm-10">
-			                    <!-- <input type="text" class="form-control" id="inputContent" placeholder=""> -->
-			                    
-			                    <textarea name="content" id="editor" rows="10" cols="80" >
-			                    	${article.content}
-			                    </textarea>
-			                  </div>
-			                </div>
-			                
-			                <div class="form-group">
-			                  <div class="col-sm-offset-2 col-sm-10">
-			                    <div class="checkbox">
-			                      <label>
-			                        <input type="checkbox" id="secret" name="secret" value="true" /> 비밀 글
-			                      </label>
-			                    </div>
-			                  </div>
-			                </div>
-			                
-			              </div>
-			              </form>
 			              <!-- /.box-body -->
 			              <div class="box-footer">
-			                <button type="button" class="btn btn-default" onclick="location.href='/sample/board';">Cancel</button>
-			                <button type="submit" class="btn btn-info pull-right">Save</button>
+			                <button type="button" class="btn btn-default" onclick="history.back();">Cancel</button>
+			                <button type="submit" class="btn btn-info pull-right">Update</button>
 			              </div>
+			              
+		              	</form>
 			              <!-- /.box-footer -->
 			          </div>
-		        
+		        ${board} <br>
+		        ${paramsVo}
 		        </div>
 		    </div>
 		</section>
 	</div>
-	<script>
-		var editor = CKEDITOR.replace( 'editor', {
-        	customConfig: '/resources/lib/ckeditor/config.js'
-        });
-        function save() {
-        	var data = CKEDITOR.instances.editor.getData();
-        	console.log(data);
-        }
-        
-        function saveArticle() {
-        	//var data = CKEDITOR.instances.editor.getData();
-        	return true;
-        }
-        
-        $(function() {
-        	editor.on( 'change', function( evt ) {
-        	    // getData() returns CKEditor's HTML content.
-        	    console.log( 'Total bytes: ' + evt.editor.getData().length );
-        	});
-        });
-    </script>
+	
 </body>
 
 </html>

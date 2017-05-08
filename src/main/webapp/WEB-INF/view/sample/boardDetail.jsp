@@ -5,7 +5,7 @@
 <html>
 <head>
 
-<script src="/resources/lib/ckeditor/ckeditor.js"></script>
+<script src="${contextPath}/resources/lib/ckeditor/ckeditor.js"></script>
 
 <title>Main</title>
 </head>
@@ -27,17 +27,17 @@
 		        
 		        	<div class="box box-info">
 			            <div class="box-header with-border">
-			              <h3 class="box-title">Horizontal Form</h3>
+			              <h3 class="box-title">글 쓰기</h3>
 			            </div>
 			            <!-- /.box-header -->
 			            <!-- form start -->
-			            <form:form class="form-horizontal" commandName="board" method="post" action="article" onsubmit="return saveArticle();">
+			            <form:form class="form-horizontal" id="boardFrom" commandName="board" method="post" action="article" onsubmit="return saveArticle();">
 			              <div class="box-body">
 			              
 			                <div class="form-group">
 			                  <label for="title" class="col-sm-2 control-label">Title</label>
 			                  <div class="col-sm-10">
-			                    <form:input type="text" class="form-control" path="title" placeholder="Title" value="${title}"/>
+			                    <form:input type="text" class="form-control" path="title" placeholder="Title" value="${article.title}"/>
 			                    <form:errors path="title" />
 			                  </div>
 			                </div>
@@ -45,14 +45,11 @@
 			                <div class="form-group">
 			                  <label for="inputContent" class="col-sm-2 control-label">Content</label>
 			                  <div class="col-sm-10">
-			                    <!-- <input type="text" class="form-control" id="inputContent" placeholder=""> -->
 			                    
-			                    <form:textarea path="content" id="editor" rows="10" cols="80" />
-			                    	<%-- ${content} --%>
-			                    <%-- </form:textarea> --%>
-			                    <!-- <textarea name="content" id="editor" rows="10" cols="80">
-			                    	
-					            </textarea> -->
+			                    <%-- <form:textarea path="content" id="editor" rows="10" cols="80" value="${article.content}"/> --%>
+			                    <textarea name="content" id="editor" rows="10" cols="80">
+			                    	${article.content}
+					            </textarea>
 					            
 			                  </div>
 			                </div>
@@ -76,33 +73,31 @@
 			              </div>
 			              <!-- /.box-footer -->
 			              <input type="hidden" name="type" value="${board.type}" />
+			              <input type="hidden" id="boardId" name="id" value="${article.id}" />
 			            </form:form>
 			          </div>
-		        
 		        </div>
 		    </div>
 		</section>
 	</div>
 	<script>
 		var editor = CKEDITOR.replace( 'editor', {
-        	customConfig: '/resources/lib/ckeditor/config.js'
+        	customConfig: '${contextPath}/resources/lib/ckeditor/config.js'
         });
-        function save() {
-        	var data = CKEDITOR.instances.editor.getData();
-        	console.log(data);
-        }
         
         function saveArticle() {
-        	//var data = CKEDITOR.instances.editor.getData();
+        	if($('#boardId').val() != "") {
+        		$('#boardFrom').attr('action', $('#boardFrom').attr('action')+'/update');
+        	}
         	return true;
         }
         
-        $(function() {
+        /* $(function() {
         	editor.on( 'change', function( evt ) {
         	    // getData() returns CKEditor's HTML content.
         	    console.log( 'Total bytes: ' + evt.editor.getData().length );
         	});
-        });
+        }); */
     </script>
 </body>
 

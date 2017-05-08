@@ -10,7 +10,7 @@
 <c:set var="first" value="${number eq 0 ? true : false}" />
 <c:set var="last" value="${number+1 eq totalPages ? true : false}" />
 
-<ul class="pagination no-margin pull-right">
+<ul class="pagination no-margin">
 	<c:if test="${!first}">
 		<li><a href="javascript:movePage(0);"><i class="fa fa-angle-double-left"></i>&nbsp;</a></li>
 		<li><a href="javascript:movePage(${number-1});"><i class="fa fa-angle-left"></i>&nbsp;</a></li>
@@ -26,7 +26,7 @@
 	</c:if>
 </ul>
 
-<script src="/webjars/uri.js/1.17.1/src/URI.min.js"></script>
+<script src="${contextPath}/webjars/uri.js/1.17.1/src/URI.min.js"></script>
 <script>
 function movePage(page){
 	var uri = new URI(window.location);

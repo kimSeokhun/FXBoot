@@ -8,7 +8,11 @@ public class CommonVo {
 	private LoginUserDetails loginUserDetails;
 	
 	public CommonVo() {
-		this.loginUserDetails = (LoginUserDetails) UserDetailsHelper.getAuthenticatedUser();
+		if(UserDetailsHelper.getAuthenticatedUser() instanceof LoginUserDetails) {
+			this.loginUserDetails = (LoginUserDetails) UserDetailsHelper.getAuthenticatedUser();
+		} else {
+			this.loginUserDetails = null;
+		}
 	}
 	
 	/********************************************************************

@@ -29,11 +29,11 @@ public class Board extends BaseJpaModel<Long> {
 	@Column(name="BOARD_ID")
 	private Long id;
 
-	@Column(name="TYPE")
+	@Column(name="TYPE", length=10)
 	private String type;
 	
 	@NotEmpty
-	@Column(name="TITLE")
+	@Column(name="TITLE", length=100)
 	private String title;
 	
 	@NotEmpty
@@ -43,6 +43,7 @@ public class Board extends BaseJpaModel<Long> {
 	@Column(name="VIEW_COUNT")
 	private int viewCount;
 	
+	@Column(length=1)
 	@Enumerated(EnumType.STRING)
 	private Secret secret;
 	

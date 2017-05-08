@@ -20,7 +20,7 @@ CKEDITOR.editorConfig = function( config ) {
 		{ name: 'others', groups: [ 'others' ] }
 	];
 
-	config.filebrowserImageUploadUrl = '/files/ckeditorImageUplaod';
+	config.filebrowserImageUploadUrl = contextPath+'/files/ckeditorImageUplaod';
 		
 	config.removeButtons = 'Save,NewPage,Preview,Print,Templates,Cut,Copy,Paste,PasteText,PasteFromWord,Find,Replace,SelectAll,Scayt,Form,Checkbox,Radio,TextField,Textarea,Select,Button,HiddenField,CreateDiv,Language,BidiLtr,BidiRtl,Anchor,Flash,PageBreak,Iframe';
 	config.font_names = '굴림; 돋움; 궁서; HY견고딕; HY견명조; 휴먼둥근헤드라인; 휴먼매직체; 휴먼모음T; 휴먼아미체; 휴먼엑스포; 휴먼옛체; 휴먼편지체;' + CKEDITOR.config.font_names;
