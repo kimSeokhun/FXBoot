@@ -1,5 +1,7 @@
 package com.flexink.sample.service;
 
+import java.util.Map;
+
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -9,10 +11,16 @@ import org.springframework.transaction.annotation.Transactional;
 import com.flexink.common.domain.BaseService;
 import com.flexink.domain.sample.Board;
 import com.flexink.domain.sample.BoardSampleRepository;
+import com.flexink.domain.sample.Comment;
 import com.flexink.domain.sample.QBoard;
+import com.flexink.domain.sample.QComment;
 import com.flexink.vo.ParamsVo;
 import com.querydsl.core.BooleanBuilder;
+import com.querydsl.core.types.Projections;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 @Service
 public class BoardSampleService extends BaseService<Board, Long>{
 
@@ -28,7 +36,7 @@ public class BoardSampleService extends BaseService<Board, Long>{
 	 * @작성자	: KIMSEOKHOON
 	 * @메소드 내용	: 글목록 조회
 	 ********************************************************************/
-	public Page<Board> getList(ParamsVo params) {
+	public Page<Map<String, Object>> getList(ParamsVo params) {
 		BooleanBuilder builder = new BooleanBuilder();
 		if(StringUtils.isNotEmpty(params.getString("type"))) {
 			builder.and(qBoard.type.eq(params.getString("type")));
@@ -39,12 +47,34 @@ public class BoardSampleService extends BaseService<Board, Long>{
 		 *	@ SpringData JPA
 		 *	Page<Board> list = repository.findAll(builder, params.getPageable());	
 		 ********************************************************************************************/
-		// QueryDsl
-		Page<Board> list = readPage(queryDsl().from(qBoard).where(builder).orderBy(qBoard.id.desc()), params.getPageable());
+		QComment qComment = QComment.comment;
 		
-		return list;
+		// QueryDsl	(Page<Entity>)
+		//Page<Board> list = (Page<Board>) readPage(query().from(qBoard).where(builder).orderBy(qBoard.id.desc()), params.getPageable());
+
+		// Page<Map>
+		Page<Map<String, Object>> mapList = readPageToMap(
+				query().select(Projections.map(qBoard, qComment.id.count().as("commentCount")))
+				.from(qBoard).leftJoin(qBoard.comments, qComment)
+				.groupBy(qBoard.id)
+				.where(builder)
+				.orderBy(qBoard.id.desc())
+				, params.getPageable());
+		log.debug("Page<Map<String, Object>> : " + mapList.getContent());
+		
+		// Page<vo>
+		//Page<BoardVo> voList = (Page<BoardVo>) readPage(query().select(Projections.bean(BoardVo.class, qBoard.title, qBoard.content, qBoard.comments.size().as("commentCount"))).from(qBoard).where(builder).orderBy(qBoard.id.desc()),  params.getPageable());
+		//log.debug("Page<BoardVo> : " + voList.getContent());
+		
+		// List
+		//List<Tuple> tuple = query().select(qBoard, qBoard.comments.size().as("size")).from(qBoard).where(builder).orderBy(qBoard.id.desc()).fetch();
+		//List<Map<Expression<?>, ?>> expList = query().select(Projections.map(qBoard.title, qBoard.content, qBoard.comments.size().as("count"), qBoard.viewCount)).from(qBoard).where(builder).orderBy(qBoard.id.desc()).fetch();
+		//List<BoardVo> l = query().select(Projections.bean(BoardVo.class, qBoard.title, qBoard.content, qBoard.comments.size().as("count"))).from(qBoard).where(builder).orderBy(qBoard.id.desc()).fetch();
+		
+		return mapList;
 	}
 	
+
 	/********************************************************************
 	 * @메소드명	: getArticle
 	 * @작성자	: KIMSEOKHOON
@@ -58,7 +88,7 @@ public class BoardSampleService extends BaseService<Board, Long>{
 		 *	Board article = repository.findOne(board.getId());
 		 ********************************************************************************************/
 		// QueryDsl
-		Board article = queryDsl().from(qBoard).where(qBoard.id.eq(board.getId())).fetchOne();
+		Board article = query().from(qBoard).where(qBoard.id.eq(board.getId())).fetchOne();
 		article.setViewCount(article.getViewCount() + 1);
 		return article;
 	}
@@ -76,20 +106,17 @@ public class BoardSampleService extends BaseService<Board, Long>{
 			 * 	@ EntityManager 직접 이용
 			 *	getEntityManager().persist(board);
 			 *
+			 *	@ SpringData JPA
+			 *	repository.save(board);
+			 *
 			 * 	@ QueryDsl
 			 * 	Insert 메소드 없음
 			 ********************************************************************************************/
-			// SpringData JPA
-			repository.save(board);
+			// EntityManager
+			insert(board);
 		} else {
 			/********************************************************************************************
 			 * 	#### Entity 수정 ###
-			 * 	@ QueryDsl
-			 *	new JPAUpdateClause(getEntityManager(), qBoard).where(qBoard.id.eq(board.getId()))
-					.set(qBoard.title, board.getTitle())
-					.set(qBoard.content, board.getContent())
-					.execute(); 
-			 * 
 			 *	@ SpringData JPA
 			 *	repository.save(board);
 			 *
@@ -97,11 +124,10 @@ public class BoardSampleService extends BaseService<Board, Long>{
 			 *	getEntityManager().merge(board)  
 			 ********************************************************************************************/
 			// QueryDsl
-			Board selectBoard = queryDsl().from(qBoard).where(qBoard.id.eq(board.getId())).fetchOne();
-			selectBoard.setTitle(board.getTitle());
-			selectBoard.setContent(board.getContent());
-			selectBoard.setSecret(board.getSecret());
-			
+			update(qBoard).where(qBoard.id.eq(board.getId()))
+				.set(qBoard.title, board.getTitle())
+				.set(qBoard.content, board.getContent())
+				.set(qBoard.secret, board.getSecret()).execute();
 		}
 	}
 	
@@ -118,13 +144,33 @@ public class BoardSampleService extends BaseService<Board, Long>{
 			 * 	@ EntityManager 직접 이용
 			 *	getEntityManager().remove(board);
 			 *
-			 *	@ QueryDsl
-			 *	new JPADeleteClause(getEntityManager(), qBoard).where(qBoard.id.eq(board.getId())).execute();
+			 *	@ SpringData JPA
+			 *	repository.delete(board.getId());
 			 ********************************************************************************************/
-			// SpringData JPA
-			repository.delete(board.getId());
-			
+			// QueryDsl
+			delete(qBoard).where(qBoard.id.eq(board.getId())).execute();
 		}
+	}
+	
+	
+	/********************************************************************
+	 * @메소드명	: saveComment
+	 * @작성자	: KIMSEOKHOON
+	 * @메소드 내용	: 댓글 등록
+	 ********************************************************************/
+	@Transactional
+	public Comment saveComment(ParamsVo params, Comment comment) {
+		Board board = query().from(qBoard).where(qBoard.id.eq(params.getLong("boardId"))).fetchOne();
+		comment.setBoard(board);
+		insert(comment);
+		
+		return comment;
+	}
+	
+	@Transactional
+	public void deleteComment(Comment comment) {
+		QComment qComment = QComment.comment;
+		delete(qComment).where(qComment.id.eq(comment.getId())).execute();
 	}
 
 	

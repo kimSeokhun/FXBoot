@@ -10,11 +10,15 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
+import com.flexink.common.domain.BaseJpaModel;
+
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 @Data
+@EqualsAndHashCode(callSuper = true)
 @Entity
-public class Comment {
+public class Comment extends BaseJpaModel<Long> {
 
 	@Id
 	@GeneratedValue(strategy=GenerationType.AUTO)
@@ -34,8 +38,13 @@ public class Comment {
 	private Secret secret;
 	
 	@ManyToOne
-	@JoinColumn(name="BOARD")
+	@JoinColumn(name="BOARD_ID")
 	private Board board;
+	
+	public void setBoard(Board board) {
+		board.addComment(this);
+		this.board = board;
+	}
 	
 	public enum Secret {
 		Y, N

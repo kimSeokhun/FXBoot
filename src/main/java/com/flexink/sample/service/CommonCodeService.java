@@ -66,14 +66,14 @@ public class CommonCodeService extends BaseService<CommonCode, CommonCodeId> {
         //List<CommonCode> list4 = repository.findByGroupCdEquals("user");
         
         // QueryDSL
-        //List<CommonCode> list5 = queryDsl().from(qCommonCode).where(qCommonCode.groupCd.eq("user")).fetch();
+        //List<CommonCode> list5 = query().from(qCommonCode).where(qCommonCode.groupCd.eq("user")).fetch();
         
         // Mybatis
         //List<EgovMap> list6 = commonCodeMapper.readPage(paramsVo);
         
-        //List<Tuple> result = queryDsl().select(qCommonCode.data1, qCommonCode.data2).from(qCommonCode).fetch();
+        //List<Tuple> result = query().select(qCommonCode.data1, qCommonCode.data2).from(qCommonCode).fetch();
         
-        Page<CommonCode> list = readPage(queryDsl().from(qCommonCode).where(builder), paramsVo.getPageable());
+        Page<CommonCode> list = (Page<CommonCode>) readPage(query().from(qCommonCode).where(builder), paramsVo.getPageable());
         return list;
     }
 

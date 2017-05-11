@@ -49,10 +49,12 @@ function search() {
 			                		<tr>
 					                  <td><fx:rowNumberDesc totalElements="${list.totalElements}" number="${list.number}" size="${list.size}" count="${status.count}"/></td>
 					                  <%-- <td><fx:rowNumberAsc number="${data.number}" size="${data.size}" count="${status.count}"/></td> --%>
-					                  <td><a href="viewArticle?id=${row.id}"><p>${row.title}</p></a></td>
-					                  <td>${row.createdBy}</td>
-					                  <td>${row.viewCount}</td>
-					                  <td><fmt:formatDate pattern="yyyy-MM-dd H:m:s" value="${row.createdAt}" /></td>
+					                  <td><a href="viewArticle?id=${row.board.id}">
+					                  		<p>${row.board.title} ${row.commentCount gt 0 ? '(' : ''}${row.commentCount gt 0 ? row.commentCount : ''}${row.commentCount gt 0 ? ')' : ''}</p>
+					                  </a></td>
+					                  <td>${row.board.createdBy}</td>
+					                  <td>${row.board.viewCount}</td>
+					                  <td><fmt:formatDate pattern="yyyy-MM-dd H:m:s" value="${row.board.createdAt}" /></td>
 					                </tr>
 					                
 			                	</c:forEach>
@@ -83,6 +85,7 @@ function search() {
 			            	<fx:pagination pageViewCount="9" totalPages="${list.totalPages}" number="${list.number}" />
 			            </div>
 			          </div>
+			          ${list.content}
 		        </div>
 		    </div>
 		</section>

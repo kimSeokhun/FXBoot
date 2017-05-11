@@ -5,7 +5,32 @@
 <html>
 <head>
 
-<script src="/resources/lib/ckeditor/ckeditor.js"></script>
+<script>
+function addComment() {
+	$.post("${contextPath}/sample/article/comment", $('#comment').serialize())
+	.done(function(data) {
+		console.log(data);
+		location.reload();
+		//$(".result").html(data);
+	});
+}
+
+function removeComment(commentId) {
+	$.post("${contextPath}/sample/article/comment/delete", {id : commentId})
+	.done(function(data) {
+		location.reload();
+		//$(".result").html(data);
+	});
+}
+
+function editArticle() {
+	location.href="${contextPath}/sample/article?id=${article.id}";
+}
+
+function removeArticle() {
+	return true;
+}
+</script>
 
 <title>Main</title>
 </head>
@@ -31,8 +56,9 @@
 			            </div>
 			            <!-- /.box-header -->
 			            <!-- form start -->
-			            <form method="get" action="${contextPath}/sample/article?id=${article.id}" class="form-horizontal">
+			            <form method="post" action="${contextPath}/sample/article/delete?id=${article.id}" class="form-horizontal" onsubmit="return removeArticle();">
 			            	<input type="hidden" name="id" value="${article.id}" />
+			            	<input type="hidden" name="type" value="${article.type}" />
 			            	<div class="box-body">
 				                <div class="form-group">
 				                  <label for="title" class="col-sm-2 control-label">Title</label>
@@ -56,16 +82,75 @@
 			              <!-- /.box-body -->
 			              <div class="box-footer">
 			                <button type="button" class="btn btn-default" onclick="history.back();">Cancel</button>
-			                <button type="submit" class="btn btn-info pull-right">Update</button>
+			                <button type="button" class="btn btn-info" onclick="editArticle();">Update</button>
+			                <button type="submit" class="btn btn-danger pull-right">delete</button>
+			                
 			              </div>
 			              
 		              	</form>
 			              <!-- /.box-footer -->
 			          </div>
-		        ${board} <br>
-		        ${paramsVo}
 		        </div>
 		    </div>
+
+
+			<div class="row">
+				<div class="col-md-12">
+					<!-- The time line -->
+					<ul class="timeline">
+						<!-- timeline time label -->
+						<li class="time-label"><span class="bg-red"> Comment </span>
+						</li>
+
+						<!-- timeline item -->
+						<li>
+							<i class="fa fa-comments bg-yellow"></i>
+
+							<div class="timeline-item">
+								<h3 class="timeline-header">
+									Add Comment
+								</h3>
+
+								<div class="timeline-body">
+									<form id="comment">
+										<input type="hidden" name="boardId" value="${article.id}" />
+										<input type="text" class="form-control" name="content" placeholder="comment" />
+									</form>
+								</div>
+								<div class="timeline-footer">
+									<a class="btn btn-primary btn-xs" onclick="addComment();">save</a>
+								</div>
+							</div>
+						</li>
+						<!-- end timeline item -->
+						<c:forEach var="comment" items="${comments}">
+							<!-- timeline item -->
+							<li><i class="fa fa-comments bg-yellow"></i>
+	
+								<div class="timeline-item">
+									<span class="time"><i class="fa fa-clock-o"></i> ${comment.createdAt}</span>
+	
+									<h3 class="timeline-header">
+										<a href="#">${comment.createdBy}</a> commented on your post
+									</h3>
+	
+									<div class="timeline-body">
+										${comment.content}
+									</div>
+									<div class="timeline-footer">
+										<a class="btn btn-warning btn-xs" onclick="">Update</a>
+										<a class="btn btn-danger btn-xs" onclick="removeComment('${comment.id}');">Delete</a>
+									</div>
+								</div>
+							</li>
+							<!-- end timeline item -->
+						</c:forEach>
+					</ul>
+				</div>
+				<!-- /.col -->
+			</div>
+
+
 		</section>
 	</div>
 	

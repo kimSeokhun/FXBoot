@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -13,6 +14,8 @@ import org.springframework.data.querydsl.QPageRequest;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.flexink.common.code.FxBootType;
+import com.flexink.common.utils.ExpressionToMap;
+import com.querydsl.core.types.Expression;
 import com.querydsl.jpa.JPQLQuery;
 import com.querydsl.jpa.impl.JPAQuery;
 
@@ -31,17 +34,20 @@ public class BaseService<T, ID extends Serializable> extends QueryDslRepositoryS
 	}
 	
 	/********************************************************************
-	 * @메소드명	: queryDsl
+	 * @메소드명	: query
 	 * @작성자	: KIMSEOKHOON
 	 * @메소드 내용	: JPAQuery 객체 반환
 	 * @return
 	 * JPAQuery<T>
 	 ********************************************************************/
-	public JPAQuery<T> queryDsl() {
+	public JPAQuery<T> query() {
 		JPAQuery<T> query = new JPAQuery<T>(getEntityManager());
 		return query;
 	}
 	
+	public void insert(Object entity) {
+		getEntityManager().persist(entity);
+	}
 	
 	/********************************************************************
 	 * @메소드명	: save
@@ -89,14 +95,38 @@ public class BaseService<T, ID extends Serializable> extends QueryDslRepositoryS
 	 * @return
 	 * Page<T>
 	 ********************************************************************/
-	protected Page<T> readPage(JPAQuery<T> query, Pageable pageable) {
+    protected Page<?> readPage(JPAQuery<?> query, Pageable pageable) {
 		if (pageable == null) {
 			return readPage(query, new QPageRequest(0, Integer.MAX_VALUE));
+		}
+        long total = query.clone(super.getEntityManager()).fetchCount();
+		JPQLQuery<?> pagedQuery = getQuerydsl().applyPagination(pageable, query);
+		List<?> content = total > pageable.getOffset() ? pagedQuery.fetch() : Collections.emptyList();
+		return new PageImpl<>(content, pageable, total);
+	} 
+    
+	protected Page<T> readPageSafety(JPAQuery<T> query, Pageable pageable) {
+		if (pageable == null) {
+			return readPageSafety(query, new QPageRequest(0, Integer.MAX_VALUE));
 		}
         long total = query.clone(super.getEntityManager()).fetchCount();
 		JPQLQuery<T> pagedQuery = getQuerydsl().applyPagination(pageable, query);
 		List<T> content = total > pageable.getOffset() ? pagedQuery.fetch() : Collections.<T>emptyList();
 		return new PageImpl<>(content, pageable, total);
 	}
+	
+	protected Page<Map<String, Object>> readPageToMap(JPAQuery<Map<Expression<?>, ?>> jpaQuery, Pageable pageable) {
+		if (pageable == null) {
+			return readPageToMap(jpaQuery, new QPageRequest(0, Integer.MAX_VALUE));
+		}
+        long total = jpaQuery.clone(super.getEntityManager()).fetchCount();
+		JPQLQuery<Map<Expression<?>, ?>> pagedQuery = getQuerydsl().applyPagination(pageable, jpaQuery);
+		List<Map<Expression<?>, ?>> content = (List<Map<Expression<?>, ?>>) (total > pageable.getOffset() ? pagedQuery.fetch() : Collections.emptyList());
+		return new PageImpl<>(ExpressionToMap.convert(content), pageable, total);
+	}
+	
+	
+	
+	
 		
 }

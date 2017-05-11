@@ -2,6 +2,7 @@ package com.flexink.common.file.service;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
@@ -99,6 +100,17 @@ public class CommonFileService extends BaseService<CommonFile, Long> implements 
         uploadParameters.setSort(sort);
 
         return upload(uploadParameters);
+    }
+    
+    @Transactional
+    public List<CommonFile> uploads(UploadParameters parameter) throws IOException {
+    	List<CommonFile> commonFiles = new ArrayList<CommonFile>();
+    	List<MultipartFile> files = parameter.getMultipartFiles();
+    	for(int i=0; i < files.size(); i++) {
+        	System.out.println(files.get(i).getOriginalFilename());
+        	commonFiles.add(upload(files.get(i), parameter.getTargetType(), parameter.getTargetId(), i));
+        }
+    	return commonFiles;
     }
 
     @Transactional

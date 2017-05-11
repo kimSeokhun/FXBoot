@@ -1,6 +1,7 @@
 package com.flexink.vo.file;
 
 import java.io.File;
+import java.util.List;
 
 import org.springframework.web.multipart.MultipartFile;
 
@@ -12,6 +13,8 @@ public class UploadParameters {
 	private File file;
 
 	private MultipartFile multipartFile;
+	
+	private List<MultipartFile> multipartFiles;
 
 	private String targetType;
 

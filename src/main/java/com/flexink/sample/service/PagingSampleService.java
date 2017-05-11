@@ -32,7 +32,7 @@ public class PagingSampleService extends BaseService<CommonCode, CommonCodeId>{
 			builder.and(qCommonCode.groupNm.startsWithIgnoreCase(filter));
 		}
 		
-		Page<CommonCode> list = readPage(queryDsl().from(qCommonCode).where(builder), vo.getPageable());
+		Page<CommonCode> list = (Page<CommonCode>) readPage(query().from(qCommonCode).where(builder), vo.getPageable());
 		System.out.println(list.getContent());
 		return list;
 	}

@@ -31,7 +31,7 @@
 			            </div>
 			            <!-- /.box-header -->
 			            <!-- form start -->
-			            <form:form class="form-horizontal" id="boardFrom" commandName="board" method="post" action="article" onsubmit="return saveArticle();">
+			            <form:form class="form-horizontal" id="boardFrom" commandName="board" method="post" action="article" enctype="multipart/form-data" onsubmit="return saveArticle();">
 			              <div class="box-body">
 			              
 			                <div class="form-group">
@@ -64,8 +64,17 @@
 			                    </div>
 			                  </div>
 			                </div>
-			                
-			              </div>
+							<div class="form-group">
+								<div class="col-sm-offset-2 col-sm-10">
+									<label for="exampleInputFile">File input</label> <input
+										type="file" name="file">
+								</div>
+								<div class="col-sm-offset-2 col-sm-10">
+									<input type="file" name="file">
+								</div>
+							</div>
+
+						  </div>
 			              <!-- /.box-body -->
 			              <div class="box-footer">
 			                <button type="button" class="btn btn-default" onclick="history.back();">Cancel</button>

@@ -10,18 +10,22 @@ import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 
 import org.hibernate.validator.constraints.NotEmpty;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.flexink.common.domain.BaseJpaModel;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 @Data
 @EqualsAndHashCode(callSuper = true)
 @Entity
+@ToString(exclude={"comments"})
 public class Board extends BaseJpaModel<Long> {
 
 	@Id
@@ -48,7 +52,12 @@ public class Board extends BaseJpaModel<Long> {
 	private Secret secret;
 	
 	@OneToMany(mappedBy="board")
-	private List<Comment> commentList = new ArrayList<Comment>();
+	@JsonBackReference
+	private List<Comment> comments = new ArrayList<Comment>();
+	
+	public void addComment(Comment comment) {
+		this.comments.add(comment);
+	}
 
 	public enum Type {
 		SAMPLE
