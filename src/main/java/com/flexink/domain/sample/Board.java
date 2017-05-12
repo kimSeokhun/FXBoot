@@ -10,13 +10,14 @@ import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
+import javax.persistence.Transient;
 
 import org.hibernate.validator.constraints.NotEmpty;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.flexink.common.domain.BaseJpaModel;
+import com.flexink.domain.file.CommonFile;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -54,6 +55,9 @@ public class Board extends BaseJpaModel<Long> {
 	@OneToMany(mappedBy="board")
 	@JsonBackReference
 	private List<Comment> comments = new ArrayList<Comment>();
+	
+	@Transient
+	private List<CommonFile> files = new ArrayList<CommonFile>();
 	
 	public void addComment(Comment comment) {
 		this.comments.add(comment);

@@ -6,6 +6,7 @@
 <html>
 <head>
 	<script src="${contextPath}/webjars/jquery/1.12.4/jquery.min.js"></script>
+	<script src="${contextPath}/webjars/lodash/4.17.4/lodash.js"></script>
   
 	<!-- Tell the browser to be responsive to screen width -->
 	<meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">

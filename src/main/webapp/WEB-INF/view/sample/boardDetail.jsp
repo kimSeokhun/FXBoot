@@ -5,8 +5,16 @@
 <html>
 <head>
 
-<script src="${contextPath}/resources/lib/ckeditor/ckeditor.js"></script>
+<link rel="stylesheet" href="${contextPath}/webjars/ax5ui-uploader/1.4.20/dist/ax5uploader.css">
+<link rel="stylesheet" href="${contextPath}/webjars/ax5ui-dialog/1.4.20/dist/ax5dialog.css">
 
+<script src="${contextPath}/webjars/ax5core/1.4.20/dist/ax5core.min.js"></script>
+<script src="${contextPath}/webjars/ax5ui-uploader/1.4.20/dist/ax5uploader.min.js"></script>
+<script src="${contextPath}/webjars/ax5ui-dialog/1.4.20/dist/ax5dialog.min.js"></script>
+<script src="https://cdn.rawgit.com/thomasJang/jquery-direct/master/dist/jquery-direct.min.js"></script>
+
+<script src="${contextPath}/resources/lib/ckeditor/ckeditor.js"></script>
+<script src="${contextPath}/webjars/uri.js/1.17.1/src/URI.min.js"></script>
 <title>Main</title>
 </head>
 <body>
@@ -70,7 +78,16 @@
 										type="file" name="file">
 								</div>
 								<div class="col-sm-offset-2 col-sm-10">
-									<input type="file" name="file">
+									<input type="file" name="file" value="123">
+								</div>
+							</div>
+							<div class="form-group">
+								<div class="col-sm-offset-2 col-sm-10">
+									<div data-ax5uploader="upload1">
+									    <button type="button" data-ax5uploader-button="selector" class="btn btn-primary">Select File (*/*)</button>
+									    (Upload Max fileSize 20MB)
+									    <div data-uploaded-box="upload1" data-ax5uploader-uploaded-box="inline"></div>
+									</div>
 								</div>
 							</div>
 
@@ -89,7 +106,10 @@
 		    </div>
 		</section>
 	</div>
-	<script>
+	
+	
+	<script src="${resourcePath}/js/file/axfile.js"></script>
+	<script type="text/javascript">
 		var editor = CKEDITOR.replace( 'editor', {
         	customConfig: '${contextPath}/resources/lib/ckeditor/config.js'
         });
@@ -100,6 +120,25 @@
         	}
         	return true;
         }
+        
+        $(function() {
+        	var config = {
+   	    		target : $('[data-ax5uploader="upload1"]'),
+   	    		dropZone: {
+   	    			target: $('[data-uploaded-box="upload1"]')
+   	    		},
+   	    		uploadBox: {
+   	    			target: $('[data-uploaded-box="upload1"]')
+   	    		},
+   	    		fileLength: 5,
+   	    		fileSize: 20
+   	    	}
+        	$.extend(axFileConfig, config);
+        	axfile.init();
+        	if(!_.isEmpty("${article.id}")) {
+        		axfile.setUploadedFiles({targetType:'${article.type}', targetId:'${article.id}'});
+        	}
+        });
         
         /* $(function() {
         	editor.on( 'change', function( evt ) {

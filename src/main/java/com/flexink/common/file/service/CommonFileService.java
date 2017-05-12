@@ -102,12 +102,16 @@ public class CommonFileService extends BaseService<CommonFile, Long> implements 
         return upload(uploadParameters);
     }
     
+    /********************************************************************
+     * @메소드명	: uploads
+     * @작성자	: KIMSEOKHOON
+     * @메소드 내용	: List<MultipartFile> 용 업로드
+     ********************************************************************/
     @Transactional
     public List<CommonFile> uploads(UploadParameters parameter) throws IOException {
     	List<CommonFile> commonFiles = new ArrayList<CommonFile>();
     	List<MultipartFile> files = parameter.getMultipartFiles();
     	for(int i=0; i < files.size(); i++) {
-        	System.out.println(files.get(i).getOriginalFilename());
         	commonFiles.add(upload(files.get(i), parameter.getTargetType(), parameter.getTargetId(), i));
         }
     	return commonFiles;
@@ -175,6 +179,8 @@ public class CommonFileService extends BaseService<CommonFile, Long> implements 
 
         return commonFile;
     }
+    
+    //public CommonFile save()
 
     private String getFileType(String extension) {
         switch (extension.toUpperCase()) {
@@ -322,6 +328,11 @@ public class CommonFileService extends BaseService<CommonFile, Long> implements 
         }
 
         return commonFileRepository.findAll(builder, pageable);
+    }
+    
+    public List<CommonFile> getList(String targetType, String targetId) {
+    	List<CommonFile> files = query().from(qCommonFile).where(qCommonFile.targetType.eq(targetType).and(qCommonFile.targetId.eq(targetId))).fetch();
+    	return files;
     }
 
     public CommonFile get(ParamsVo paramsVo) {

@@ -12,7 +12,7 @@
     response.setHeader("Pragma","no-cache");
     response.setCharacterEncoding("UTF-8");
     String contextPath = request.getContextPath();
-    String resourcePath = contextPath + "/resource";
+    String resourcePath = contextPath + "/resources";
 
     boolean secure = request.isSecure();
     int port = request.getServerPort();

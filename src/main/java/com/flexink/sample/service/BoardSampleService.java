@@ -1,5 +1,6 @@
 package com.flexink.sample.service;
 
+import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
@@ -9,6 +10,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.flexink.common.domain.BaseService;
+import com.flexink.common.file.service.CommonFileService;
+import com.flexink.domain.file.CommonFile;
+import com.flexink.domain.file.QCommonFile;
 import com.flexink.domain.sample.Board;
 import com.flexink.domain.sample.BoardSampleRepository;
 import com.flexink.domain.sample.Comment;
@@ -23,13 +27,17 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @Service
 public class BoardSampleService extends BaseService<Board, Long>{
-
-	QBoard qBoard = QBoard.board;
+	
+	@Autowired
+	CommonFileService commonFileService;
 	
 	@Autowired
 	public BoardSampleService(BoardSampleRepository repository) {
 		super(Board.class, repository);
 	}
+	
+	QBoard qBoard = QBoard.board;
+	QComment qComment = QComment.comment;
 	
 	/********************************************************************
 	 * @메소드명	: getList
@@ -47,8 +55,6 @@ public class BoardSampleService extends BaseService<Board, Long>{
 		 *	@ SpringData JPA
 		 *	Page<Board> list = repository.findAll(builder, params.getPageable());	
 		 ********************************************************************************************/
-		QComment qComment = QComment.comment;
-		
 		// QueryDsl	(Page<Entity>)
 		//Page<Board> list = (Page<Board>) readPage(query().from(qBoard).where(builder).orderBy(qBoard.id.desc()), params.getPageable());
 
@@ -89,6 +95,9 @@ public class BoardSampleService extends BaseService<Board, Long>{
 		 ********************************************************************************************/
 		// QueryDsl
 		Board article = query().from(qBoard).where(qBoard.id.eq(board.getId())).fetchOne();
+		QCommonFile qCommonFile = QCommonFile.commonFile;
+		List<CommonFile> files = commonFileService.getList(article.getType(), String.valueOf(article.getId()));
+		article.setFiles(files);
 		article.setViewCount(article.getViewCount() + 1);
 		return article;
 	}
@@ -169,7 +178,7 @@ public class BoardSampleService extends BaseService<Board, Long>{
 	
 	@Transactional
 	public void deleteComment(Comment comment) {
-		QComment qComment = QComment.comment;
+		
 		delete(qComment).where(qComment.id.eq(comment.getId())).execute();
 	}
 

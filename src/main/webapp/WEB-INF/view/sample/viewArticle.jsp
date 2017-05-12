@@ -63,22 +63,31 @@ function removeArticle() {
 				                <div class="form-group">
 				                  <label for="title" class="col-sm-2 control-label">Title</label>
 				                  <div class="col-sm-10">
-				                    <input type="text" class="form-control" name="title" placeholder="Title" value="${article.title}" disabled="disabled"/>
+				                  	<blockquote>
+				                  		${article.title}
+				                  	</blockquote>
 				                  </div>
 				                </div>
 				                
 				                <div class="form-group">
 				                  <label for="inputContent" class="col-sm-2 control-label">Content</label>
 				                  <div class="col-sm-10">
-				                    <!-- <input type="text" class="form-control" id="inputContent" placeholder=""> -->
-				                    
-				                    <!-- <textarea name="content" id="editor" rows="10" cols="80" > -->
+				                    <blockquote>
 				                    	${article.content}
-				                    <!-- </textarea> -->
+				                    </blockquote>
 				                  </div>
 				                </div>
+				                <c:if test="${fn:length(article.files) > 0}">
+				                	<div class="form-group">
+					                	<label for="inputContent" class="col-sm-2 control-label">files</label>
+					                	<c:forEach var="file" items="${article.files}">
+						                	<div class="col-sm-10">
+						                		<a href="${contextPath}/files/download/${file.id}"><i class="fa fa-fw fa-file"></i>${file.fileNm}</a>
+						                	</div>
+					                	</c:forEach>
+					                </div>
+				                </c:if>
 		              		</div>
-			              
 			              <!-- /.box-body -->
 			              <div class="box-footer">
 			                <button type="button" class="btn btn-default" onclick="history.back();">Cancel</button>

@@ -89,6 +89,7 @@ public class BoardSampleController {
         
         boardSampleService.saveArticle(board);
         
+        // 파일업로드
         UploadParameters uploadParameters = new UploadParameters();
         uploadParameters.setMultipartFiles(request.getFiles("file"));
         uploadParameters.setTargetType(board.getType());
