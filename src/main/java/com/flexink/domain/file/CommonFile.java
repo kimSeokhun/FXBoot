@@ -37,6 +37,17 @@ import lombok.ToString;
 @Table(name = "FILE_L")
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class CommonFile extends BaseJpaModel<Long>{
+	
+	public CommonFile() {
+		super();
+	}
+	public CommonFile(String id, String targetType, Long targetId, int sort) {
+		this.id = Long.valueOf(id);
+		this.targetType = targetType;
+		this.targetId = String.valueOf(targetId);
+		this.sort = sort;
+	}
+	
     @Id
     @Column(name = "ID")
     @GeneratedValue(strategy = GenerationType.IDENTITY)

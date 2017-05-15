@@ -2,6 +2,7 @@ package com.flexink.common.file;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -65,6 +66,19 @@ public class FileUploadController {
         
         return commonFileService.upload(uploadParameters);
     }
+    
+   /* @RequestMapping(value = "/uploads", method = RequestMethod.POST, produces = "application/json; charset=UTF-8")
+    @ResponseBody
+    public List<CommonFile> uploads(@RequestBody List<UploadParameters> files) throws IOException {
+    	System.out.println("#############################################");
+    	List<CommonFile> list = new ArrayList<>();
+    	for(UploadParameters param : files) {
+    		System.out.println(param);
+    		list.add(commonFileService.upload(param));
+    	}
+               
+        return list;
+    }*/
 
     @RequestMapping(method = RequestMethod.GET, produces = "application/json; charset=UTF-8")	
     @ResponseBody

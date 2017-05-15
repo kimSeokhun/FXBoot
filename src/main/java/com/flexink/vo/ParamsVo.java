@@ -92,6 +92,19 @@ public class ParamsVo extends CommonVo {
         return null;
     }
     
+    public List<String> getArray(String key) {
+    	if(getString(key) == null) {
+    		return null;
+    	}
+    	List<String> array = new ArrayList<>();
+    	String parameter = getString(key);
+    	String[] values = parameter.split(",");
+    	for (int i = 0; i < values.length; i++) {
+    		array.add(values[i]);
+        }
+    	return array;
+    }
+    
     private boolean hasSortParameter() {
         return StringUtils.isNotEmpty(getString("sort"));
     }

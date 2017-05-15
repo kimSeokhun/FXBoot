@@ -95,7 +95,6 @@ public class BoardSampleService extends BaseService<Board, Long>{
 		 ********************************************************************************************/
 		// QueryDsl
 		Board article = query().from(qBoard).where(qBoard.id.eq(board.getId())).fetchOne();
-		QCommonFile qCommonFile = QCommonFile.commonFile;
 		List<CommonFile> files = commonFileService.getList(article.getType(), String.valueOf(article.getId()));
 		article.setFiles(files);
 		article.setViewCount(article.getViewCount() + 1);

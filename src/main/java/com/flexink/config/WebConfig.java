@@ -3,6 +3,7 @@ package com.flexink.config;
 import java.util.List;
 import java.util.Locale;
 
+import javax.servlet.MultipartConfigElement;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -11,6 +12,7 @@ import org.springframework.boot.context.embedded.ConfigurableEmbeddedServletCont
 import org.springframework.boot.context.embedded.EmbeddedServletContainerCustomizer;
 import org.springframework.boot.web.servlet.ErrorPage;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
+import org.springframework.boot.web.servlet.MultipartConfigFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.support.MessageSourceAccessor;
@@ -18,7 +20,11 @@ import org.springframework.context.support.ReloadableResourceBundleMessageSource
 import org.springframework.data.web.PageableHandlerMethodArgumentResolver;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.web.csrf.CsrfToken;
+import org.springframework.web.filter.HiddenHttpMethodFilter;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
+import org.springframework.web.multipart.MultipartResolver;
+import org.springframework.web.multipart.support.MultipartFilter;
+import org.springframework.web.multipart.support.StandardServletMultipartResolver;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.LocaleResolver;
 import org.springframework.web.servlet.ModelAndView;
@@ -33,7 +39,6 @@ import org.springframework.web.servlet.i18n.SessionLocaleResolver;
 import com.flexink.common.error.ErrorController;
 import com.flexink.common.interceptor.MultipartInterceptor;
 import com.flexink.config.resolver.ParamsVoArgumentResolver;
-import com.flexink.config.resolver.ReaderHandlerMethodArgumentResolver;
 import com.flexink.config.resolver.RequestParamsArgumentResolver;
 
 
@@ -56,9 +61,12 @@ public class WebConfig extends WebMvcConfigurerAdapter {
 	 ********************************************************************/
 	@Bean
 	public FilterRegistrationBean siteMeshFilter() {
-		FilterRegistrationBean siteMeshFilter = new FilterRegistrationBean();
-		siteMeshFilter.setFilter(new CustomSiteMeshFilter());
-		return siteMeshFilter;
+		FilterRegistrationBean filterRegistrationBean = new FilterRegistrationBean();
+		filterRegistrationBean.setFilter(new CustomSiteMeshFilter());
+		//filterRegistrationBean.setFilter(new HiddenHttpMethodFilter());
+		//filterRegistrationBean.setFilter(new MultipartFilter());
+		
+		return filterRegistrationBean;
 	}
 	
 	/********************************************************************
@@ -200,6 +208,25 @@ public class WebConfig extends WebMvcConfigurerAdapter {
 			}
 		};
     }
+	
+	/*@Bean
+	public CommonsMultipartResolver filterMultipartResolver() {
+		CommonsMultipartResolver multipartResolver = new CommonsMultipartResolver();
+		multipartResolver.setDefaultEncoding("UTF-8");
+		return multipartResolver;
+	}*/
+	/*@Bean
+	MultipartConfigElement MultipartConfigElement() {
+	    MultipartConfigFactory factory = new MultipartConfigFactory();
+
+	    return factory.createMultipartConfig();
+	}
+
+	@Bean
+	public MultipartResolver multipartResolver() {
+	    return new StandardServletMultipartResolver();
+	}*/
+
 	
 	/********************************************************************
 	 * @메소드명	: addResourceHandlers

@@ -9,12 +9,15 @@
 <link rel="stylesheet" href="${contextPath}/webjars/ax5ui-dialog/1.4.20/dist/ax5dialog.css">
 
 <script src="${contextPath}/webjars/ax5core/1.4.20/dist/ax5core.min.js"></script>
-<script src="${contextPath}/webjars/ax5ui-uploader/1.4.20/dist/ax5uploader.min.js"></script>
+<%-- <script src="${contextPath}/webjars/ax5ui-uploader/1.4.20/dist/ax5uploader.min.js"></script> --%>
+<script type="text/javascript" src="https://cdn.rawgit.com/ax5ui/ax5ui-uploader/master/dist/ax5uploader.js"></script>
 <script src="${contextPath}/webjars/ax5ui-dialog/1.4.20/dist/ax5dialog.min.js"></script>
 <script src="https://cdn.rawgit.com/thomasJang/jquery-direct/master/dist/jquery-direct.min.js"></script>
 
 <script src="${contextPath}/resources/lib/ckeditor/ckeditor.js"></script>
 <script src="${contextPath}/webjars/uri.js/1.17.1/src/URI.min.js"></script>
+
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Main</title>
 </head>
 <body>
@@ -55,7 +58,7 @@
 			                  <div class="col-sm-10">
 			                    
 			                    <%-- <form:textarea path="content" id="editor" rows="10" cols="80" value="${article.content}"/> --%>
-			                    <textarea name="content" id="editor" rows="10" cols="80">
+			                    <textarea id="editor" rows="10" cols="80">
 			                    	${article.content}
 					            </textarea>
 					            
@@ -74,15 +77,6 @@
 			                </div>
 							<div class="form-group">
 								<div class="col-sm-offset-2 col-sm-10">
-									<label for="exampleInputFile">File input</label> <input
-										type="file" name="file">
-								</div>
-								<div class="col-sm-offset-2 col-sm-10">
-									<input type="file" name="file" value="123">
-								</div>
-							</div>
-							<div class="form-group">
-								<div class="col-sm-offset-2 col-sm-10">
 									<div data-ax5uploader="upload1">
 									    <button type="button" data-ax5uploader-button="selector" class="btn btn-primary">Select File (*/*)</button>
 									    (Upload Max fileSize 20MB)
@@ -95,10 +89,12 @@
 			              <!-- /.box-body -->
 			              <div class="box-footer">
 			                <button type="button" class="btn btn-default" onclick="history.back();">Cancel</button>
-			                <button type="submit" class="btn btn-info pull-right">Save</button>
+			                <!-- <button type="submit" class="btn btn-info pull-right">Save</button> -->
+			                <button type="button" class="btn btn-info pull-right" onclick="saveArticle();">Save</button>
+			                
 			              </div>
 			              <!-- /.box-footer -->
-			              <input type="hidden" name="type" value="${board.type}" />
+			              <input type="hidden" name="type" value="${empty board.type ? article.type : board.type}" />
 			              <input type="hidden" id="boardId" name="id" value="${article.id}" />
 			            </form:form>
 			          </div>
@@ -110,18 +106,31 @@
 	
 	<script src="${resourcePath}/js/file/axfile.js"></script>
 	<script type="text/javascript">
+		// CKEditor
 		var editor = CKEDITOR.replace( 'editor', {
         	customConfig: '${contextPath}/resources/lib/ckeditor/config.js'
         });
         
+		// 글 저장
         function saveArticle() {
-        	if($('#boardId').val() != "") {
-        		$('#boardFrom').attr('action', $('#boardFrom').attr('action')+'/update');
-        	}
-        	return true;
+			console.log(editor.getData());
+        	$.ajax({
+                method: "POST",
+                url: '${contextPath}/sample/article',
+                data: $('#boardFrom').serialize()+'&'+$.param(axfile.getUploadedFileIds(), true) +'&content='+editor.getData(),
+                traditional: true,
+                success: function (res) {
+                    if (res.error) {
+                        alert(res.error.message);
+                        return;
+                    }
+                    //location.replace('viewArticle?id='+res.id);
+                }
+            });
         }
         
         $(function() {
+        	// axfile
         	var config = {
    	    		target : $('[data-ax5uploader="upload1"]'),
    	    		dropZone: {
@@ -138,6 +147,7 @@
         	if(!_.isEmpty("${article.id}")) {
         		axfile.setUploadedFiles({targetType:'${article.type}', targetId:'${article.id}'});
         	}
+        	
         });
         
         /* $(function() {

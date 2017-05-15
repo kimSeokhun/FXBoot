@@ -9,18 +9,31 @@
 function addComment() {
 	$.post("${contextPath}/sample/article/comment", $('#comment').serialize())
 	.done(function(data) {
-		console.log(data);
 		location.reload();
-		//$(".result").html(data);
 	});
 }
 
 function removeComment(commentId) {
-	$.post("${contextPath}/sample/article/comment/delete", {id : commentId})
+	$.ajax({
+        contentType: "application/json",
+        method: "DELETE",
+        url: '${contextPath}/sample/article/comment',
+        data: JSON.stringify({
+            id: commentId
+        }),
+        success: function (res) {
+            if (res.error) {
+                alert(res.error.message);
+                return;
+            }
+            location.reload();
+        }
+    });
+	/* $.post("${contextPath}/sample/article/comment/delete", {id : commentId})
 	.done(function(data) {
 		location.reload();
 		//$(".result").html(data);
-	});
+	}); */
 }
 
 function editArticle() {
@@ -56,9 +69,7 @@ function removeArticle() {
 			            </div>
 			            <!-- /.box-header -->
 			            <!-- form start -->
-			            <form method="post" action="${contextPath}/sample/article/delete?id=${article.id}" class="form-horizontal" onsubmit="return removeArticle();">
-			            	<input type="hidden" name="id" value="${article.id}" />
-			            	<input type="hidden" name="type" value="${article.type}" />
+			            <form:form method="delete" action="${contextPath}/sample/article/${article.id}" class="form-horizontal" onsubmit="return removeArticle();">
 			            	<div class="box-body">
 				                <div class="form-group">
 				                  <label for="title" class="col-sm-2 control-label">Title</label>
@@ -96,7 +107,7 @@ function removeArticle() {
 			                
 			              </div>
 			              
-		              	</form>
+		              	</form:form>
 			              <!-- /.box-footer -->
 			          </div>
 		        </div>

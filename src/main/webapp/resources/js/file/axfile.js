@@ -81,6 +81,10 @@ var axFileConfig = {
         }
     },
     validateSelectedFiles: function () {
+    	//console.log(this.fileList);
+    	console.log(this);
+    	console.log(this.selectedFiles);
+    	console.log(this.selectedFiles[0]);
     	// 파일타입 체크
     	if(this.selectedFiles.length > 0) {
     		var selectedFiles = this.selectedFiles;
@@ -107,13 +111,8 @@ var axFileConfig = {
     	// 파일 사이즈 체크
     	if (this.selectedFiles.length > 0) {
     		var selectedFiles = this.selectedFiles;
-    		console.log(selectedFiles.length);
     		var arr = _.filter(selectedFiles, function(file) {
     			var check = false;
-    			console.log("c size : " + (axFileConfig.fileSize*1024*1024));
-    			console.log(axFileConfig.fileSize);
-    			console.log(axFileConfig.fileSize);
-    			console.log("f size : " + file.size);
     			if(file.size > axFileConfig.fileSize*1024*1024) {
     				check = true;
     			}
@@ -148,7 +147,6 @@ var axFileConfig = {
         DIALOG.alert(this.error.message);
     },
     onuploaded: function () {
- 
     },
     onuploadComplete: function () {
  
@@ -161,11 +159,8 @@ var axfile = {
             title: ""
         }),
         UPLOAD = new ax5.ui.uploader(axFileConfig)
-		//,axfile.setUploadedFiles();
 	},
 	setUploadedFiles: function(params) {
-		console.log("setUploadedFiles");
-		console.log(params);
 		$.ajax({
             method: "GET",
             url: API_SERVER + "/files",
@@ -178,6 +173,13 @@ var axfile = {
 	},
 	getUploadFiles: function() {
 		return ax5.util.deepCopy(UPLOAD.uploadedFiles);
+	},
+	getUploadedFileIds: function() {
+		var fileIds = [];
+        UPLOAD.uploadedFiles.forEach(function (f) {
+        	fileIds.push(f.id);
+        });
+        return {fileIds : fileIds};
 	},
 	deleteFiles: function() {
 		var deleteFiles = [];

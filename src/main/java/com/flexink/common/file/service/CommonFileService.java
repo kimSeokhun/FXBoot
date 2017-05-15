@@ -385,7 +385,6 @@ public class CommonFileService extends BaseService<CommonFile, Long> implements 
             if (file.isDeleted()) {
                 deleteFile(file.getId());
             } else {
-                //commonFileRepository.updateCommonFile(file);
         		update(qCommonFile).set(qCommonFile.targetType, file.getTargetType()).set(qCommonFile.targetId, file.getTargetId()).where(qCommonFile.id.eq(file.getId())).execute();
             }
         }
