@@ -47,8 +47,7 @@ function search() {
 				                <c:forEach var="row" items="${list.content}" varStatus="status">
 				                	
 			                		<tr>
-					                  <td><fx:rowNumberDesc totalElements="${list.totalElements}" number="${list.number}" size="${list.size}" count="${status.count}"/></td>
-					                  <%-- <td><fx:rowNumberAsc number="${data.number}" size="${data.size}" count="${status.count}"/></td> --%>
+					                  <td><fx:row-number sort="desc" totalElements="${list.totalElements}" number="${list.number}" size="${list.size}" count="${status.count}"/></td>
 					                  <td><a href="viewArticle?id=${row.board.id}">
 					                  		<p>${row.board.title} ${row.commentCount gt 0 ? '(' : ''}${row.commentCount gt 0 ? row.commentCount : ''}${row.commentCount gt 0 ? ')' : ''}</p>
 					                  </a></td>
@@ -85,7 +84,6 @@ function search() {
 			            	<fx:pagination pageViewCount="9" totalPages="${list.totalPages}" number="${list.number}" />
 			            </div>
 			          </div>
-			          ${list.content}
 		        </div>
 		    </div>
 		</section>

@@ -1,8 +1,8 @@
 package com.flexink.common.utils;
 
-public class CamelUtil {
+public class CamelUtils {
 
-	private CamelUtil() {
+	private CamelUtils() {
 		
 	}
 

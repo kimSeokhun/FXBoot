@@ -55,9 +55,35 @@
 				</div>
 			</div>
 			
-           	<div style="position: relative;height:400px;" id="grid-parent">
-				<div data-ax5grid="first-grid" data-ax5grid-config="{}" style="height: 100%;"></div>
+			<div class="row">
+				<div class="col-lg-12 col-xs-12" style="margin-bottom: 15px">
+		           	<div style="position: relative;height:400px;" id="grid-parent">
+						<div data-ax5grid="first-grid" data-ax5grid-config="{}" style="height: 100%;"></div>
+					</div>
+				</div>
 			</div>
+			
+			<div class="row">
+				<div class="col-lg-12 col-xs-12">
+					<div class="box box-solid">
+			            <div class="box-header with-border">
+			              <i class="fa fa-code"></i>
+			
+			              <h3 class="box-title">공통 코드 Tag Library</h3>
+			            </div>
+			            <!-- /.box-header -->
+			            <div class="box-body">
+			             	<fx:common-code groupCd="USER_STATUS" defaultValue="9"/>
+						    <br>
+						    <fx:common-code groupCd="USER_STATUS" type="checkbox" defaultValue="9"/>
+						    <br>
+						    <fx:common-code groupCd="TEST_CODE_1" type="radio"  defaultValue="8"/>
+			            </div>
+			            <!-- /.box-body -->
+	            	</div>
+				</div>
+			</div>
+				
 				
 		</section>
 	</div>

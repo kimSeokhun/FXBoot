@@ -34,12 +34,14 @@ import com.flexink.common.code.Types;
 import com.flexink.common.domain.BaseService;
 import com.flexink.common.utils.ArrayUtils;
 import com.flexink.common.utils.EncodeUtils;
+import com.flexink.common.utils.PropertyUtils;
 import com.flexink.domain.file.CommonFile;
 import com.flexink.domain.file.CommonFileRepository;
 import com.flexink.domain.file.QCommonFile;
 import com.flexink.vo.ParamsVo;
 import com.flexink.vo.file.UploadParameters;
 import com.querydsl.core.BooleanBuilder;
+import com.querydsl.jpa.impl.JPAUpdateClause;
 
 import lombok.extern.slf4j.Slf4j;
 import net.coobird.thumbnailator.Thumbnails;
@@ -53,8 +55,8 @@ public class CommonFileService extends BaseService<CommonFile, Long> implements 
     
     QCommonFile qCommonFile = QCommonFile.commonFile;
 
-    @Value("${axboot.upload.repository}")
-    public String uploadRepository;
+    @Value("${upload.tmpDir}")
+    public String uploadTempDir;
 
     @Autowired
     public CommonFileService(CommonFileRepository commonFileRepository) {
@@ -64,7 +66,7 @@ public class CommonFileService extends BaseService<CommonFile, Long> implements 
 
     public void createBaseDirectory() {
         try {
-            FileUtils.forceMkdir(new File(uploadRepository));
+            FileUtils.forceMkdir(new File(uploadTempDir));
         } catch (IOException e) {
         }
     }
@@ -143,9 +145,16 @@ public class CommonFileService extends BaseService<CommonFile, Long> implements 
 
         String baseName = UUID.randomUUID().toString();
         String saveName = baseName + "." + extension;
-        String savePath = getSavePath(saveName);
+        String savePath;
+        
+        if(StringUtils.isNotBlank(uploadParameters.getSavePath())) {
+        	savePath = PropertyUtils.getSavePathProperty(uploadParameters.getSavePath());
+        	log.debug("Save Path : {}", savePath);
+        } else {
+        	savePath = getDefaultPath();
+        }
 
-        File file = new File(savePath);
+        File file = new File(savePath + saveName);
         FileUtils.copyFile(uploadFile, file);
 
         if (deleteIfExist) {
@@ -157,6 +166,7 @@ public class CommonFileService extends BaseService<CommonFile, Long> implements 
         commonFile.setTargetId(targetId);
         commonFile.setFileNm(fileName);
         commonFile.setSaveNm(saveName);
+        commonFile.setSavePath(savePath);
         commonFile.setSort(sort);
         commonFile.setDesc(desc);
         commonFile.setFileType(fileType);
@@ -164,11 +174,15 @@ public class CommonFileService extends BaseService<CommonFile, Long> implements 
         commonFile.setFileSize(file.length());
 
         if (fileType.equals(Types.FileType.IMAGE) && thumbnail) {
+        	File thumbnailDir = new File(getThumbnailPath(savePath));
+        	if(!thumbnailDir.exists()) {
+        		FileUtils.forceMkdir(new File(getThumbnailPath(savePath)));
+        	}
             try {
                 Thumbnails.of(file)
                         //.crop(Positions.CENTER)
                         .size(thumbnailWidth, thumbnailHeight)
-                        .toFiles(new File(getBasePath()), Rename.SUFFIX_HYPHEN_THUMBNAIL);
+                        .toFiles(new File(thumbnailDir.getPath()), Rename.SUFFIX_HYPHEN_THUMBNAIL);
             } catch (Exception e) {
             }
         }
@@ -180,7 +194,6 @@ public class CommonFileService extends BaseService<CommonFile, Long> implements 
         return commonFile;
     }
     
-    //public CommonFile save()
 
     private String getFileType(String extension) {
         switch (extension.toUpperCase()) {
@@ -202,7 +215,8 @@ public class CommonFileService extends BaseService<CommonFile, Long> implements 
     }
 
     public ResponseEntity<byte[]> downloadById(Long id) throws IOException {
-        CommonFile commonFile = commonFileRepository.findOne(id);
+        //CommonFile commonFile = commonFileRepository.findOne(id);
+    	CommonFile commonFile = query().from(qCommonFile).where(qCommonFile.id.eq(id)).fetchOne();
         return download(commonFile);
     }
 
@@ -211,12 +225,12 @@ public class CommonFileService extends BaseService<CommonFile, Long> implements 
         CommonFile commonFile = from(qCommonFile).where(qCommonFile.targetType.eq(targetType).and(qCommonFile.targetId.eq(targetId))).fetchOne();
         return download(commonFile);
     }
-
+    
     public ResponseEntity<byte[]> download(CommonFile commonFile) throws IOException {
         if (commonFile == null)
             return null;
 
-        byte[] bytes = FileUtils.readFileToByteArray(new File(getSavePath(commonFile.getSaveNm())));
+        byte[] bytes = FileUtils.readFileToByteArray(new File(commonFile.getSavePath()+commonFile.getSaveNm()));
 
         String fileName = EncodeUtils.encodeDownloadFileName(commonFile.getFileNm());
 
@@ -256,11 +270,12 @@ public class CommonFileService extends BaseService<CommonFile, Long> implements 
 
         switch (type) {
             case Types.ImagePreviewType.ORIGIN:
-                imagePath = getSavePath(commonFile.getSaveNm());
+                imagePath = commonFile.getSavePath()+commonFile.getSaveNm();
                 break;
 
             case Types.ImagePreviewType.THUMBNAIL:
-                imagePath = getSavePath(commonFile.getThumbnailFileName());
+                //imagePath = commonFile.getSavePath()+commonFile.getThumbnailFileName();
+            	imagePath = getThumbnailPath(commonFile.getSavePath())+commonFile.getThumbnailFileName();
                 break;
         }
 
@@ -282,16 +297,24 @@ public class CommonFileService extends BaseService<CommonFile, Long> implements 
     }
 
     public String getBasePath() {
-        return uploadRepository;
+        return uploadTempDir;
 
     }
 
     public String getSavePath(String saveName) {
         return getBasePath() + "/" + saveName;
     }
+    
+    public String getDefaultPath() {
+    	return getBasePath() + "/";
+    }
+    
+    public String getThumbnailPath(String savePath) {
+    	return savePath + "/thumbnails/";
+    }
 
-    public byte[] getFileBytes(String saveName) throws IOException {
-        return FileUtils.readFileToByteArray(new File(getSavePath(saveName)));
+    public byte[] getFileBytes(String savePathName) throws IOException {
+        return FileUtils.readFileToByteArray(new File(savePathName));
     }
 
     public Page<CommonFile> getList(ParamsVo paramsVo) {
@@ -378,15 +401,66 @@ public class CommonFileService extends BaseService<CommonFile, Long> implements 
         //commonFileRepository.delete(file);
         delete(qCommonFile).where(qCommonFile.targetType.eq(targetType).and(qCommonFile.targetId.eq(targetId))).execute();
     }
+    
+    
+    /********************************************************************
+     * @메소드명	: transfer
+     * @작성자	: KIMSEOKHOON
+     * @메소드 내용	: tmpDir -> 디렉토리 변경
+     ********************************************************************/
+    @Transactional
+    public void filePathUpdate(List<String> ids, String savePathKey) {
+    	System.out.println(ids);
+    	filePathUpdate(ids, savePathKey, null, null);
+    }
+    
+    /********************************************************************
+     * @메소드명	: transfer
+     * @작성자	: KIMSEOKHOON
+     * @메소드 내용	: tmpDir -> 디렉토리 변경 및 TargetType, TargetId update
+     ********************************************************************/
+    @Transactional
+    public void filePathUpdate(List<String> ids, String savePathKey, String targetType, Long targetId) {
+    	String savePath = PropertyUtils.getSavePathProperty(savePathKey) + "/";
+    	for(String id : ids) {
+    		CommonFile file = query().from(qCommonFile).where(qCommonFile.id.eq(Long.valueOf(id))).fetchOne();
+    		File sourceFile = FileUtils.getFile(file.getSavePath()+file.getSaveNm());
+    		if(file.getSavePath().equals(savePath)) {
+    			return;
+    		}
+    		File destinationDir = new File(savePath);
+    		try {
+				FileUtils.copyFileToDirectory(sourceFile, destinationDir, true);
+				if(file.getFileType().equals(Types.FileType.IMAGE)) {
+					File thumbSourceFile = FileUtils.getFile(getThumbnailPath(file.getSavePath()) + Rename.SUFFIX_HYPHEN_THUMBNAIL.apply(file.getSaveNm(), null));
+					if(thumbSourceFile.isFile()) {
+						File thumbDestDir = FileUtils.getFile(getThumbnailPath(savePath));
+						FileUtils.copyFileToDirectory(thumbSourceFile, thumbDestDir, true);
+					}
+				}
+				file.setSavePath(savePath);
+				if(StringUtils.isNotBlank(targetType)) {
+					file.setTargetType(targetType);
+				}
+				if(StringUtils.isNotBlank(String.valueOf(targetId))) {
+					file.setTargetId(String.valueOf(targetId));
+				}
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+    		
+    	}
+    }
 
     @Transactional
     public void updateOrDelete(List<CommonFile> commonFileList) {
-        for (CommonFile file : commonFileList) {
+    	for (CommonFile file : commonFileList) {
             if (file.isDeleted()) {
                 deleteFile(file.getId());
             } else {
-        		update(qCommonFile).set(qCommonFile.targetType, file.getTargetType()).set(qCommonFile.targetId, file.getTargetId()).where(qCommonFile.id.eq(file.getId())).execute();
+            	update(qCommonFile).set(qCommonFile.targetType, file.getTargetType()).set(qCommonFile.targetId, file.getTargetId()).where(qCommonFile.id.eq(file.getId())).execute();
             }
         }
     }
+    
 }

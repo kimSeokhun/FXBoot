@@ -5,11 +5,14 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -25,6 +28,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import com.flexink.common.file.service.CommonFileService;
+import com.flexink.common.utils.EditorUtils;
 import com.flexink.domain.file.CommonFile;
 import com.flexink.domain.sample.Board;
 import com.flexink.domain.sample.Comment;
@@ -45,6 +49,8 @@ public class BoardSampleController {
 	@Autowired
     private CommonFileService commonFileService;
 	
+	private String editorImgPathKey = "upload.editor";
+	private String fileSavePathKey = "upload.board";
 	
 	/********************************************************************
 	 * @메소드명	: view
@@ -83,7 +89,7 @@ public class BoardSampleController {
 	 * @작성자	: KIMSEOKHOON
 	 * @메소드 내용	: 글 쓰기 및 수정 페이지
 	 ********************************************************************/
-	@GetMapping("/article")
+	@GetMapping(value="/article")
 	public String writeAriticle(Board board, ParamsVo params, ModelMap model) {
 		if(board.getId() != null) {
 			model.put("article", boardSampleService.getArticle(board));
@@ -94,9 +100,9 @@ public class BoardSampleController {
 	/********************************************************************
 	 * @메소드명	: saveAriticle
 	 * @작성자	: KIMSEOKHOON
-	 * @메소드 내용	: 글 등록 (AxFile 용)
+	 * @메소드 내용	: 글 등록 및 수정 (AxFile 용)
 	 ********************************************************************/
-	@PostMapping("/article")
+	@PostMapping(value="/article", consumes=MediaType.APPLICATION_FORM_URLENCODED_VALUE)
 	public ResponseEntity<Board> saveAriticle(ParamsVo params, Board board) throws IOException {
 		
 		if(params.getString("secret", "").equalsIgnoreCase("true")) {
@@ -104,52 +110,32 @@ public class BoardSampleController {
 		} else {
 			board.setSecret(Board.Secret.N);
 		}
-		
         
         boardSampleService.saveArticle(board);
         
-        // Axfile 정보  수정
+        // editor에 업로드된 이미지 tempDir -> 디렉토리 수정
+        commonFileService.filePathUpdate(EditorUtils.getImgIds(board.getContent()), editorImgPathKey);
+        
+        // Axfile tempDir -> 디렉토리 수정
         if(params.getArray("fileIds") != null && params.getArray("fileIds").size() > 0) {
-        	List<CommonFile> fileList = new ArrayList<>();
-        	List<String> fileIds = params.getArray("fileIds");
-    		for(int i=0; i < fileIds.size(); i++) {
-        		fileList.add(new CommonFile(fileIds.get(i), board.getType(), board.getId(), i));
-            }
-        	commonFileService.updateOrDelete(fileList);
+        	commonFileService.filePathUpdate(params.getArray("fileIds"), fileSavePathKey, board.getType(), board.getId());
         }
         
 		
-		//return "redirect:/sample/board?type="+board.getType();
 		return new ResponseEntity<Board>(board, HttpStatus.OK);
 	}
 	
 	/********************************************************************
-	 * @메소드명	: updateAriticle
+	 * @메소드명	: deleteAriticle2
 	 * @작성자	: KIMSEOKHOON
-	 * @메소드 내용	: 글 수정
+	 * @메소드 내용	: 글 삭제
 	 ********************************************************************/
-	@PutMapping("/article")
-	public ResponseEntity<Board> updateAriticle(ParamsVo params, Board board) {
-		if(params.getString("secret", "").equalsIgnoreCase("true")) {
-			board.setSecret(Board.Secret.Y);
-		} else {
-			board.setSecret(Board.Secret.N);
-		}
-		
-		boardSampleService.saveArticle(board);
-		
-		// Axfile 정보  수정
-        if(params.getArray("fileIds") != null && params.getArray("fileIds").size() > 0) {
-        	List<CommonFile> fileList = new ArrayList<>();
-        	List<String> fileIds = params.getArray("fileIds");
-    		for(int i=0; i < fileIds.size(); i++) {
-        		fileList.add(new CommonFile(fileIds.get(i), board.getType(), board.getId(), i));
-            }
-        	commonFileService.updateOrDelete(fileList);
-        }
-		
-        return new ResponseEntity<Board>(board, HttpStatus.OK);
+	@DeleteMapping(value="/article")
+	public String deleteAriticle2(Board board) {
+		boardSampleService.deleteArticle(board);
+        return "redirect:/sample/board?type="+board.getType();
 	}
+	
 	
 	/********************************************************************
 	 * @메소드명	: saveAriticle
@@ -174,6 +160,7 @@ public class BoardSampleController {
         
         // 파일업로드
         UploadParameters uploadParameters = new UploadParameters();
+        uploadParameters.setSavePath("upload.testBoard");
         uploadParameters.setMultipartFiles(request.getFiles("file"));
         uploadParameters.setTargetType(board.getType());
         uploadParameters.setTargetId(String.valueOf(board.getId()));
@@ -187,9 +174,9 @@ public class BoardSampleController {
 	/********************************************************************
 	 * @메소드명	: updateAriticle
 	 * @작성자	: KIMSEOKHOON
-	 * @메소드 내용	: 글 수정
+	 * @메소드 내용	: 글 수정  (form 전용, Input type=file 형식)
 	 ********************************************************************/
-	@PostMapping("/article/update")
+	@PostMapping("/formArticle/update")
 	public String updateAriticle(ParamsVo params, @Valid Board board, BindingResult bindingResult) {
 		if(params.getString("secret", "").equalsIgnoreCase("true")) {
 			board.setSecret(Board.Secret.Y);
@@ -205,35 +192,18 @@ public class BoardSampleController {
         
         boardSampleService.saveArticle(board);
 		
-		//return "redirect:/sample/board?type="+board.getType();
         return "redirect:/sample/viewArticle?id="+board.getId();
 	}
 	
-	/*@DeleteMapping("/article")
-	@ResponseBody
-	public String deleteAriticle(@RequestBody Board board) {
-		System.out.println(board.getId());
-        boardSampleService.deleteArticle(board);
-		
-		return "redirect:/sample/board?type="+board.getType();
-	}*/
 	
-	/********************************************************************
-	 * @메소드명	: deleteAriticle2
-	 * @작성자	: KIMSEOKHOON
-	 * @메소드 내용	: 글 삭제
-	 ********************************************************************/
-	@DeleteMapping("/article/{id}")
-	public String deleteAriticle2(@PathVariable long id, Board board) {
-        return "redirect:/sample/board?type="+board.getType();
-	}
+
 	
 	/********************************************************************
 	 * @메소드명	: saveComment
 	 * @작성자	: KIMSEOKHOON
 	 * @메소드 내용	: 댓글 등록
 	 ********************************************************************/
-	@PostMapping("/article/comment")
+	@PostMapping(value="/article/comment", consumes=MediaType.APPLICATION_FORM_URLENCODED_VALUE)
 	@ResponseBody
 	public Comment saveComment(ParamsVo params, Comment comment) {
 		boardSampleService.saveComment(params, comment);
@@ -245,7 +215,7 @@ public class BoardSampleController {
 	 * @작성자	: KIMSEOKHOON
 	 * @메소드 내용	: 댓글 삭제
 	 ********************************************************************/
-	@DeleteMapping("/article/comment")
+	@DeleteMapping(value="/article/comment", consumes=MediaType.APPLICATION_JSON_UTF8_VALUE)
 	@ResponseBody
 	public void deleteComment(@RequestBody Comment comment) {
 		boardSampleService.deleteComment(comment);

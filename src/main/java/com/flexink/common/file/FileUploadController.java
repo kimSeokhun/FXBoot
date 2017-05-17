@@ -67,19 +67,6 @@ public class FileUploadController {
         return commonFileService.upload(uploadParameters);
     }
     
-   /* @RequestMapping(value = "/uploads", method = RequestMethod.POST, produces = "application/json; charset=UTF-8")
-    @ResponseBody
-    public List<CommonFile> uploads(@RequestBody List<UploadParameters> files) throws IOException {
-    	System.out.println("#############################################");
-    	List<CommonFile> list = new ArrayList<>();
-    	for(UploadParameters param : files) {
-    		System.out.println(param);
-    		list.add(commonFileService.upload(param));
-    	}
-               
-        return list;
-    }*/
-
     @RequestMapping(method = RequestMethod.GET, produces = "application/json; charset=UTF-8")	
     @ResponseBody
     public Page<CommonFile> list(ParamsVo paramsVo) {
@@ -140,10 +127,10 @@ public class FileUploadController {
     	
     	UploadParameters uploadParameters = new UploadParameters();
         uploadParameters.setMultipartFile(multipartFile);
+        uploadParameters.setThumbnail(false);
         CommonFile file = commonFileService.upload(uploadParameters);
         String fileUrl = request.getContextPath() + "/files/preview/" + file.getId();
-        //String fileUrl = "/files/preview?id=" + file.getId();
-        
+
         response.setCharacterEncoding("UTF-8");
         response.setContentType("text/html;charset=UTF-8");
         @Cleanup PrintWriter writer = response.getWriter();

@@ -291,22 +291,18 @@ desired effect
         <li><a href="${contextPath}/sample/valid"><i class="fa fa-link"></i> <span>Valid</span></a></li>
         <li><a href="${contextPath}/sample/code"><i class="fa fa-link"></i> <span>CommonCode Mng</span></a></li>
         <li><a href="${contextPath}/sample/cache"><i class="fa fa-link"></i> <span>EhCache</span></a></li>
-        <!-- <li class="treeview">
-          <a href="#"><i class="fa fa-link"></i> <span>Cache</span>
+        <li><a href="${contextPath}/sample/file"><i class="fa fa-link"></i> <span>file</span></a></li>
+        <li><a href="${contextPath}/h2-console" target="_blank"><i class="fa fa-link"></i> <span>H2 Console</span></a></li>
+        <li class="treeview">
+          <a href="#"><i class="fa fa-link"></i> <span>Actuator</span>
             <span class="pull-right-container">
               <i class="fa fa-angle-left pull-right"></i>
             </span>
           </a>
           <ul class="treeview-menu">
-            <li><a href="/sample/cache/getNoCache/no">getNoCache</a></li>
-            <li><a href="/sample/cache/getCache/1">getCache-1</a></li>
-            <li><a href="/sample/cache/getCache/2">getCache-2</a></li>
-            <li><a href="/sample/cache/refresh/1">refresh-1</a></li>
-            <li><a href="/sample/cache/refresh/2">refresh-2</a></li>
+            <li><a href="/health" target="_blank">Health</a></li>
           </ul>
-        </li> -->
-        <li><a href="${contextPath}/sample/file"><i class="fa fa-link"></i> <span>file</span></a></li>
-        <li><a href="${contextPath}/h2-console" target="_blank"><i class="fa fa-link"></i> <span>H2 Console</span></a></li>
+        </li>
       </ul>
       <!-- /.sidebar-menu -->
     </section>

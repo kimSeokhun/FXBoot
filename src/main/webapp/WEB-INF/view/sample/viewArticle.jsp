@@ -69,7 +69,8 @@ function removeArticle() {
 			            </div>
 			            <!-- /.box-header -->
 			            <!-- form start -->
-			            <form:form method="delete" action="${contextPath}/sample/article/${article.id}" class="form-horizontal" onsubmit="return removeArticle();">
+			            <form:form method="delete" action="${contextPath}/sample/article" class="form-horizontal" onsubmit="return removeArticle();">
+			            	<input type="hidden" name="type" value="${article.type}" />
 			            	<div class="box-body">
 				                <div class="form-group">
 				                  <label for="title" class="col-sm-2 control-label">Title</label>
@@ -101,7 +102,7 @@ function removeArticle() {
 		              		</div>
 			              <!-- /.box-body -->
 			              <div class="box-footer">
-			                <button type="button" class="btn btn-default" onclick="history.back();">Cancel</button>
+			                <button type="button" class="btn btn-default" onclick="history.back();">Back</button>
 			                <button type="button" class="btn btn-info" onclick="editArticle();">Update</button>
 			                <button type="submit" class="btn btn-danger pull-right">delete</button>
 			                

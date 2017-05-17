@@ -4,11 +4,16 @@ import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.flexink.common.code.FxBootType;
+import com.flexink.common.code.FxBootType.Used;
 import com.flexink.common.domain.BaseService;
 import com.flexink.domain.code.CommonCode;
 import com.flexink.domain.code.CommonCodeId;
@@ -18,6 +23,7 @@ import com.flexink.sample.mapper.CommonCodeMapper;
 import com.flexink.vo.ParamsVo;
 import com.querydsl.core.BooleanBuilder;
 
+@EnableCaching
 @Service
 public class CommonCodeService extends BaseService<CommonCode, CommonCodeId> {
 
@@ -31,6 +37,12 @@ public class CommonCodeService extends BaseService<CommonCode, CommonCodeId> {
         super(CommonCode.class, basicCodeRepository);
     }
 
+    @Cacheable(cacheNames="commonCode", key="#commonCode.groupCd")
+    public List<CommonCode> getList(CommonCode commonCode) {
+    	ParamsVo param = new ParamsVo();
+    	param.put("groupCd", commonCode.getGroupCd());
+    	return get(param).getContent();
+    }
     
     public Page<CommonCode> get(ParamsVo paramsVo) {
     	
@@ -46,6 +58,12 @@ public class CommonCodeService extends BaseService<CommonCode, CommonCodeId> {
             		.or(qCommonCode.groupNm.like("%"+filter+"%"))
             		.or(qCommonCode.code.like("%"+filter+"%"))
             		.or(qCommonCode.name.like("%"+filter+"%")));
+        }
+        if (StringUtils.isNotEmpty(paramsVo.getString("groupCd"))) {
+        	builder.and(qCommonCode.groupCd.eq(paramsVo.getString("groupCd")));
+        }
+        if (paramsVo.get("useYn") != null) {
+        	builder.and(qCommonCode.useYn.eq((Used) paramsVo.get("useYn")));
         }
         
         
@@ -76,8 +94,9 @@ public class CommonCodeService extends BaseService<CommonCode, CommonCodeId> {
         Page<CommonCode> list = (Page<CommonCode>) readPage(query().from(qCommonCode).where(builder), paramsVo.getPageable());
         return list;
     }
-
+    
     @Transactional
+    @CacheEvict(cacheNames="commonCode", allEntries=true)
     public void saveCommonCode(List<CommonCode> basicCodes) {
         save(basicCodes);
     }

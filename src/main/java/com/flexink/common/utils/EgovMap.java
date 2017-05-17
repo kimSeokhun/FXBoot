@@ -21,7 +21,7 @@ public class EgovMap extends ListOrderedMap{
 	 */
 	@Override
 	public Object put(Object key, Object value) {
-		return super.put(CamelUtil.convert2CamelCase((String) key), value);
+		return super.put(CamelUtils.convert2CamelCase((String) key), value);
 	}
 	
 }

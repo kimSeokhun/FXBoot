@@ -110,9 +110,14 @@
 		
 		<!-- Cache -->
 		<dependency>
+		    <groupId>org.hibernate</groupId>
+		    <artifactId>hibernate-ehcache</artifactId>
+		    <version>5.2.10.Final</version>
+		</dependency>
+		<!-- <dependency>
 		    <groupId>net.sf.ehcache</groupId>
 		    <artifactId>ehcache</artifactId>
-		</dependency>
+		</dependency> -->
 		
 		<!-- Commons -->
 		<dependency>
@@ -138,6 +143,12 @@
 		    <groupId>joda-time</groupId>
 		    <artifactId>joda-time</artifactId>
 		</dependency>
+		<dependency>
+		    <groupId>eu.bitwalker</groupId>
+		    <artifactId>UserAgentUtils</artifactId>
+		    <version>1.20</version>
+		</dependency>
+		
 		
 		<!-- webjar -->
 		<dependency>
@@ -178,7 +189,7 @@
 		<dependency>
 		    <groupId>org.webjars.npm</groupId>
 		    <artifactId>ax5ui-uploader</artifactId>
-		    <version>1.4.20</version>
+		    <version>1.4.53</version>
 		</dependency>
 		<dependency>
 		    <groupId>org.webjars.npm</groupId>

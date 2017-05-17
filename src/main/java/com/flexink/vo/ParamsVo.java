@@ -192,4 +192,8 @@ public class ParamsVo extends CommonVo {
 	public Map<String, Object> getParamemter() {
 		return this.map;
 	}
+	
+	public String getGroupCd() {
+		return getString("groupCd");
+	}
 }

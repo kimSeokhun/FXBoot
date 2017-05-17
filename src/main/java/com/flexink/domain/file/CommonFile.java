@@ -49,48 +49,51 @@ public class CommonFile extends BaseJpaModel<Long>{
 	}
 	
     @Id
-    @Column(name = "ID")
+    @Column(name="ID")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "TARGET_TYPE", length = 50)
+    @Column(name="TARGET_TYPE", length=50)
     //Comment(value = "타겟 TYPE")
     private String targetType;
 
-    @Column(name = "TARGET_ID", length = 100)
+    @Column(name="TARGET_ID", length=100)
     //Comment(value = "타겟 ID")
     private String targetId;
 
-    @Column(name = "FILE_NM", columnDefinition = "TEXT")
+    @Column(name="FILE_NM", columnDefinition="TEXT")
     //Comment(value = "실제 파일명")
     private String fileNm;
 
-    @Column(name = "SAVE_NM", columnDefinition = "TEXT")
+    @Column(name="SAVE_NM", columnDefinition="TEXT")
     //Comment(value = "저장 파일명")
     private String saveNm;
+    
+    @Column(name="SAVE_PATH", length=150)
+    private String savePath;
 
-    @Column(name = "FILE_TYPE", length = 30)
+    @Column(name="FILE_TYPE", length=30)
     //Comment(value = "파일 타입")
     private String fileType;
 
-    @Column(name = "EXTENSION", length = 10)
+    @Column(name="EXTENSION", length=10)
     //Comment(value = "확장자")
     private String extension;
 
-    @Column(name = "FILE_SIZE")
+    @Column(name="FILE_SIZE")
     //Comment(value = "파일 크기")
     private Long fileSize;
 
-    @Column(name = "DEL_YN", length = 1)
+    @Column(name="DEL_YN", length=1)
     @Enumerated(EnumType.STRING)
     //Comment(value = "삭제여부")
     private Deleted delYn = Deleted.N;
 
-    @Column(name = "FILE_DESC", columnDefinition = "TEXT")
+    @Column(name="FILE_DESC", columnDefinition = "TEXT")
     //Comment(value = "설명")
     private String desc;
 
-    @Column(name = "SORT")
+    @Column(name="SORT")
     //Comment(value = "정렬")
     private Integer sort;
 

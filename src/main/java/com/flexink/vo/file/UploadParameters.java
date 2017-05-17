@@ -31,4 +31,6 @@ public class UploadParameters {
 	private int thumbnailWidth = 150;
 
 	private int thumbnailHeight = 150;
+	
+	private String savePath;
 }

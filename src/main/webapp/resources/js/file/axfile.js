@@ -81,10 +81,6 @@ var axFileConfig = {
         }
     },
     validateSelectedFiles: function () {
-    	//console.log(this.fileList);
-    	console.log(this);
-    	console.log(this.selectedFiles);
-    	console.log(this.selectedFiles[0]);
     	// 파일타입 체크
     	if(this.selectedFiles.length > 0) {
     		var selectedFiles = this.selectedFiles;
@@ -118,11 +114,6 @@ var axFileConfig = {
     			}
     			return check;
     		});
-    		/*if(this.selectedFiles[0].size > axFileConfig.fileSize*1024*1024) {
-    			var message = String.format(axFileConfig.fileSizeErrMsg, axFileConfig.fileSize);
-                alert(message);
-                return false;
-    		}*/
     		if(arr.length > 0 ) {
     			var message = String.format(axFileConfig.fileSizeErrMsg, axFileConfig.fileSize);
                 alert(message);
@@ -203,14 +194,9 @@ var axfile = {
 }
 
 String.format = function() {
-    // The string containing the format items (e.g. "{0}")
-    // will and always has to be the first argument.
     var theString = arguments[0];
     
-    // start with the second argument (i = 1)
     for (var i = 1; i < arguments.length; i++) {
-        // "gm" = RegEx options for Global search (more than one instance)
-        // and for Multiline search
         var regEx = new RegExp("\\{" + (i - 1) + "\\}", "gm");
         theString = theString.replace(regEx, arguments[i]);
     }

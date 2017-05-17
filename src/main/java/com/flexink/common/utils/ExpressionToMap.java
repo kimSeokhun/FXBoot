@@ -10,6 +10,15 @@ import com.querydsl.core.types.Expression;
 
 import lombok.extern.slf4j.Slf4j;
 
+/**************************************************************
+ * @FileName	: ExpressionToMap.java
+ * @Project		: fxBoot
+ * @Package_Name: com.flexink.common.utils
+ * @Date		: 2017. 5. 16. 
+ * @작성자		: KIMSEOKHOON
+ * @변경이력		:
+ * @프로그램 설명 	: QueryDsl Projection.Map 사용시 Expression -> Map 변환
+ **************************************************************/
 @Slf4j
 public class ExpressionToMap {
 	

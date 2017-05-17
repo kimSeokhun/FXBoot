@@ -64,7 +64,7 @@ function search() {
 				                </tr>
 				                <c:forEach var="list" items="${data.content}" varStatus="status">
 			                		<tr>
-					                  <td><fx:rowNumberDesc totalElements="${data.totalElements}" number="${data.number}" size="${data.size}" count="${status.count}"/></td>
+					                  <td><fx:row-number sort="desc" totalElements="${data.totalElements}" number="${data.number}" size="${data.size}" count="${status.count}"/></td>
 					                  <%-- <td><fx:rowNumberAsc number="${data.number}" size="${data.size}" count="${status.count}"/></td> --%>
 					                  <td>${list.groupCd}</td>
 					                  <td>${list.groupNm}</td>

@@ -75,10 +75,13 @@ mybatis:
     default-statement-timeout: 30
 
 # 파일업로드 경로
-axboot:
+fxboot:
   upload:
-    repository:
+    dir:
       /data/tempDir
+    test:
+      /data/testDir
+
 ---
 
 spring:
@@ -92,6 +95,10 @@ spring:
       enabled: true
     restart:
       enabled: true
+endpoints:
+  enabled: true
+  actuator:
+    enabled: true
   
 logging:
   level:
