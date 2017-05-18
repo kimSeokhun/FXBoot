@@ -5,6 +5,10 @@
 <html>
 <head>
 
+<link rel="stylesheet" href="${contextPath}/resources/lib/ckeditor/plugins/codesnippet/lib/highlight/styles/androidstudio.css">
+<script src="${contextPath}/resources/lib/ckeditor/plugins/codesnippet/lib/highlight/highlight.pack.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
 <script>
 function addComment() {
 	$.post("${contextPath}/sample/article/comment", $('#comment').serialize())
@@ -17,7 +21,7 @@ function removeComment(commentId) {
 	$.ajax({
         contentType: "application/json",
         method: "DELETE",
-        url: '${contextPath}/sample/article/comment',
+        url: '${contextPath}/sample/article/comment/'+commentId,
         data: JSON.stringify({
             id: commentId
         }),
@@ -37,7 +41,7 @@ function removeComment(commentId) {
 }
 
 function editArticle() {
-	location.href="${contextPath}/sample/article?id=${article.id}";
+	location.href="${contextPath}/board/article?id=${article.id}";
 }
 
 function removeArticle() {
@@ -69,7 +73,7 @@ function removeArticle() {
 			            </div>
 			            <!-- /.box-header -->
 			            <!-- form start -->
-			            <form:form method="delete" action="${contextPath}/sample/article" class="form-horizontal" onsubmit="return removeArticle();">
+			            <form:form method="delete" action="${article.id}" class="form-horizontal" onsubmit="return removeArticle();">
 			            	<input type="hidden" name="type" value="${article.type}" />
 			            	<div class="box-body">
 				                <div class="form-group">

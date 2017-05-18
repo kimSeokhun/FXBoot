@@ -9,6 +9,7 @@ import javax.validation.constraints.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -23,13 +24,18 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Controller
-@RequestMapping(value = "/api/v1/commonCodes")
+@RequestMapping(value = "/system")
 public class CommonCodeController {
 
     @Autowired
     private CommonCodeService basicCodeService;
+    
+    @GetMapping(value="/code")
+	public String viewCode() throws Exception {
+		return "/sample/codeMng/codeMng";
+	}
 
-    @RequestMapping(method = RequestMethod.GET, produces = "application/json; charset=UTF-8")
+    @RequestMapping(value="/commonCodes", method = RequestMethod.GET, produces = "application/json; charset=UTF-8")
     @ResponseBody
 	public Page<CommonCode> list(ParamsVo paramsVo, CommonCode code) {
     	
@@ -50,7 +56,7 @@ public class CommonCodeController {
         return basicCodes;
     }
 
-    @RequestMapping(method = {RequestMethod.PUT}, produces = "application/json; charset=UTF-8")
+    @RequestMapping(value="/commonCodes", method = {RequestMethod.PUT}, produces = "application/json; charset=UTF-8")
     @ResponseBody
     public boolean save(@Valid @NotNull @RequestBody List<CommonCode> basicCodes) {
         basicCodeService.saveCommonCode(basicCodes);

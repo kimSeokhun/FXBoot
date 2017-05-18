@@ -1,4 +1,5 @@
 
+###### 공통 설정 ######
 spring:
   h2:
     console:
@@ -25,21 +26,18 @@ spring:
     view:
       prefix: /WEB-INF/view
       suffix: .jsp
-  datasource:
-    url: jdbc:log4jdbc:h2:~/test/db
-    username: sa
-    password: 
+  # DB 정보
+  datasource: 
     type: com.zaxxer.hikari.HikariDataSource                    # Hikari 커텍션풀
     driver-class-name: net.sf.log4jdbc.sql.jdbcapi.DriverSpy    # query로그 정렬
     hikari:
       idle-timeout: 10000
       connection-init-sql: SELECT 1
+  # Profile
   profiles:
-    active: development
+    active: local                                               # profile 수동 설정
       
-  #thymeleaf:
-  #  prefix: classpath:/templates/
-  #  suffix: .html
+# Security
 security:
   basic:
     authorize-mode: role
@@ -56,15 +54,21 @@ security:
     xss: false
   require-ssl: false
   sessions: stateless
-  user:
-    name: user
-    password: user
-    role: USER
-    
+
+# Actuator
 management:
+  context-path:
+    /actuator 
   security:
     enabled: true
+    roles:
+      - ROLE_SYSTEM
+endpoints:
+  enabled: true
+  actuator:
+    enabled: true
     
+# Mybatis
 mybatis:
   mapper-locations: classpath:mapper/**/*.xml
   type-aliases-package: com.flexink.vo, com.flexink.domain, com.flexink.common.utils 
@@ -74,18 +78,20 @@ mybatis:
     map-underscore-to-camel-case: true
     default-statement-timeout: 30
 
-# 파일업로드 경로
-fxboot:
-  upload:
-    dir:
-      /data/tempDir
-    test:
-      /data/testDir
+# Log Level
+logging:
+  level:
+    root: ERROR
+    org.springframework.web: ERROR
+    org.hibernate.SQLQuery: DEBUG
+    com.flexink: DEBUG
+    jdbc.sqlonly: DEBUG
+    jdbc.resultsettable: DEBUG
 
 ---
-
+###### 로컬 환경 ######
 spring:
-  profiles: development
+  profiles: local
   jpa:
     hibernate:
       ddl-auto: create-drop
@@ -95,39 +101,69 @@ spring:
       enabled: true
     restart:
       enabled: true
-endpoints:
-  enabled: true
-  actuator:
-    enabled: true
-  
+  # DB 정보    
+  datasource:
+    url: jdbc:log4jdbc:h2:~/test/db
+    username: sa
+    password: 
+
+    
+---
+###### 개발 환경 ######
+spring:
+  profiles: development
+  jpa:
+    hibernate:
+      ddl-auto: validate
+  # DB 정보    
+  datasource:
+    url: 
+    username: 
+    password: 
+
+# Log Level
 logging:
   level:
     root: ERROR
     org.springframework.web: ERROR
-    org.hibernate.SQLQuery: DEBUG
-    com.flexink: DEBUG
-    jdbc.sqlonly: DEBUG
-    jdbc.resultsettable: DEBUG
+    org.hibernate.SQLQuery: ERROR
+    com.flexink: ERROR
+    jdbc.sqlonly: ERROR
+    jdbc.resultsettable: ERROR
     
 ---
-
+###### 운영 환경 ######
 spring:
   profiles: production
   jpa:
     hibernate:
-      ddl-auto: none    # 개발서버 : validate
+      ddl-auto: none    
   h2:
     console:
       enabled: false
+  # DB 정보    
+  datasource:
+    url: 
+    username: 
+    password: 
 
+# Actuator 비활성화
+management: 
+  security: 
+    enabled: false
+endpoints:
+  actuator:
+    enabled: false
+
+# Log Level
 logging:
   level:
-    root: WARN
-    org.springframework.web: WARN
-    org.hibernate: WARN
-    com.flexink: WARN
+    root: ERROR
+    org.springframework.web: ERROR
+    org.hibernate: ERROR
+    com.flexink: ERROR
     jdbc.sqlonly: ERROR
     jdbc.resultsettable: ERROR
 
     
-    
+#profile 환경설정   http://jsonobject.tistory.com/220

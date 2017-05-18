@@ -41,7 +41,7 @@
 			            </div>
 			            <!-- /.box-header -->
 			            <!-- form start -->
-			            <form:form class="form-horizontal" id="boardFrom" commandName="board" method="post" action="article" enctype="multipart/form-data" onsubmit="return saveArticle();">
+			            <form:form class="form-horizontal" id="boardFrom" commandName="board" method="post" action="article" enctype="multipart/form-data"  onsubmit="return checkSaveArticle();">
 			              <div class="box-body">
 			              
 			                <div class="form-group">
@@ -56,8 +56,7 @@
 			                  <label for="inputContent" class="col-sm-2 control-label">Content</label>
 			                  <div class="col-sm-10">
 			                    
-			                    <%-- <form:textarea path="content" id="editor" rows="10" cols="80" value="${article.content}"/> --%>
-			                    <textarea id="editor" rows="10" cols="80">
+			                    <textarea id="editor" rows="10" cols="80" name="content">
 			                    	${article.content}
 					            </textarea>
 					            
@@ -89,7 +88,8 @@
 			              <div class="box-footer">
 			                <button type="button" class="btn btn-default" onclick="history.back();">Cancel</button>
 			                <!-- <button type="submit" class="btn btn-info pull-right">Save</button> -->
-			                <button type="button" class="btn btn-info pull-right" onclick="saveArticle();">Save</button>
+			                <!-- <button type="button" class="btn btn-info pull-right" onclick="saveArticle();">Save</button> -->
+			                <button type="submit" class="btn btn-info pull-right" >Save</button>
 			                
 			              </div>
 			              <!-- /.box-footer -->
@@ -111,12 +111,12 @@
         });
         
 		// 글 저장
-        function saveArticle() {
-			console.log(editor.getData());
+        /* function saveArticle() {
         	$.ajax({
                 method: "POST",
                 url: '${contextPath}/sample/article',
-                data: $('#boardFrom').serialize()+'&'+$.param(axfile.getUploadedFileIds(), true) +'&content='+editor.getData(),
+                contentType: 'application/json',
+                //data: $('#boardFrom').serialize()+'&'+$.param(axfile.getUploadedFileIds(), true) +'&content='+editor.getData(),
                 traditional: true,
                 success: function (res) {
                     if (res.error) {
@@ -126,7 +126,20 @@
                     location.replace('viewArticle?id='+res.id);
                 }
             });
-        }
+        } */
+		
+		function checkSaveArticle() {
+        	// 유효성 체크
+        	
+        	// 파일
+			var fileIds = axfile.getUploadedFileIds().fileIds;
+			for(var i=0; i < fileIds.length; i++) {
+				var file = '<input type="hidden" name="fileIds" value="'+ fileIds[i] +'" />';
+				$('#boardFrom').append(file);
+			}
+			
+			return true;
+		}
         
         $(function() {
         	// axfile

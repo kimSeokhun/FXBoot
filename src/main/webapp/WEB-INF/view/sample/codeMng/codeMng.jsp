@@ -73,11 +73,11 @@
 			            </div>
 			            <!-- /.box-header -->
 			            <div class="box-body">
-			             	<fx:common-code groupCd="USER_STATUS" defaultValue="9"/>
+			             	<fx:common-code groupCd="USER_STATUS" defaultValue="ACCOUNT_LOCK"/>
 						    <br>
-						    <fx:common-code groupCd="USER_STATUS" type="checkbox" defaultValue="9"/>
+						    <fx:common-code groupCd="MENU_GROUP" type="checkbox" defaultValue="SYSTEM"/>
 						    <br>
-						    <fx:common-code groupCd="TEST_CODE_1" type="radio"  defaultValue="8"/>
+						    <fx:common-code groupCd="USER_ROLE" type="radio"  defaultValue="ADMIN"/>
 			            </div>
 			            <!-- /.box-body -->
 	            	</div>
@@ -224,7 +224,7 @@
 		   		PAGE_SEARCH: function () {
 		   	        $.ajax({
 		   	        	method: "GET",
-		   	            url: API_SERVER + "/api/v1/commonCodes",
+		   	            url: API_SERVER + "/system/commonCodes",
 		   	         	data: $.extend({}, fnObj.searchView.getData(), fnObj.gridView.getPageData()),
 		   	            success: function(res) {
 		   	            	console.log(res);
@@ -239,7 +239,7 @@
 		   	        saveList = saveList.concat(fnObj.gridView.getData("deleted"));
 		   	        $.ajax({
 		   	        	method: "PUT",
-		   	            url: API_SERVER + "/api/v1/commonCodes",
+		   	            url: API_SERVER + "/system/commonCodes",
 		   	         	contentType: "application/json;charset=UTF-8",
 		   	            data: JSON.stringify(saveList),
 		   	         	success: function (res) {

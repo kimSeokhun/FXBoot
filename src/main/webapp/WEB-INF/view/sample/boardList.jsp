@@ -48,7 +48,7 @@ function search() {
 				                	
 			                		<tr>
 					                  <td><fx:row-number sort="desc" totalElements="${list.totalElements}" number="${list.number}" size="${list.size}" count="${status.count}"/></td>
-					                  <td><a href="viewArticle?id=${row.board.id}">
+					                  <td><a href="article/${row.board.id}">
 					                  		<p>${row.board.title} ${row.commentCount gt 0 ? '(' : ''}${row.commentCount gt 0 ? row.commentCount : ''}${row.commentCount gt 0 ? ')' : ''}</p>
 					                  </a></td>
 					                  <td>${row.board.createdBy}</td>

@@ -6,9 +6,13 @@ import java.util.Locale;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.catalina.Context;
+import org.apache.tomcat.util.http.LegacyCookieProcessor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.embedded.ConfigurableEmbeddedServletContainer;
 import org.springframework.boot.context.embedded.EmbeddedServletContainerCustomizer;
+import org.springframework.boot.context.embedded.tomcat.TomcatContextCustomizer;
+import org.springframework.boot.context.embedded.tomcat.TomcatEmbeddedServletContainerFactory;
 import org.springframework.boot.web.servlet.ErrorPage;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
@@ -247,5 +251,41 @@ public class WebConfig extends WebMvcConfigurerAdapter {
         argumentResolvers.add(pageableHandlerMethodArgumentResolver);
         argumentResolvers.add(new ParamsVoArgumentResolver());
     }
+	
+	/********************************************************************
+	 * @메소드명	: customizer
+	 * @작성자	: KIMSEOKHOON
+	 * @메소드 내용	: Tomcat 8.0 이상일 경우 Cookie Parser 사용
+	 ********************************************************************/
+	@Bean
+	public EmbeddedServletContainerCustomizer customizer() {
+		return new EmbeddedServletContainerCustomizer() {
+			@Override
+			public void customize(ConfigurableEmbeddedServletContainer container) {
+				if (container instanceof TomcatEmbeddedServletContainerFactory) {
+	                ((TomcatEmbeddedServletContainerFactory) container).addContextCustomizers(new TomcatContextCustomizer() {
+	                    @Override
+	                    public void customize(Context context) {
+	                        context.setCookieProcessor(new LegacyCookieProcessor());
+	                    }
+	                });
+	            }
+			}
+		};
+	}
+	
+	@Bean
+	public HandlerInterceptor csrfTokenAddingIntserceptor() {
+		return new HandlerInterceptorAdapter() {
+			@Override
+			public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler,
+					ModelAndView view) {
+				CsrfToken token = (CsrfToken) request.getAttribute(CsrfToken.class.getName());
+				if (token != null && null != view) {
+					view.addObject(token.getParameterName(), token);
+				}
+			}
+		};
+	}
 
 }

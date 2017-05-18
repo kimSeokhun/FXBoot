@@ -56,8 +56,8 @@ public class WebSecurityConfigureAdapter extends WebSecurityConfigurerAdapter {
     public static final String FAILURE_URL                 = SECURITY_PATH+"/fail";			// 로그인 실패시 이동할 주소
     public static final String USERNAME_PARAMETER          = "username";					// 로그인 폼 Input name
     public static final String PASSWORD_PARAMETER          = "password";					// 로그인 폼 Input name
-    public static final String DEFAULT_SUCCESS_URL         = ROOT_PATH;						// 로그인 성공시 이동할 기본 주소
-    public static final String LOGOUT_SUCCESS_URL          = ROOT_PATH;						// 로그아웃 성공시 이동할 주소
+    public static final String DEFAULT_SUCCESS_URL         = ROOT_PATH+"sample";			// 로그인 성공시 이동할 기본 주소
+    public static final String LOGOUT_SUCCESS_URL          = ROOT_PATH+"sample";			// 로그아웃 성공시 이동할 주소
     public static final String SESSION_EXPIRED_URL         = LOGIN_PAGE+"?expred";			// 중복 로그인시 기존 로그인 사용자가 이동할 주소
     public static final String SESSION_INVALIDSESSION_URL  = LOGIN_PAGE+"?invalid";			// 세션이 유효하지않은경우 이동할 주소 
     public static final String LOGOUT_URL                  = SECURITY_PATH+"/logout";		// 로그아웃 프로세스 주소
@@ -68,12 +68,9 @@ public class WebSecurityConfigureAdapter extends WebSecurityConfigurerAdapter {
     public final String[] ignorePages = new String[]{
             "/resources/**",
             "/static/**",
-            "/img/**",
-            "/image/**",
+            "/images/**",
             "/webjars/**",
-            h2ConsolePath+"/**",
             "/error/**",
-            //LOGIN_PAGE
     };
 
     @Autowired
@@ -108,8 +105,10 @@ public class WebSecurityConfigureAdapter extends WebSecurityConfigurerAdapter {
         		.antMatchers(HttpMethod.POST, LOGIN_PROCESSING_URL).permitAll()
         		.antMatchers(LOGIN_PAGE).permitAll()
         		.antMatchers(SECURITY_PATH+"/register").permitAll()
-        		.antMatchers("/sample/**").permitAll()
-				.antMatchers("/admin/**")           .hasRole("ADMIN")
+        		.antMatchers(h2ConsolePath+"/**").hasRole("SYSTEM")
+        		.antMatchers("/sample/**").hasRole("SYSTEM")
+				.antMatchers("/admin/**").hasRole("SYSTEM")
+				.antMatchers("/actuator/**").hasRole("SYSTEM")
 				//.antMatchers("/board/**").hasAnyAuthority()
 				//.anyRequest().authenticated()
 				.and()
@@ -208,7 +207,7 @@ public class WebSecurityConfigureAdapter extends WebSecurityConfigurerAdapter {
 	@Bean
 	public RoleHierarchy roleHierarchy() {
 	   RoleHierarchyImpl roleHierarchy = new RoleHierarchyImpl();
-	   roleHierarchy.setHierarchy(Role.ROLE_ADMIN + " > " + Role.ROLE_USER + " > ROLE_USER3 > ROLE_USER2");
+	   roleHierarchy.setHierarchy(Role.ROLE_SYSTEM + " > " + Role.ROLE_ADMIN + " > " + Role.ROLE_USER + " > ROLE_USER3 > ROLE_USER2");
 	   return roleHierarchy;
 	}
 	

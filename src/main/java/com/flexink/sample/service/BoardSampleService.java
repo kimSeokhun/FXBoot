@@ -11,6 +11,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.flexink.common.domain.BaseService;
 import com.flexink.common.file.service.CommonFileService;
+import com.flexink.common.utils.CookieUtils;
+import com.flexink.common.utils.HttpUtils;
 import com.flexink.domain.file.CommonFile;
 import com.flexink.domain.file.QCommonFile;
 import com.flexink.domain.sample.Board;
@@ -97,7 +99,16 @@ public class BoardSampleService extends BaseService<Board, Long>{
 		Board article = query().from(qBoard).where(qBoard.id.eq(board.getId())).fetchOne();
 		List<CommonFile> files = commonFileService.getList(article.getType(), String.valueOf(article.getId()));
 		article.setFiles(files);
-		article.setViewCount(article.getViewCount() + 1);
+		
+		// view count update
+		String cookieView = CookieUtils.getCookieValue("view_count");
+		String newCookieView = " | " + article.getType() + ":" + article.getId();
+		if(StringUtils.indexOfIgnoreCase(cookieView, newCookieView) < 0) {
+			article.setViewCount(article.getViewCount() + 1);
+			CookieUtils.addCookie("view_count", cookieView + newCookieView);
+		}
+		
+		
 		return article;
 	}
 	
@@ -145,8 +156,8 @@ public class BoardSampleService extends BaseService<Board, Long>{
 	 * @메소드 내용	: 글 삭제
 	 ********************************************************************/
 	@Transactional
-	public void deleteArticle(Board board) {
-		if(board.getId() != null) {
+	public void deleteArticle(Long boardId) {
+		if(boardId != null) {
 			/********************************************************************************************
 			 * 	### Entity 삭제 ###
 			 * 	@ EntityManager 직접 이용
@@ -156,7 +167,7 @@ public class BoardSampleService extends BaseService<Board, Long>{
 			 *	repository.delete(board.getId());
 			 ********************************************************************************************/
 			// QueryDsl
-			delete(qBoard).where(qBoard.id.eq(board.getId())).execute();
+			delete(qBoard).where(qBoard.id.eq(boardId)).execute();
 		}
 	}
 	
@@ -176,9 +187,9 @@ public class BoardSampleService extends BaseService<Board, Long>{
 	}
 	
 	@Transactional
-	public void deleteComment(Comment comment) {
+	public void deleteComment(Long commentId) {
 		
-		delete(qComment).where(qComment.id.eq(comment.getId())).execute();
+		delete(qComment).where(qComment.id.eq(commentId)).execute();
 	}
 
 	

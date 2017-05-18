@@ -25,7 +25,7 @@ public class ErrorController implements org.springframework.boot.autoconfigure.w
 		log.debug("ErrorController : {}", PATH_ERROR_DEFAULT);
 		model.addAttribute("errorCode", "ERROR");
 		//return "error/default";
-		return "error/error";
+		return "/error/error";
 	}
 
 	@RequestMapping(value = PATH_ERROR_401, method = RequestMethod.GET)
@@ -33,7 +33,7 @@ public class ErrorController implements org.springframework.boot.autoconfigure.w
 		log.debug("ErrorController : {}", PATH_ERROR_401);
 		model.addAttribute("errorCode", "401");
 		//return "error/401";
-		return "error/error";
+		return "/error/error";
 	}
 
 	@RequestMapping(value = PATH_ERROR_403, method = RequestMethod.GET)
@@ -41,7 +41,7 @@ public class ErrorController implements org.springframework.boot.autoconfigure.w
 		log.debug("ErrorController : {}", PATH_ERROR_403);
 		model.addAttribute("errorCode", "403");
 		//return "error/403";
-		return "error/error";
+		return "/error/error";
 	}
 
 	@RequestMapping(value = PATH_ERROR_404, method = RequestMethod.GET)
@@ -49,7 +49,7 @@ public class ErrorController implements org.springframework.boot.autoconfigure.w
 		log.debug("ErrorController : {}", PATH_ERROR_404);
 		model.addAttribute("errorCode", "404");
 		//return "error/404";
-		return "error/error";
+		return "/error/error";
 	}
 
 	@RequestMapping(value = PATH_ERROR_500, method = RequestMethod.GET)
@@ -57,11 +57,11 @@ public class ErrorController implements org.springframework.boot.autoconfigure.w
 		log.debug("ErrorController : {}", PATH_ERROR_500);
 		model.addAttribute("errorCode", "500");
 		//return "error/500";
-		return "error/error";
+		return "/error/error";
 	}
 
 	@Override
 	public String getErrorPath() {
-		return "error/default";
+		return "/error/default";
 	}
 }
