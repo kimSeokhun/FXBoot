@@ -11,6 +11,7 @@ import org.springframework.http.HttpMethod;
 import org.springframework.security.access.AccessDecisionVoter;
 import org.springframework.security.access.hierarchicalroles.RoleHierarchy;
 import org.springframework.security.access.hierarchicalroles.RoleHierarchyImpl;
+import org.springframework.security.access.hierarchicalroles.RoleHierarchyUtils;
 import org.springframework.security.access.vote.AffirmativeBased;
 import org.springframework.security.access.vote.RoleHierarchyVoter;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -32,6 +33,7 @@ import com.flexink.common.utils.PhaseUtils;
 import com.flexink.config.web.security.AuthenticationFailureHandler;
 import com.flexink.config.web.security.AuthenticationSuccessHandler;
 import com.flexink.config.web.security.FilterInvocationSecurityMetadataSource;
+import com.flexink.config.web.security.service.SecurityService;
 import com.flexink.config.web.security.user.LoginUserDetailsService;
 import com.flexink.config.web.security.user.Role;
 
@@ -197,12 +199,14 @@ public class WebSecurityConfigureAdapter extends WebSecurityConfigurerAdapter {
 	   AffirmativeBased affirmativeBased = new AffirmativeBased(accessDecisionVoters);
 	   return affirmativeBased;
 	}
+	
 	@Bean
 	public RoleHierarchyVoter roleVoter() {
 	   RoleHierarchyVoter roleHierarchyVoter = new RoleHierarchyVoter(roleHierarchy());
 	   roleHierarchyVoter.setRolePrefix("ROLE_");
 	   return roleHierarchyVoter;
 	}
+	
 	//RoleHierarchy 설정 (하드코딩)
 	@Bean
 	public RoleHierarchy roleHierarchy() {
@@ -210,7 +214,6 @@ public class WebSecurityConfigureAdapter extends WebSecurityConfigurerAdapter {
 	   roleHierarchy.setHierarchy(Role.ROLE_SYSTEM + " > " + Role.ROLE_ADMIN + " > " + Role.ROLE_USER + " > ROLE_USER3 > ROLE_USER2");
 	   return roleHierarchy;
 	}
-	
 	
 	//시큐리트쪽 부분에서 사용자가 화면 페이지 호출하면 매번 호출되는 클래스 중요함
 	@Bean

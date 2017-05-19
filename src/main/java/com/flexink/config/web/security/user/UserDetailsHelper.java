@@ -27,6 +27,16 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class UserDetailsHelper {
 
+	public static LoginUserDetails getLoginUserDetails() {
+		Object obj = getAuthenticatedUser();
+		if(obj == null) {
+			return new LoginUserDetails();
+		} else if (obj instanceof LoginUserDetails) {
+			return (LoginUserDetails) obj;
+		} else {
+			return new LoginUserDetails();
+		}
+	}
     /********************************************************************
      * @메소드명	: getAuthenticatedUser
      * @작성자	: KIMSEOKHOON

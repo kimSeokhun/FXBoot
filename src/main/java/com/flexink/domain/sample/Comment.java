@@ -1,5 +1,6 @@
 package com.flexink.domain.sample;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -25,19 +26,24 @@ public class Comment extends BaseJpaModel<Long> {
 	@Column(name="COMMENT_ID")
 	private Long id;
 	
-	@Column(name="WRITER")
+	@Column(name="WRITER", length=50)
 	private String writer;
 	
-	@Column(name="PASSWORD")
+	@Column(name="PASSWORD", length=100)
 	private String password;
 	
-	@Column(name="CONTENT")
+	@Column(name="CONTENT", columnDefinition="TEXT", nullable=false)
 	private String content;
 	
 	@Enumerated(EnumType.STRING)
+	@Column(name="SECRET", length=1)
 	private Secret secret;
 	
-	@ManyToOne
+	@Enumerated(EnumType.STRING)
+	@Column(name="DEL_YN", length=1)
+	private DelYn delYn = DelYn.N;
+	
+	@ManyToOne(cascade=CascadeType.ALL)
 	@JoinColumn(name="BOARD_ID")
 	private Board board;
 	
@@ -47,6 +53,10 @@ public class Comment extends BaseJpaModel<Long> {
 	}
 	
 	public enum Secret {
+		Y, N
+	}
+	
+	public enum DelYn {
 		Y, N
 	}
 }

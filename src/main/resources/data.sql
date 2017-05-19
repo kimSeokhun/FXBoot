@@ -1,6 +1,8 @@
 
 INSERT INTO USER
 (USERNAME,		PASSWORD,		ACCOUNTNONEXPIRED,		ACCOUNTNONLOCKED,		CREDENTIALSNONEXPIRED,		ENABLED) VALUES
+('system',      '$2a$10$9Uraz7S4LZTFttdqJgE5v.rrIW54wZgFh3nQ7e0hCs9CiPhckfoG.',	TRUE,	TRUE,	TRUE,	TRUE),
+('admin',      '$2a$10$9Uraz7S4LZTFttdqJgE5v.rrIW54wZgFh3nQ7e0hCs9CiPhckfoG.',	TRUE,	TRUE,	TRUE,	TRUE),
 ('ksh',       	'$2a$10$9Uraz7S4LZTFttdqJgE5v.rrIW54wZgFh3nQ7e0hCs9CiPhckfoG.',	TRUE,	TRUE,	TRUE,	TRUE),
 ('aaa', 		'$2a$10$9Uraz7S4LZTFttdqJgE5v.rrIW54wZgFh3nQ7e0hCs9CiPhckfoG.',	FALSE,	TRUE,	TRUE,	TRUE),
 ('bbb', 		'$2a$10$9Uraz7S4LZTFttdqJgE5v.rrIW54wZgFh3nQ7e0hCs9CiPhckfoG.',	TRUE,	FALSE,	TRUE,	TRUE),
@@ -23,11 +25,12 @@ INSERT INTO AUTHORITY
 ('ccc',       	'ROLE_USER'),
 ('ddd',       	'ROLE_USER');
 
-INSERT INTO BOARD (BOARD_ID, TITLE, CONTENT, VIEW_COUNT, SECRET, TYPE, CREATED_BY, CREATED_AT ) VALUES 
-(1, 'TITLE', 'CONTENTS', 0, 'N', 'SAMPLE', 'ksh', '2017-05-10 09:29:29.437'),
-(2, 'TITLE2', 'CONTENTS2', 0, 'N', 'SAMPLE', 'ksh', '2017-05-10 09:29:29.437');
+INSERT INTO BOARD (BOARD_ID, TITLE, CONTENT, VIEW_COUNT, SECRET, DEL_YN, TYPE, CREATED_BY, CREATED_AT ) VALUES 
+(1, 'TITLE', 'CONTENTS', 0, 'N', 'N', 'SAMPLE', 'ksh', '2017-05-10 09:29:29.437'),
+(2, 'TITLE2', 'CONTENTS2', 0, 'N', 'N', 'SAMPLE', 'ksh', '2017-05-10 09:29:29.437'),
+(3, 'TITLE333', 'CONTENTS', 0, 'N', 'N', 'SAMPLE', 'aaa', '2017-05-10 09:29:29.437');
 
-INSERT INTO COMMON_CODE_M
+INSERT INTO COMMON_CODE
 (GROUP_CD,		GROUP_NM,	CODE,			NAME,	SORT,	USE_YN) VALUES
 ('USER_STATUS',	'계정상태',	'NORMAL',		'활성',	'1',	'Y'),
 ('USER_STATUS',	'계정상태',	'ACCOUNT_LOCK',	'잠김',	'2',	'Y'),
@@ -99,3 +102,23 @@ INSERT INTO COMMON_CODE_M
 ('ZTEST_CODE_4',	'테스트 코드 4',	'11',		'11',	'13',	'Y'),
 ('ZTEST_CODE_4',	'테스트 코드 4',	'12',		'12',	'14',	'Y'),
 ('ZTEST_CODE_4',	'테스트 코드 4',	'13',		'13',	'15',	'Y');
+
+
+insert  into RESOURCES (RESOURCES_ID, PATH) values (1,'/user');
+insert  into RESOURCES (RESOURCES_ID, PATH) values (2,'/admin');
+insert  into RESOURCES (RESOURCES_ID, PATH) values (3,'/sample');
+insert  into RESOURCES (RESOURCES_ID, PATH) values (4,'/system');
+
+insert  into ROLE(ROLE_ID, ROLE_NAME) values (1,'ROLE_SYSTEM');
+insert  into ROLE(ROLE_ID, ROLE_NAME) values (2,'ROLE_ADMIN');
+insert  into ROLE(ROLE_ID, ROLE_NAME) values (3,'ROLE_USER');
+
+insert  into ROLE_RESOURCE(ROLE_RESOURCE_ID, ROLE_ID, RESOURCES_ID) values (1,1,2);
+insert  into ROLE_RESOURCE(ROLE_RESOURCE_ID, ROLE_ID, RESOURCES_ID) values (2,1,3);
+insert  into ROLE_RESOURCE(ROLE_RESOURCE_ID, ROLE_ID, RESOURCES_ID) values (3,1,4);
+insert  into ROLE_RESOURCE(ROLE_RESOURCE_ID, ROLE_ID, RESOURCES_ID) values (4,2,2);
+insert  into ROLE_RESOURCE(ROLE_RESOURCE_ID, ROLE_ID, RESOURCES_ID) values (5,1,3);
+
+insert  into AUTHORITIES(AUTHORITIES_ID, USERNAME, ROLE_ID) values (1,'ksh',1);
+insert  into AUTHORITIES(AUTHORITIES_ID, USERNAME, ROLE_ID) values (2,'system',1);
+insert  into AUTHORITIES(AUTHORITIES_ID, USERNAME, ROLE_ID) values (3,'admin',2);

@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
@@ -21,6 +23,7 @@ import com.flexink.common.utils.EditorUtils;
 import com.flexink.domain.sample.Board;
 import com.flexink.domain.sample.Comment;
 import com.flexink.sample.service.BoardSampleService;
+import com.flexink.sample.service.CommentSampleService;
 import com.flexink.vo.ParamsVo;
 
 import lombok.extern.slf4j.Slf4j;
@@ -32,6 +35,9 @@ public class BoardSampleController {
 
 	@Autowired
 	BoardSampleService boardSampleService;
+	
+	@Autowired
+	CommentSampleService commentSampleService;
 	
 	@Autowired
     private CommonFileService commonFileService;
@@ -74,15 +80,16 @@ public class BoardSampleController {
 	@GetMapping(value="/article/{id}")
 	public String viewArticle(@PathVariable long id, Board board, ParamsVo params, ModelMap model) {
 		board.setId(id);
-		Board article = boardSampleService.getArticle(board);
+		Board article = boardSampleService.viewArticle(board);
 		model.put("article", article);
-		model.put("comments", article.getComments());
+		model.put("comments", commentSampleService.getComments(article));
+		/*model.put("comments", article.getComments());
 		Collections.sort(article.getComments(), new Comparator<Comment>() {
 			@Override
 			public int compare(Comment o1, Comment o2) {
 				return o2.getId().compareTo(o1.getId());
 			}
-		});
+		});*/
 		
 		return "/sample/viewArticle";
 	}
@@ -197,7 +204,7 @@ public class BoardSampleController {
 	@PostMapping(value="/article/comment", consumes=MediaType.APPLICATION_FORM_URLENCODED_VALUE)
 	@ResponseBody
 	public Comment saveComment(ParamsVo params, Comment comment) {
-		boardSampleService.saveComment(params, comment);
+		commentSampleService.saveComment(params, comment);
 		return comment;
 	}
 	
@@ -209,6 +216,17 @@ public class BoardSampleController {
 	@DeleteMapping(value="/article/comment/{id}", consumes=MediaType.APPLICATION_JSON_UTF8_VALUE)
 	@ResponseBody
 	public void deleteComment(@PathVariable long id) {
-		boardSampleService.deleteComment(id);
+		commentSampleService.deleteComment(id);
+	}
+	
+	/********************************************************************
+	 * @메소드명	: updateComment
+	 * @작성자	: KIMSEOKHOON
+	 * @메소드 내용	: 댓글 수정
+	 ********************************************************************/
+	@PutMapping(value="/article/comment/{id}", consumes=MediaType.APPLICATION_JSON_UTF8_VALUE)
+	@ResponseBody
+	public void updateComment(@PathVariable long id, @RequestBody Comment comment) {
+		commentSampleService.updateComment(comment);
 	}
 }

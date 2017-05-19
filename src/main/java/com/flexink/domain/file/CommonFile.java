@@ -34,7 +34,7 @@ import lombok.ToString;
 @DynamicUpdate
 @Entity
 @EqualsAndHashCode(callSuper = true)
-@Table(name = "FILE_L")
+@Table(name = "FILE")
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class CommonFile extends BaseJpaModel<Long>{
 	

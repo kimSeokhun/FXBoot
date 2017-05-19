@@ -38,3 +38,5 @@
 
 <c:set var="securityUsername" value="<%=com.flexink.config.web.WebSecurityConfigureAdapter.USERNAME_PARAMETER%>"/>
 <c:set var="securityPassword" value="<%=com.flexink.config.web.WebSecurityConfigureAdapter.PASSWORD_PARAMETER%>"/>
+
+<sec:authentication var="principal" property="principal"/>

@@ -9,6 +9,7 @@ public class PhaseUtils implements EnvironmentAware {
 
 	private static final String DEVELOPMENT = "development";
 	private static final String PRODUCTION = "production";
+	private static final String LOCAL = "local";
 	
     private static Environment environment;
 
@@ -19,7 +20,7 @@ public class PhaseUtils implements EnvironmentAware {
 
     public static String phase() {
         String[] activeProfiles = environment.getActiveProfiles();
-        String activeProfile = DEVELOPMENT;
+        String activeProfile = LOCAL;
 
         if (activeProfiles != null && activeProfiles.length > 0) {
             activeProfile = activeProfiles[0];
@@ -29,7 +30,7 @@ public class PhaseUtils implements EnvironmentAware {
     }
 
     public static boolean isLocal() {
-        return phase().equals(DEVELOPMENT);
+        return phase().equals(LOCAL);
     }
 
 

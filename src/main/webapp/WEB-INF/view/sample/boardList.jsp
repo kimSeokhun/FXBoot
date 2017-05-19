@@ -73,7 +73,9 @@ function search() {
 							        	</form>
 					              	</div>
 					              	<div class="col-md-4 text-right">
-										<button type="submit" class="btn btn-primary" onclick="location.href='article?type=${type}'">글쓰기</button>
+					              		<sec:authorize access="isAuthenticated()">
+					              			<button type="submit" class="btn btn-primary" onclick="location.href='article?type=${type}'">글쓰기</button>
+					              		</sec:authorize>
 									</div>
 								</div>
 							</div>

@@ -12,9 +12,8 @@ import org.springframework.transaction.annotation.Transactional;
 import com.flexink.common.domain.BaseService;
 import com.flexink.common.file.service.CommonFileService;
 import com.flexink.common.utils.CookieUtils;
-import com.flexink.common.utils.HttpUtils;
+import com.flexink.config.web.security.user.UserDetailsHelper;
 import com.flexink.domain.file.CommonFile;
-import com.flexink.domain.file.QCommonFile;
 import com.flexink.domain.sample.Board;
 import com.flexink.domain.sample.BoardSampleRepository;
 import com.flexink.domain.sample.Comment;
@@ -65,7 +64,7 @@ public class BoardSampleService extends BaseService<Board, Long>{
 				query().select(Projections.map(qBoard, qComment.id.count().as("commentCount")))
 				.from(qBoard).leftJoin(qBoard.comments, qComment)
 				.groupBy(qBoard.id)
-				.where(builder)
+				.where(builder.and(qBoard.delYn.eq(Board.DelYn.N)))
 				.orderBy(qBoard.id.desc())
 				, params.getPageable());
 		log.debug("Page<Map<String, Object>> : " + mapList.getContent());
@@ -89,14 +88,8 @@ public class BoardSampleService extends BaseService<Board, Long>{
 	 * @메소드 내용	: 글 상세 조회
 	 ********************************************************************/
 	@Transactional
-	public Board getArticle(Board board) {
-		/********************************************************************************************
-		 * 	### 단건 조회 ###
-		 *	@ SpringData JPA
-		 *	Board article = repository.findOne(board.getId());
-		 ********************************************************************************************/
-		// QueryDsl
-		Board article = query().from(qBoard).where(qBoard.id.eq(board.getId())).fetchOne();
+	public Board viewArticle(Board board) {
+		Board article = getArticle(board);
 		List<CommonFile> files = commonFileService.getList(article.getType(), String.valueOf(article.getId()));
 		article.setFiles(files);
 		
@@ -108,6 +101,17 @@ public class BoardSampleService extends BaseService<Board, Long>{
 			CookieUtils.addCookie("view_count", cookieView + newCookieView);
 		}
 		
+		return article;
+	}
+	
+	public Board getArticle(Board board) {
+		/********************************************************************************************
+		 * 	### 단건 조회 ###
+		 *	@ SpringData JPA
+		 *	Board article = repository.findOne(board.getId());
+		 ********************************************************************************************/
+		// QueryDsl
+		Board article = query().from(qBoard).where(qBoard.id.eq(board.getId())).fetchOne();
 		
 		return article;
 	}
@@ -142,11 +146,17 @@ public class BoardSampleService extends BaseService<Board, Long>{
 			 *  @ EntityManager 직접 이용
 			 *	getEntityManager().merge(board)  
 			 ********************************************************************************************/
-			// QueryDsl
-			update(qBoard).where(qBoard.id.eq(board.getId()))
-				.set(qBoard.title, board.getTitle())
-				.set(qBoard.content, board.getContent())
-				.set(qBoard.secret, board.getSecret()).execute();
+			Board article = query().from(qBoard).where(qBoard.id.eq(board.getId())).fetchOne();
+			if(article.getCreatedBy().equals(UserDetailsHelper.getLoginUserDetails().getUsername())) {
+				// QueryDsl
+				/*update(qBoard).where(qBoard.id.eq(board.getId()))
+					.set(qBoard.title, board.getTitle())
+					.set(qBoard.content, board.getContent())
+					.set(qBoard.secret, board.getSecret()).execute();*/
+				article.setTitle(board.getTitle());
+				article.setContent(board.getContent());
+				article.setSecret(board.getSecret());
+			}
 		}
 	}
 	
@@ -166,31 +176,17 @@ public class BoardSampleService extends BaseService<Board, Long>{
 			 *	@ SpringData JPA
 			 *	repository.delete(board.getId());
 			 ********************************************************************************************/
-			// QueryDsl
-			delete(qBoard).where(qBoard.id.eq(boardId)).execute();
+			Board article = query().from(qBoard).where(qBoard.id.eq(boardId)).fetchOne();
+			if(article.getCreatedBy().equals(UserDetailsHelper.getLoginUserDetails().getUsername()) || UserDetailsHelper.getAuthorities().contains("ROLE_ADMIN")) {
+				// QueryDsl
+				//delete(qBoard).where(qBoard.id.eq(boardId)).execute();
+				update(qBoard).set(qBoard.delYn, Board.DelYn.Y).where(qBoard.id.eq(boardId)).execute();
+			}
+			
 		}
 	}
 	
 	
-	/********************************************************************
-	 * @메소드명	: saveComment
-	 * @작성자	: KIMSEOKHOON
-	 * @메소드 내용	: 댓글 등록
-	 ********************************************************************/
-	@Transactional
-	public Comment saveComment(ParamsVo params, Comment comment) {
-		Board board = query().from(qBoard).where(qBoard.id.eq(params.getLong("boardId"))).fetchOne();
-		comment.setBoard(board);
-		insert(comment);
-		
-		return comment;
-	}
-	
-	@Transactional
-	public void deleteComment(Long commentId) {
-		
-		delete(qComment).where(qComment.id.eq(commentId)).execute();
-	}
 
 	
 }

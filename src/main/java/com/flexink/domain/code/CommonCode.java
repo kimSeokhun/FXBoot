@@ -25,7 +25,7 @@ import lombok.Setter;
 @DynamicInsert
 @DynamicUpdate
 @Entity
-@Table(name = "COMMON_CODE_M")
+@Table(name = "COMMON_CODE")
 @IdClass(CommonCodeId.class)
 @EqualsAndHashCode
 public class CommonCode extends BaseJpaModel<CommonCodeId> {

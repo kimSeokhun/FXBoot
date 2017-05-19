@@ -30,38 +30,55 @@
 		</section>
 		<section class="content">
 			<div class="row">
-	        	<div class="col-lg-6 col-xs-6">
-	        		<form name="searchForm" id="searchForm" method="post" onsubmit="return ACTIONS.PAGE_SEARCH();" style="">
-						<div data-ax-td="" id="" class="" style="width: 300px">
-							<div data-ax-td-wrap="">
-								<input type="text" id="filter" name="filter" class="form-control form-control" placeholder="Search..">
-							</div>
-						</div>
-					</form>		
-	        	</div>
-	        	<div class="text-right col-lg-6 col-xs-6">
-	        		<div class="button-warp">
-			            <button type="button" class="btn btn-info" data-page-btn="search"><i class="axi axi-ion-android-search"></i> Inquery </button>
-			            <button type="button" class="btn btn-info" data-page-btn="save"><i class="axi axi-save"></i> Save</button>
-				    </div>
-	        	</div>
-        	</div>
-			
-			
-			<div class="row">
-				<div class="text-right col-lg-12 col-xs-12" style="padding: 10px;">
-				    <button class="btn btn-default" data-grid-control="row-add">Add</button>
-				    <button class="btn btn-default" data-grid-control="row-remove">Remove</button>
+				<div class="col-lg-12 col-xs-12">
+					<div class="box box box-primary">
+			            <div class="box-header with-border">
+			              <i class="fa fa-fw fa-gears"></i>
+			              <h3 class="box-title">Common Codes</h3>
+			            </div>
+			            <!-- /.box-header -->
+			            <div class="box-body">
+			            	<div class="row" style="margin-bottom: 15px;">
+			            		<div class="col-lg-6 col-xs-6">
+				            		<div class="input-group">
+						                <input type="text" id="filter" name="filter" class="form-control" placeholder="Search..">
+					                    <span class="input-group-btn">
+					                      <button type="submit" class="btn btn-info btn-flat">Go!</button>
+					                    </span>
+					            	</div>
+				              	</div>
+				              	<div class="text-right col-lg-6 col-xs-6">
+				        			<div class="button-warp">
+							            <!-- <button type="button" class="btn btn-info" data-page-btn="search"><i class="axi axi-ion-android-search"></i> Inquery </button> -->
+							            <button type="button" class="btn btn-info " data-page-btn="save"><i class="axi axi-save"></i> Save</button>
+								    </div>
+					        	</div>
+				        	</div>
+					        <div class="row"  style="margin-bottom: 5px;">	
+			            		<div class="text-right col-lg-12 col-xs-12" >
+									<div class="btn-group ">
+										<button type="button" class="btn btn-default" data-grid-control="row-add">
+											<i class="fa fa-fw fa-plus"></i>
+										</button>
+										<button type="button" class="btn btn-default" data-grid-control="row-remove">
+											<i class="fa fa-fw fa-minus"></i>
+										</button>
+									</div>
+								</div>
+			            	</div>
+			            	<div class="row">
+		            			<div class="col-lg-12 col-xs-12" style="margin-bottom: 15px">
+						           	<div style="position: relative;height:400px;" id="grid-parent">
+										<div data-ax5grid="first-grid" data-ax5grid-config="{}" style="height: 100%;"></div>
+									</div>
+								</div>
+			            	</div>
+			            </div>
+			            <!-- /.box-body -->
+	            	</div>
 				</div>
 			</div>
 			
-			<div class="row">
-				<div class="col-lg-12 col-xs-12" style="margin-bottom: 15px">
-		           	<div style="position: relative;height:400px;" id="grid-parent">
-						<div data-ax5grid="first-grid" data-ax5grid-config="{}" style="height: 100%;"></div>
-					</div>
-				</div>
-			</div>
 			
 			<div class="row">
 				<div class="col-lg-12 col-xs-12">

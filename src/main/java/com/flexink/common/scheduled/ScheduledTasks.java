@@ -11,6 +11,7 @@ import org.springframework.context.annotation.PropertySource;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
+import com.flexink.common.utils.PhaseUtils;
 import com.flexink.common.utils.PropertyUtils;
 
 import lombok.extern.slf4j.Slf4j;
@@ -31,6 +32,11 @@ public class ScheduledTasks {
 	
 	@Scheduled(cron="${scheduled.a}")
 	public void reportCurrentTimeA(){
+		if(PhaseUtils.isProduction()) {
+			log.debug("Production Phase");
+		} else if(PhaseUtils.isLocal()) {
+			log.debug("Local Phase");
+		}
 		log.debug("[cron={}]The time is now {}", scheduledA, DATE_FORMAT.format(new Date()));
 	}
 	

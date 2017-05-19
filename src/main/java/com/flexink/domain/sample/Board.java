@@ -3,6 +3,7 @@ package com.flexink.domain.sample;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -18,6 +19,7 @@ import org.hibernate.validator.constraints.NotEmpty;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.flexink.common.domain.BaseJpaModel;
 import com.flexink.domain.file.CommonFile;
+import com.flexink.domain.sample.Comment.DelYn;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -29,6 +31,13 @@ import lombok.ToString;
 @ToString(exclude={"comments"})
 public class Board extends BaseJpaModel<Long> {
 
+	public Board() {
+		
+	}
+	public Board(Long id) {
+		this.id = id;
+	}
+	
 	@Id
 	@GeneratedValue(strategy=GenerationType.AUTO)
 	@Column(name="BOARD_ID")
@@ -52,7 +61,11 @@ public class Board extends BaseJpaModel<Long> {
 	@Enumerated(EnumType.STRING)
 	private Secret secret;
 	
-	@OneToMany(mappedBy="board")
+	@Enumerated(EnumType.STRING)
+	@Column(name="DEL_YN", length=1)
+	private DelYn delYn = DelYn.N;
+	
+	@OneToMany(mappedBy="board", orphanRemoval=true, cascade=CascadeType.ALL)
 	@JsonBackReference
 	private List<Comment> comments = new ArrayList<Comment>();
 	
@@ -68,6 +81,10 @@ public class Board extends BaseJpaModel<Long> {
 	}
 	
 	public enum Secret {
+		Y, N
+	}
+	
+	public enum DelYn {
 		Y, N
 	}
 	

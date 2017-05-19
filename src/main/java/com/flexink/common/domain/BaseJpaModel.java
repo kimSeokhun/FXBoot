@@ -80,6 +80,6 @@ public abstract class BaseJpaModel<PK extends Serializable> extends FxBootCrudMo
     	if(obj != null && !obj.equals("anonymousUser")) {
     		user = (LoginUserDetails) obj;
     	}
-    	return user == null ? "system" : user.getUsername();
+    	return user == null ? "anonymous" : user.getUsername();
     }
 }

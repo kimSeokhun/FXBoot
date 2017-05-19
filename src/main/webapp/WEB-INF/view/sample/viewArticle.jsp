@@ -11,17 +11,20 @@
 
 <script>
 function addComment() {
-	$.post("${contextPath}/sample/article/comment", $('#comment').serialize())
+	$.post("${contextPath}/board/article/comment", $('#comment').serialize())
 	.done(function(data) {
 		location.reload();
 	});
 }
 
 function removeComment(commentId) {
+	if(!confirm("댓글을 삭제하시겠습니까?")) {
+		return false;
+	}
 	$.ajax({
         contentType: "application/json",
         method: "DELETE",
-        url: '${contextPath}/sample/article/comment/'+commentId,
+        url: '${contextPath}/board/article/comment/'+commentId,
         data: JSON.stringify({
             id: commentId
         }),
@@ -33,11 +36,32 @@ function removeComment(commentId) {
             location.reload();
         }
     });
-	/* $.post("${contextPath}/sample/article/comment/delete", {id : commentId})
-	.done(function(data) {
-		location.reload();
-		//$(".result").html(data);
-	}); */
+}
+
+function updateComment(obj) {
+	$.ajax({
+        contentType: "application/json",
+        method: "PUT",
+        url: '${contextPath}/board/article/comment/'+$(obj).parents('.timeline-footer').prev().children('input').val(),
+        data: JSON.stringify({
+            id: $(obj).parents('.timeline-footer').prev().children('input').val(),
+            content: $(obj).parents('.timeline-footer').prev().children('textarea').val()
+        }),
+        success: function (res) {
+            if (res.error) {
+                alert(res.error.message);
+                return;
+            }
+            location.reload();
+        }
+    });
+}
+
+function toggleComment(obj) {
+	$(obj).parents('.timeline-footer').children('.comment_btn_1').toggle();
+	$(obj).parents('.timeline-footer').children('.comment_btn_2').toggle();
+	$(obj).parents('.timeline-footer').prev().children('div').toggle();
+	$(obj).parents('.timeline-footer').prev().children('textarea').toggle();
 }
 
 function editArticle() {
@@ -45,7 +69,12 @@ function editArticle() {
 }
 
 function removeArticle() {
-	return true;
+	if(confirm("삭제하시겠습니까?")) {
+		return true;
+	} else {
+		return false;
+	}
+	
 }
 </script>
 
@@ -107,8 +136,17 @@ function removeArticle() {
 			              <!-- /.box-body -->
 			              <div class="box-footer">
 			                <button type="button" class="btn btn-default" onclick="history.back();">Back</button>
-			                <button type="button" class="btn btn-info" onclick="editArticle();">Update</button>
-			                <button type="submit" class="btn btn-danger pull-right">delete</button>
+							<c:choose>
+								<c:when test="${article.createdBy eq principal.username}">
+									<button type="button" class="btn btn-info" onclick="editArticle();">Update</button>
+			                	<button type="submit" class="btn btn-danger pull-right">delete</button>
+								</c:when>
+								<c:otherwise>
+									<sec:authorize access="hasAnyRole('ROLE_USER, ROLE_ADMIN')">
+										<button type="submit" class="btn btn-danger pull-right">delete</button>
+									</sec:authorize>
+								</c:otherwise>
+							</c:choose>
 			                
 			              </div>
 			              
@@ -139,7 +177,8 @@ function removeArticle() {
 								<div class="timeline-body">
 									<form id="comment">
 										<input type="hidden" name="boardId" value="${article.id}" />
-										<input type="text" class="form-control" name="content" placeholder="comment" />
+										<textarea class="form-control" rows="2"  name="content" ></textarea>
+										<!-- <input type="text" class="form-control" name="content" placeholder="comment" /> -->
 									</form>
 								</div>
 								<div class="timeline-footer">
@@ -151,7 +190,6 @@ function removeArticle() {
 						<c:forEach var="comment" items="${comments}">
 							<!-- timeline item -->
 							<li><i class="fa fa-comments bg-yellow"></i>
-	
 								<div class="timeline-item">
 									<span class="time"><i class="fa fa-clock-o"></i> ${comment.createdAt}</span>
 	
@@ -160,11 +198,28 @@ function removeArticle() {
 									</h3>
 	
 									<div class="timeline-body">
-										${comment.content}
+										<input name="commentId" type="hidden" value="${comment.id}" />
+										<div>${comment.content}</div>
+										<textarea class="form-control" rows="2" id="comment_${comment.id}" name="content" style="display: none;">${comment.content}</textarea>
 									</div>
 									<div class="timeline-footer">
-										<a class="btn btn-warning btn-xs" onclick="">Update</a>
-										<a class="btn btn-danger btn-xs" onclick="removeComment('${comment.id}');">Delete</a>
+										<c:choose>
+											<c:when test="${comment.createdBy eq principal.username}">
+												<div class="comment_btn_1">
+													<a class="btn btn-warning btn-xs" onclick="toggleComment(this);">Update</a>
+													<a class="btn btn-danger btn-xs" onclick="removeComment('${comment.id}');">Delete</a>
+												</div>
+												<div class="comment_btn_2" style="display:none;">
+													<a class="btn btn-info btn-xs" onclick="updateComment(this);">save</a>
+													<a class="btn btn-default btn-xs" onclick="toggleComment(this);">cancel</a>
+												</div>
+											</c:when>
+											<c:otherwise>
+												<sec:authorize access="hasAnyRole('ROLE_USER, ROLE_ADMIN')">
+													<a class="btn btn-danger btn-xs" onclick="removeComment('${comment.id}');">Delete</a>	
+												</sec:authorize>
+											</c:otherwise>
+										</c:choose>
 									</div>
 								</div>
 							</li>
@@ -178,7 +233,9 @@ function removeArticle() {
 
 		</section>
 	</div>
+	<script>
 	
+	</script>
 </body>
 
 </html>
