@@ -1,4 +1,4 @@
-package com.flexink.common.interceptor;
+/*package com.flexink.common.interceptor;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -26,3 +26,4 @@ public class UserInfoInterceptor extends HandlerInterceptorAdapter {
 	}
 
 }
+*/

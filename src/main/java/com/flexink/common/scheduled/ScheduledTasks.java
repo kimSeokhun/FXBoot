@@ -6,6 +6,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import org.apache.commons.io.FileUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -13,6 +14,7 @@ import org.springframework.stereotype.Component;
 
 import com.flexink.common.utils.PhaseUtils;
 import com.flexink.common.utils.PropertyUtils;
+import com.flexink.security.filter.FilterMetadataSource;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -23,6 +25,9 @@ public class ScheduledTasks {
 
 	
 	private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("HH:mm:ss");
+	
+	@Autowired
+	FilterMetadataSource filterMetadataSource;
 	
 	@Value("${scheduled.a}")
 	String scheduledA;
@@ -42,6 +47,12 @@ public class ScheduledTasks {
 	
 	@Scheduled(fixedDelayString="${scheduled.b}")
 	public void reportCurrentTimeB(){
+		try {
+			filterMetadataSource.afterPropertiesSet();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		log.debug("[fixedRate={}]The time is now {}", scheduledB, DATE_FORMAT.format(new Date()));
 	}
 	

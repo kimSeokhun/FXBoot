@@ -22,7 +22,7 @@ import lombok.Data;
 
 @Data
 @Entity
-@Table(name = "USER")
+@Table(name = "USER2")
 public class LoginUserDetails implements UserDetails, Serializable{
 
 	private static final long serialVersionUID = -8507239908294868883L;

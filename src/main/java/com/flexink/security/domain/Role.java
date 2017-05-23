@@ -1,4 +1,4 @@
-package com.flexink.domain.sec;
+package com.flexink.security.domain;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -16,19 +16,22 @@ import lombok.Data;
 import lombok.ToString;
 
 @Data
-@ToString(exclude = {"roleResources"})
+@ToString(exclude = {"authorities", "roleResources"})
 @Entity
-@Table(name = "RESOURCES")
-public class Resources {
-	
+@Table(name="ROLE")
+public class Role {
+
 	@Id
 	@GeneratedValue(strategy=GenerationType.AUTO)
-	@Column(name="RESOURCES_ID", unique = true, nullable = false)
+	@Column(name="ROLE_ID", unique = true, nullable = false)
 	private Long id;
-
-	@Column(name="PATH")
-	private String path;
 	
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "resources")
+	@Column(name="ROLE_NAME", length=100)
+	private String roleName;
+	
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "role")
+	private Set<Authorities> authorities = new HashSet<>();
+
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "role")
 	private Set<RoleResource> roleResources = new HashSet<>();
 }

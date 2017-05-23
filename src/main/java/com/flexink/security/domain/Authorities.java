@@ -1,9 +1,10 @@
-package com.flexink.domain.sec;
+package com.flexink.security.domain;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -19,13 +20,14 @@ import lombok.ToString;
 public class Authorities {
 
   @Id
-  @GeneratedValue
+  @GeneratedValue(strategy=GenerationType.AUTO)
   @Column(name = "AUTHORITIES_ID", unique = true, nullable = false)
   private Long id;
 
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "USERNAME")
-  private LoginUserDetails user;
+  private User user;
+  //private LoginUserDetails user;
 
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "ROLE_ID")

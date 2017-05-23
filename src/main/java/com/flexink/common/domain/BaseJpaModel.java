@@ -19,6 +19,7 @@ import org.springframework.data.domain.Persistable;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.flexink.config.web.security.user.UserDetailsHelper;
 import com.flexink.domain.sec.LoginUserDetails;
+import com.flexink.security.SessionUserDetail;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -75,10 +76,11 @@ public abstract class BaseJpaModel<PK extends Serializable> extends FxBootCrudMo
     
     @Transient
     private String getCurrentLoginUserCd() {
-    	LoginUserDetails user = null;
+    	SessionUserDetail user = null;
     	Object obj = UserDetailsHelper.getAuthenticatedUser();
     	if(obj != null && !obj.equals("anonymousUser")) {
-    		user = (LoginUserDetails) obj;
+    		//user = (LoginUserDetails) obj;
+    		user = (SessionUserDetail) obj;
     	}
     	return user == null ? "anonymous" : user.getUsername();
     }

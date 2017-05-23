@@ -8,8 +8,8 @@ import org.springframework.transaction.annotation.Transactional;
 import com.flexink.config.web.security.user.Role;
 import com.flexink.domain.sec.LoginUserDetails;
 import com.flexink.domain.sec.LoginUserGrantedAuthority;
-import com.flexink.domain.sec.LoginUserGrantedAuthorityRepository;
-import com.flexink.domain.sec.LoginUserRepository;
+import com.flexink.domain.sec.repository.LoginUserGrantedAuthorityRepository;
+import com.flexink.domain.sec.repository.LoginUserRepository;
 
 import lombok.extern.slf4j.Slf4j;
 

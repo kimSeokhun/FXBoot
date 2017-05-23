@@ -1,29 +1,65 @@
-
 INSERT INTO USER
 (USERNAME,		PASSWORD,		ACCOUNTNONEXPIRED,		ACCOUNTNONLOCKED,		CREDENTIALSNONEXPIRED,		ENABLED) VALUES
 ('system',      '$2a$10$9Uraz7S4LZTFttdqJgE5v.rrIW54wZgFh3nQ7e0hCs9CiPhckfoG.',	TRUE,	TRUE,	TRUE,	TRUE),
 ('admin',      '$2a$10$9Uraz7S4LZTFttdqJgE5v.rrIW54wZgFh3nQ7e0hCs9CiPhckfoG.',	TRUE,	TRUE,	TRUE,	TRUE),
 ('ksh',       	'$2a$10$9Uraz7S4LZTFttdqJgE5v.rrIW54wZgFh3nQ7e0hCs9CiPhckfoG.',	TRUE,	TRUE,	TRUE,	TRUE),
-('aaa', 		'$2a$10$9Uraz7S4LZTFttdqJgE5v.rrIW54wZgFh3nQ7e0hCs9CiPhckfoG.',	FALSE,	TRUE,	TRUE,	TRUE),
-('bbb', 		'$2a$10$9Uraz7S4LZTFttdqJgE5v.rrIW54wZgFh3nQ7e0hCs9CiPhckfoG.',	TRUE,	FALSE,	TRUE,	TRUE),
-('ccc', 		'$2a$10$9Uraz7S4LZTFttdqJgE5v.rrIW54wZgFh3nQ7e0hCs9CiPhckfoG.',	TRUE,	TRUE,	FALSE,	TRUE),
-('ddd', 		'$2a$10$9Uraz7S4LZTFttdqJgE5v.rrIW54wZgFh3nQ7e0hCs9CiPhckfoG.',	TRUE,	TRUE,	TRUE,	FALSE),
-('visualkhh',	'1234',	TRUE,	TRUE,	TRUE,	TRUE),
-('hhk',			'1234',	TRUE,	TRUE,	TRUE,	TRUE);
+('user', 		'$2a$10$9Uraz7S4LZTFttdqJgE5v.rrIW54wZgFh3nQ7e0hCs9CiPhckfoG.',	TRUE,	TRUE,	TRUE,	TRUE);
 
-INSERT INTO AUTHORITY
-(USERNAME,		AUTHORITY) VALUES
-('ksh',       	'ROLE_SYSTEM'),
-('ksh',       	'ROLE_ADMIN'),
-('ksh',       	'ROLE_USER'),
-('ksh',       	'ROLE_USER2'),
-('ksh',       	'ROLE_USER3'),
-('visualkhh', 	'ROLE_USER'),
-('hhk',       	'ROLE_USER'),
-('aaa',       	'ROLE_USER'),
-('bbb',       	'ROLE_USER'),
-('ccc',       	'ROLE_USER'),
-('ddd',       	'ROLE_USER');
+--INSERT INTO USER
+--(USERNAME,		PASSWORD) VALUES
+--('system',      '$2a$10$9Uraz7S4LZTFttdqJgE5v.rrIW54wZgFh3nQ7e0hCs9CiPhckfoG.'),
+--('admin',      '$2a$10$9Uraz7S4LZTFttdqJgE5v.rrIW54wZgFh3nQ7e0hCs9CiPhckfoG.'),
+--('ksh',       	'$2a$10$9Uraz7S4LZTFttdqJgE5v.rrIW54wZgFh3nQ7e0hCs9CiPhckfoG.'),
+--('aaa', 		'$2a$10$9Uraz7S4LZTFttdqJgE5v.rrIW54wZgFh3nQ7e0hCs9CiPhckfoG.'),
+--('bbb', 		'$2a$10$9Uraz7S4LZTFttdqJgE5v.rrIW54wZgFh3nQ7e0hCs9CiPhckfoG.'),
+--('ccc', 		'$2a$10$9Uraz7S4LZTFttdqJgE5v.rrIW54wZgFh3nQ7e0hCs9CiPhckfoG.'),
+--('ddd', 		'$2a$10$9Uraz7S4LZTFttdqJgE5v.rrIW54wZgFh3nQ7e0hCs9CiPhckfoG.'),
+--('visualkhh',	'1234'),
+--('hhk',			'1234');
+
+insert  into RESOURCES (RESOURCES_ID, URL) values (1,'/user');
+insert  into RESOURCES (RESOURCES_ID, URL) values (2,'/admin');
+insert  into RESOURCES (RESOURCES_ID, URL) values (3,'/sample');
+insert  into RESOURCES (RESOURCES_ID, URL) values (4,'/system');
+insert  into RESOURCES (RESOURCES_ID, URL) values (5,'/board/SAMPLE');
+insert  into RESOURCES (RESOURCES_ID, URL) values (6,'/actuator/beans');
+insert  into RESOURCES (RESOURCES_ID, URL) values (7,'/actuator/mappings');
+
+insert  into ROLE(ROLE_ID, ROLE_NAME) values (1,'ROLE_SYSTEM');
+insert  into ROLE(ROLE_ID, ROLE_NAME) values (2,'ROLE_ADMIN');
+insert  into ROLE(ROLE_ID, ROLE_NAME) values (3,'ROLE_USER');
+
+insert  into ROLE_RESOURCE(ROLE_RESOURCE_ID, ROLE_ID, RESOURCES_ID) values (1,1,2);
+insert  into ROLE_RESOURCE(ROLE_RESOURCE_ID, ROLE_ID, RESOURCES_ID) values (2,1,3);
+insert  into ROLE_RESOURCE(ROLE_RESOURCE_ID, ROLE_ID, RESOURCES_ID) values (3,1,4);
+insert  into ROLE_RESOURCE(ROLE_RESOURCE_ID, ROLE_ID, RESOURCES_ID) values (4,2,2);
+insert  into ROLE_RESOURCE(ROLE_RESOURCE_ID, ROLE_ID, RESOURCES_ID) values (5,2,3);
+insert  into ROLE_RESOURCE(ROLE_RESOURCE_ID, ROLE_ID, RESOURCES_ID) values (6,2,5);
+insert  into ROLE_RESOURCE(ROLE_RESOURCE_ID, ROLE_ID, RESOURCES_ID) values (7,2,6);
+insert  into ROLE_RESOURCE(ROLE_RESOURCE_ID, ROLE_ID, RESOURCES_ID) values (8,1,7);
+insert  into ROLE_RESOURCE(ROLE_RESOURCE_ID, ROLE_ID, RESOURCES_ID) values (9,3,5);
+
+insert  into AUTHORITIES(AUTHORITIES_ID, USERNAME, ROLE_ID) values (1,'ksh',2);
+insert  into AUTHORITIES(AUTHORITIES_ID, USERNAME, ROLE_ID) values (2,'system',1);
+insert  into AUTHORITIES(AUTHORITIES_ID, USERNAME, ROLE_ID) values (3,'admin',2);
+insert  into AUTHORITIES(AUTHORITIES_ID, USERNAME, ROLE_ID) values (4,'user',3);
+
+
+
+
+--INSERT INTO AUTHORITY
+--(USERNAME,		AUTHORITY) VALUES
+--('ksh',       	'ROLE_SYSTEM'),
+--('ksh',       	'ROLE_ADMIN'),
+--('ksh',       	'ROLE_USER'),
+--('ksh',       	'ROLE_USER2'),
+--('ksh',       	'ROLE_USER3'),
+--('visualkhh', 	'ROLE_USER'),
+--('hhk',       	'ROLE_USER'),
+--('aaa',       	'ROLE_USER'),
+--('bbb',       	'ROLE_USER'),
+--('ccc',       	'ROLE_USER'),
+--('ddd',       	'ROLE_USER');
 
 INSERT INTO BOARD (BOARD_ID, TITLE, CONTENT, VIEW_COUNT, SECRET, DEL_YN, TYPE, CREATED_BY, CREATED_AT ) VALUES 
 (1, 'TITLE', 'CONTENTS', 0, 'N', 'N', 'SAMPLE', 'ksh', '2017-05-10 09:29:29.437'),
@@ -104,21 +140,3 @@ INSERT INTO COMMON_CODE
 ('ZTEST_CODE_4',	'테스트 코드 4',	'13',		'13',	'15',	'Y');
 
 
-insert  into RESOURCES (RESOURCES_ID, PATH) values (1,'/user');
-insert  into RESOURCES (RESOURCES_ID, PATH) values (2,'/admin');
-insert  into RESOURCES (RESOURCES_ID, PATH) values (3,'/sample');
-insert  into RESOURCES (RESOURCES_ID, PATH) values (4,'/system');
-
-insert  into ROLE(ROLE_ID, ROLE_NAME) values (1,'ROLE_SYSTEM');
-insert  into ROLE(ROLE_ID, ROLE_NAME) values (2,'ROLE_ADMIN');
-insert  into ROLE(ROLE_ID, ROLE_NAME) values (3,'ROLE_USER');
-
-insert  into ROLE_RESOURCE(ROLE_RESOURCE_ID, ROLE_ID, RESOURCES_ID) values (1,1,2);
-insert  into ROLE_RESOURCE(ROLE_RESOURCE_ID, ROLE_ID, RESOURCES_ID) values (2,1,3);
-insert  into ROLE_RESOURCE(ROLE_RESOURCE_ID, ROLE_ID, RESOURCES_ID) values (3,1,4);
-insert  into ROLE_RESOURCE(ROLE_RESOURCE_ID, ROLE_ID, RESOURCES_ID) values (4,2,2);
-insert  into ROLE_RESOURCE(ROLE_RESOURCE_ID, ROLE_ID, RESOURCES_ID) values (5,1,3);
-
-insert  into AUTHORITIES(AUTHORITIES_ID, USERNAME, ROLE_ID) values (1,'ksh',1);
-insert  into AUTHORITIES(AUTHORITIES_ID, USERNAME, ROLE_ID) values (2,'system',1);
-insert  into AUTHORITIES(AUTHORITIES_ID, USERNAME, ROLE_ID) values (3,'admin',2);

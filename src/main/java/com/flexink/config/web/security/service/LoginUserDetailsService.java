@@ -1,4 +1,5 @@
-package com.flexink.config.web.security.user;
+package com.flexink.config.web.security.service;
+/*package com.flexink.config.web.security.user;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.support.MessageSourceAccessor;
@@ -30,3 +31,4 @@ public class LoginUserDetailsService implements UserDetailsService {
 		return userDetails;
 	}
 }
+*/

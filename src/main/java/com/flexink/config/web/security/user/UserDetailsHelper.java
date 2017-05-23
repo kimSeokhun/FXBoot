@@ -12,6 +12,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import com.flexink.domain.sec.LoginUserDetails;
+import com.flexink.security.SessionUserDetail;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -27,7 +28,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class UserDetailsHelper {
 
-	public static LoginUserDetails getLoginUserDetails() {
+	/*public static LoginUserDetails getLoginUserDetails() {
 		Object obj = getAuthenticatedUser();
 		if(obj == null) {
 			return new LoginUserDetails();
@@ -35,6 +36,16 @@ public class UserDetailsHelper {
 			return (LoginUserDetails) obj;
 		} else {
 			return new LoginUserDetails();
+		}
+	}*/
+	public static SessionUserDetail getLoginUserDetails() {
+		Object obj = getAuthenticatedUser();
+		if(obj == null) {
+			return null;
+		} else if (obj instanceof LoginUserDetails) {
+			return (SessionUserDetail) obj;
+		} else {
+			return null;
 		}
 	}
     /********************************************************************
@@ -52,8 +63,18 @@ public class UserDetailsHelper {
             return null;
         }
 
-        if (authentication.getPrincipal() instanceof LoginUserDetails) {
+        /*if (authentication.getPrincipal() instanceof LoginUserDetails) {
         	LoginUserDetails details = (LoginUserDetails) authentication.getPrincipal();
+
+
+        	log.debug("## LoginUserDetailsHelper.getAuthenticatedUser : AuthenticatedUser is {}", details.getUsername());
+
+	        return details;
+        } else {
+        	return authentication.getPrincipal();
+        }*/
+        if (authentication.getPrincipal() instanceof SessionUserDetail) {
+        	SessionUserDetail details = (SessionUserDetail) authentication.getPrincipal();
 
 
         	log.debug("## LoginUserDetailsHelper.getAuthenticatedUser : AuthenticatedUser is {}", details.getUsername());

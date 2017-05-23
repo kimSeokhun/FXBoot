@@ -1,4 +1,4 @@
-package com.flexink.config.web.security;
+/*package com.flexink.config.web.security;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.support.MessageSourceAccessor;
@@ -70,3 +70,4 @@ public class AuthenticationProvider implements org.springframework.security.auth
 	}
 
 }
+*/

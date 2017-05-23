@@ -50,6 +50,7 @@ public class WebConfig extends WebMvcConfigurerAdapter {
 		//registry.addViewController("/security/login").setViewName("/login/login");
 		registry.addViewController("/").setViewName("/index.jsp");
 	}
+	
 
 	/********************************************************************
 	 * @메소드명	: siteMeshFilter
@@ -60,9 +61,6 @@ public class WebConfig extends WebMvcConfigurerAdapter {
 	public FilterRegistrationBean siteMeshFilter() {
 		FilterRegistrationBean filterRegistrationBean = new FilterRegistrationBean();
 		filterRegistrationBean.setFilter(new CustomSiteMeshFilter());
-		//filterRegistrationBean.setFilter(new HiddenHttpMethodFilter());
-		//filterRegistrationBean.setFilter(new MultipartFilter());
-		
 		return filterRegistrationBean;
 	}
 	
@@ -147,6 +145,7 @@ public class WebConfig extends WebMvcConfigurerAdapter {
 		ReloadableResourceBundleMessageSource messageSource = messageSource();
 		return new MessageSourceAccessor(messageSource);
 	}
+	
 	
 	/*@Bean
 	public HandlerInterceptor sessionFactoryTransctionInterceptor() {
@@ -288,4 +287,6 @@ public class WebConfig extends WebMvcConfigurerAdapter {
 		};
 	}
 
+	
+	
 }

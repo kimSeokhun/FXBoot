@@ -1,4 +1,4 @@
-package com.flexink.domain.sec;
+package com.flexink.security.domain;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
