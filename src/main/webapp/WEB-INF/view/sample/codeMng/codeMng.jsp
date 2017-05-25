@@ -40,12 +40,14 @@
 			            <div class="box-body">
 			            	<div class="row" style="margin-bottom: 15px;">
 			            		<div class="col-lg-6 col-xs-6">
-				            		<div class="input-group">
-						                <input type="text" id="filter" name="filter" class="form-control" placeholder="Search..">
-					                    <span class="input-group-btn">
-					                      <button type="submit" class="btn btn-info btn-flat">Go!</button>
-					                    </span>
-					            	</div>
+			            			<form name="searchForm">
+					            		<div class="input-group">
+							                <input type="text" id="filter" name="filter" class="form-control" placeholder="Search..">
+						                    <span class="input-group-btn">
+						                      <button type="submit" class="btn btn-info btn-flat">Go!</button>
+						                    </span>
+						            	</div>
+						            </form>
 				              	</div>
 				              	<div class="text-right col-lg-6 col-xs-6">
 				        			<div class="button-warp">

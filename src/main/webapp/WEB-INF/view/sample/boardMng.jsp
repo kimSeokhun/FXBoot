@@ -37,12 +37,14 @@
 			            <div class="box-body">
 			            	<div class="row" style="margin-bottom: 15px;">
 			            		<div class="col-lg-6 col-xs-6">
-				            		<div class="input-group">
-						                <input type="text" id="filter" name="filter" class="form-control" placeholder="Search..">
-					                    <span class="input-group-btn">
-					                      <button type="submit" class="btn btn-info btn-flat">Go!</button>
-					                    </span>
-					            	</div>
+			            			<form name="searchForm">
+					            		<div class="input-group">
+							                <input type="text" id="filter" name="filter" class="form-control" placeholder="Search..">
+						                    <span class="input-group-btn">
+						                      <button type="submit" class="btn btn-info btn-flat">Go!</button>
+						                    </span>
+						            	</div>
+					            	</form>
 				              	</div>
 				              	<div class="text-right col-lg-6 col-xs-6">
 				        			<div class="button-warp">
@@ -77,7 +79,7 @@
 			</div>
 		</section>
 	</div>
-	
+	<script src="${contextPath}/resources/js/grid/axgrid.js"></script>
 	<script type="text/javascript">
 		var fnObj = {};
 		
@@ -113,24 +115,12 @@
 					        	ACTIONS.PAGE_SEARCH();
 		                    }
 					    },
-				        columns: [            
-				            {key: "groupCd", label: "Group Code", width: 250, align: "center", editor: {type: "text", disabled: function () {
+					    columns: [            
+				            {key: "type", label: "Board Type", width: 250, align: "center", editor: {type: "text", disabled: function () {
 				                return !this.item.__created__;
 				            }}},
-				            {key: "groupNm", label: "Group Name", width: 200, align: "center", editor: {type: "text"}},
-				            {key: "code", label: "Code", width: 100, align: "center", editor: {type: "text", disabled: function () {
-				                return !this.item.__created__;
-				            }}},
-				            {key: "name", label: "Value", width: 150, align: "center", editor: {type: "text"}},
-				            {key: "sort", label: "Sort", align: "center", formatter: "money", editor: {type: "number"}},
-				            {key: "useYn", label: "UseYN", align: "center", editor: {
-				                type: "checkbox", config: {trueValue: "Y", falseValue: "N"}
-				            }},
-				            {key: "remark", label: "Remark", width: 200, align: "left", editor: {type: "text"}},
-				            {key: "data1", label: "Data1", width: 70, align: "left", editor: {type: "text"}},
-				            {key: "data2", label: "Data2", width: 70, align: "left", editor: {type: "text"}},
-				            {key: "data3", label: "Data3", width: 70, align: "left", editor: {type: "text"}},
-				            {key: "data4", label: "Data4", width: 70, align: "left", editor: {type: "text"}}
+				            {key: "name", label: "Board Name", width: 200, align: "center", editor: {type: "text"}},
+				            {key: "desc", label: "Description", width: 150, align: "center", editor: {type: "text"}}
 				        ]
 				    });
 					return this;
@@ -155,10 +145,9 @@
 			    getData: function (_type) {
 			        var list = [];
 			        var _list = this.target.getList(_type);
-		
 			        if (_type == "modified" || _type == "deleted") {
 			            list = ax5.util.filter(_list, function () {
-			                return this.groupCd && this.code;
+			                return this.type;
 			            });
 			        } else {
 			            list = _list;
@@ -214,11 +203,9 @@
 		   		PAGE_SEARCH: function () {
 		   	        $.ajax({
 		   	        	method: "GET",
-		   	            url: API_SERVER + "/system/commonCodes",
+		   	            url: API_SERVER + "/system/boardMng/boardTypes",
 		   	         	data: $.extend({}, fnObj.searchView.getData(), fnObj.gridView.getPageData()),
 		   	            success: function(res) {
-		   	            	console.log(res);
-		   	            	console.log(res.first);
 		   	            	fnObj.gridView.setData(res);
 		   	            }
 		   	        });
@@ -229,7 +216,7 @@
 		   	        saveList = saveList.concat(fnObj.gridView.getData("deleted"));
 		   	        $.ajax({
 		   	        	method: "PUT",
-		   	            url: API_SERVER + "/system/commonCodes",
+		   	            url: API_SERVER + "/system/boardMng/boardTypes",
 		   	         	contentType: "application/json;charset=UTF-8",
 		   	            data: JSON.stringify(saveList),
 		   	         	success: function (res) {

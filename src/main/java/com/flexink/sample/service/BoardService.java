@@ -13,12 +13,12 @@ import com.flexink.common.domain.BaseService;
 import com.flexink.common.file.service.CommonFileService;
 import com.flexink.common.utils.CookieUtils;
 import com.flexink.config.web.security.user.UserDetailsHelper;
+import com.flexink.domain.board.Board;
+import com.flexink.domain.board.BoardType;
+import com.flexink.domain.board.QBoard;
+import com.flexink.domain.board.QComment;
+import com.flexink.domain.board.repository.BoardSampleRepository;
 import com.flexink.domain.file.CommonFile;
-import com.flexink.domain.sample.Board;
-import com.flexink.domain.sample.Comment;
-import com.flexink.domain.sample.QBoard;
-import com.flexink.domain.sample.QComment;
-import com.flexink.domain.sample.repository.BoardSampleRepository;
 import com.flexink.vo.ParamsVo;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.Projections;
@@ -31,6 +31,9 @@ public class BoardService extends BaseService<Board, Long>{
 	
 	@Autowired
 	CommonFileService commonFileService;
+	
+	@Autowired
+	BoardTypeService boardTypeService;
 	
 	@Autowired
 	public BoardService(BoardSampleRepository repository) {
@@ -46,9 +49,10 @@ public class BoardService extends BaseService<Board, Long>{
 	 * @메소드 내용	: 글목록 조회
 	 ********************************************************************/
 	public Page<Map<String, Object>> getList(ParamsVo params) {
+		BoardType boardType = boardTypeService.getBoardType(params.getString("type"));
 		BooleanBuilder builder = new BooleanBuilder();
 		if(StringUtils.isNotEmpty(params.getString("type"))) {
-			builder.and(qBoard.type.eq(params.getString("type")));
+			builder.and(qBoard.type.eq(boardType));
 		}
 		
 		/********************************************************************************************
@@ -90,7 +94,7 @@ public class BoardService extends BaseService<Board, Long>{
 	@Transactional
 	public Board viewArticle(Board board) {
 		Board article = getArticle(board);
-		List<CommonFile> files = commonFileService.getList(article.getType(), String.valueOf(article.getId()));
+		List<CommonFile> files = commonFileService.getList(article.getType().getType(), String.valueOf(article.getId()));
 		article.setFiles(files);
 		
 		// view count update

@@ -285,6 +285,7 @@ desired effect
         <li class="header">HEADER</li>
         <!-- Optionally, you can add icons to the links -->
         <li class="active"><a href="${contextPath}/sample"><i class="fa fa-link"></i> <span>Main</span></a></li>
+        <li><a href="${contextPath}/boardMng"><i class="fa fa-link"></i> <span>Board Mng</span></a></li>
         <li><a href="${contextPath}/board/SAMPLE"><i class="fa fa-link"></i> <span>Board</span></a></li>
         <li><a href="${contextPath}/sample/paging"><i class="fa fa-link"></i> <span>Pagination</span></a></li>
         <li><a href="${contextPath}/sample/locale"><i class="fa fa-link"></i> <span>Locale</span></a></li>

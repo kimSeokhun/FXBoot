@@ -4,9 +4,9 @@ import java.util.List;
 
 import org.springframework.data.jpa.repository.support.QueryDslRepositorySupport;
 
-import com.flexink.domain.sec.QResources;
-import com.flexink.domain.sec.QRole;
-import com.flexink.domain.sec.QRoleResource;
+import com.flexink.security.domain.QResources;
+import com.flexink.security.domain.QRole;
+import com.flexink.security.domain.QRoleResource;
 import com.flexink.security.domain.Resources;
 import com.flexink.security.dto.AuthoritiesDto;
 import com.querydsl.core.types.Projections;

@@ -1,4 +1,4 @@
-package com.flexink.domain.sample;
+package com.flexink.domain.board;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;

@@ -1,4 +1,4 @@
-package com.flexink.domain.sample;
+package com.flexink.domain.board;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -8,9 +8,12 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Transient;
 
@@ -19,21 +22,19 @@ import org.hibernate.validator.constraints.NotEmpty;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.flexink.common.domain.BaseJpaModel;
 import com.flexink.domain.file.CommonFile;
-import com.flexink.domain.sample.Comment.DelYn;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 @Data
+@NoArgsConstructor
 @EqualsAndHashCode(callSuper = true)
 @Entity
 @ToString(exclude={"comments"})
 public class Board extends BaseJpaModel<Long> {
 
-	public Board() {
-		
-	}
 	public Board(Long id) {
 		this.id = id;
 	}
@@ -43,8 +44,9 @@ public class Board extends BaseJpaModel<Long> {
 	@Column(name="BOARD_ID")
 	private Long id;
 
-	@Column(name="TYPE", length=10)
-	private String type;
+	@ManyToOne(fetch=FetchType.LAZY)
+	@JoinColumn(name="TYPE")
+	private BoardType type;
 	
 	@NotEmpty
 	@Column(name="TITLE", length=100)

@@ -20,8 +20,8 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import com.flexink.common.file.service.CommonFileService;
 import com.flexink.common.utils.EditorUtils;
-import com.flexink.domain.sample.Board;
-import com.flexink.domain.sample.Comment;
+import com.flexink.domain.board.Board;
+import com.flexink.domain.board.Comment;
 import com.flexink.sample.service.BoardService;
 import com.flexink.sample.service.CommentService;
 import com.flexink.vo.ParamsVo;
@@ -115,7 +115,7 @@ public class BoardController {
         
         // Axfile tempDir -> 디렉토리 수정
         if(params.getArray("fileIds") != null && params.getArray("fileIds").size() > 0) {
-        	commonFileService.filePathUpdate(params.getArray("fileIds"), fileSavePathKey, board.getType(), board.getId());
+        	commonFileService.filePathUpdate(params.getArray("fileIds"), fileSavePathKey, board.getType().getType(), board.getId());
         }
         
         // 파일업로드 (MultiPart 형식)

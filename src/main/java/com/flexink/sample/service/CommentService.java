@@ -8,11 +8,11 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.flexink.common.domain.BaseService;
 import com.flexink.config.web.security.user.UserDetailsHelper;
-import com.flexink.domain.sample.Board;
-import com.flexink.domain.sample.Comment;
-import com.flexink.domain.sample.QBoard;
-import com.flexink.domain.sample.QComment;
-import com.flexink.domain.sample.repository.CommentSampleRepository;
+import com.flexink.domain.board.Board;
+import com.flexink.domain.board.Comment;
+import com.flexink.domain.board.QBoard;
+import com.flexink.domain.board.QComment;
+import com.flexink.domain.board.repository.CommentSampleRepository;
 import com.flexink.vo.ParamsVo;
 
 import lombok.extern.slf4j.Slf4j;
