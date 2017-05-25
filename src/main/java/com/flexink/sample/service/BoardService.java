@@ -15,10 +15,10 @@ import com.flexink.common.utils.CookieUtils;
 import com.flexink.config.web.security.user.UserDetailsHelper;
 import com.flexink.domain.file.CommonFile;
 import com.flexink.domain.sample.Board;
-import com.flexink.domain.sample.BoardSampleRepository;
 import com.flexink.domain.sample.Comment;
 import com.flexink.domain.sample.QBoard;
 import com.flexink.domain.sample.QComment;
+import com.flexink.domain.sample.repository.BoardSampleRepository;
 import com.flexink.vo.ParamsVo;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.Projections;
@@ -27,13 +27,13 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Service
-public class BoardSampleService extends BaseService<Board, Long>{
+public class BoardService extends BaseService<Board, Long>{
 	
 	@Autowired
 	CommonFileService commonFileService;
 	
 	@Autowired
-	public BoardSampleService(BoardSampleRepository repository) {
+	public BoardService(BoardSampleRepository repository) {
 		super(Board.class, repository);
 	}
 	
@@ -177,7 +177,7 @@ public class BoardSampleService extends BaseService<Board, Long>{
 			 *	repository.delete(board.getId());
 			 ********************************************************************************************/
 			Board article = query().from(qBoard).where(qBoard.id.eq(boardId)).fetchOne();
-			if(article.getCreatedBy().equals(UserDetailsHelper.getLoginUserDetails().getUsername()) || UserDetailsHelper.getAuthorities().contains("ROLE_ADMIN")) {
+			if(article.getCreatedBy().equals(UserDetailsHelper.getLoginUserDetails().getUsername()) || UserDetailsHelper.containsAuthority("ROLE_ADMIN", "ROLE_SYSTEM")) {
 				// QueryDsl
 				//delete(qBoard).where(qBoard.id.eq(boardId)).execute();
 				update(qBoard).set(qBoard.delYn, Board.DelYn.Y).where(qBoard.id.eq(boardId)).execute();

@@ -23,11 +23,7 @@ import lombok.extern.slf4j.Slf4j;
 @PropertySource("classpath:project.properties")
 public class ScheduledTasks {
 
-	
 	private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("HH:mm:ss");
-	
-	@Autowired
-	FilterMetadataSource filterMetadataSource;
 	
 	@Value("${scheduled.a}")
 	String scheduledA;
@@ -48,7 +44,6 @@ public class ScheduledTasks {
 	@Scheduled(fixedDelayString="${scheduled.b}")
 	public void reportCurrentTimeB(){
 		try {
-			filterMetadataSource.afterPropertiesSet();
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

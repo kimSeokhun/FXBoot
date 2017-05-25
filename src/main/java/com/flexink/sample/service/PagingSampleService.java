@@ -8,8 +8,8 @@ import org.springframework.stereotype.Service;
 import com.flexink.common.domain.BaseService;
 import com.flexink.domain.code.CommonCode;
 import com.flexink.domain.code.CommonCodeId;
-import com.flexink.domain.code.CommonCodeRepository;
 import com.flexink.domain.code.QCommonCode;
+import com.flexink.domain.code.repository.CommonCodeRepository;
 import com.flexink.vo.ParamsVo;
 import com.querydsl.core.BooleanBuilder;
 

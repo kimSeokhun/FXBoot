@@ -40,7 +40,7 @@ public class LogoutSuccessHandler
 
 		response.setStatus(HttpServletResponse.SC_OK);
 		//redirect to login
-		response.sendRedirect(WebSecurityConfigureAdapter.LOGOUT_PAGE);
+		response.sendRedirect(WebSecurityConfigureAdapter.LOGOUT_SUCCESS_URL);
 		//super.onLogoutSuccess(request,response,authentication);
 	}
 

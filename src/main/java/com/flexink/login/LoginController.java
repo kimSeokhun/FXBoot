@@ -1,4 +1,4 @@
-package com.flexink.common.login;
+package com.flexink.login;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -20,12 +20,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.flexink.common.login.service.LoginUserService;
 import com.flexink.config.web.WebSecurityConfigureAdapter;
 import com.flexink.config.web.security.user.LoginUserValidator;
 import com.flexink.config.web.security.user.Role;
 import com.flexink.config.web.security.user.UserDetailsHelper;
 import com.flexink.domain.sec.LoginUserDetails;
+import com.flexink.login.service.LoginUserService;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -40,7 +40,6 @@ import lombok.extern.slf4j.Slf4j;
  **************************************************************/
 @Slf4j
 @Controller
-@RequestMapping()
 public class LoginController {
 	
 	@Autowired
@@ -57,15 +56,12 @@ public class LoginController {
 	 ********************************************************************/
 	@GetMapping("/security/login")
 	public String loginPage() {
-		/*System.out.println(UserDetailsHelper.getAuthorities());
-		System.out.println(UserDetailsHelper.containsAuthority(Role.ROLE_ADMIN.toString()));
-		System.out.println(UserDetailsHelper.getRoleType());*/
 		// 로그인된 사용자면 페이지 Redirect
 		if(UserDetailsHelper.isAuthenticated()) {
 			// 사용자 권한에 맞는 Page 이동
-			if(UserDetailsHelper.getRoleType().equals(Role.ROLE_ADMIN.toString())) {
+			if(UserDetailsHelper.containsAuthority(Role.ROLE_ADMIN.toString(), Role.ROLE_SYSTEM.toString())) {
 				log.debug("redirect To Admin Page");
-				return "redirect:/";
+				return "redirect:"+WebSecurityConfigureAdapter.ROOT_PATH;
 			} else {
 				log.debug("redirect To User Page");
 				return "redirect:/";

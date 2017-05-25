@@ -11,6 +11,10 @@ import eu.bitwalker.useragentutils.Browser;
 
 public class HttpUtils {
 
+	public static String getContextPath() {
+		return getCurrentRequest().getContextPath();
+	}
+	
 	public static HttpServletRequest getCurrentRequest() {
         return ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
     }

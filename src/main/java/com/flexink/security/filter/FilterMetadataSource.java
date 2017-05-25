@@ -28,7 +28,7 @@ public class FilterMetadataSource implements FilterInvocationSecurityMetadataSou
 
 	@Override
 	public Collection<ConfigAttribute> getAttributes(Object object) throws IllegalArgumentException {
-		FilterInvocation fi = (FilterInvocation) object;
+		/*FilterInvocation fi = (FilterInvocation) object;
 	    String url = fi.getRequestUrl();
 
 	    log.debug("###########################");
@@ -52,26 +52,23 @@ public class FilterMetadataSource implements FilterInvocationSecurityMetadataSou
 
 	    log.debug("###########################");
 	    
-	    return SecurityConfig.createList(roleArr);
+	    return SecurityConfig.createList(roleArr);*/
+		return null;
 	}
 
 	@Override
 	public Collection<ConfigAttribute> getAllConfigAttributes() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	public boolean supports(Class<?> clazz) {
-		// TODO Auto-generated method stub
-		// return false;
 		return FilterInvocation.class.isAssignableFrom(clazz);
 	}
 
 	@Override
 	public void afterPropertiesSet() throws Exception {
-		// TODO Auto-generated method stub
-		resourceMetaService.findAllResources();
+		//resourceMetaService.findAllResources();
 	}
 
 }

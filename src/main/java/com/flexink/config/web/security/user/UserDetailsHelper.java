@@ -42,7 +42,7 @@ public class UserDetailsHelper {
 		Object obj = getAuthenticatedUser();
 		if(obj == null) {
 			return null;
-		} else if (obj instanceof LoginUserDetails) {
+		} else if (obj instanceof SessionUserDetail) {
 			return (SessionUserDetail) obj;
 		} else {
 			return null;
@@ -55,8 +55,7 @@ public class UserDetailsHelper {
      * @return	: 사용자 ValueObject
      ********************************************************************/
     public static Object getAuthenticatedUser() {
-        SecurityContext context = SecurityContextHolder.getContext();
-        Authentication authentication = context.getAuthentication();
+        Authentication authentication = getAuthentication();
 
         if (authentication == null) {
         	log.debug("## authentication object is null!!");
@@ -81,10 +80,11 @@ public class UserDetailsHelper {
 
 	        return details;
         } else {
+        	log.debug("## #############################");
         	return authentication.getPrincipal();
         }
     }
-
+    
     /********************************************************************
      * @메소드명	: getAuthorities
      * @작성자	: KIMSEOKHOON
@@ -99,24 +99,20 @@ public class UserDetailsHelper {
     public static List<String> getAuthorities() {
         List<String> listAuth = new ArrayList<String>();
 
-        SecurityContext context = SecurityContextHolder.getContext();
-        Authentication authentication = context.getAuthentication();
+        Authentication authentication = getAuthentication();
 
         if (authentication == null) {
         	log.debug("## authentication object is null!!");
             return null;
         }
 
-        Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
-
-        Iterator<? extends GrantedAuthority> iter = authorities.iterator();
+        Iterator<? extends GrantedAuthority> iter = authentication.getAuthorities().iterator();
 
         while(iter.hasNext()) {
         	GrantedAuthority auth = iter.next();
         	listAuth.add(auth.getAuthority());
 
         	log.debug("## LoginUserDetailsHelper.getAuthorities : Authority is {}", auth.getAuthority());
-
         }
 
         return listAuth;
@@ -127,25 +123,15 @@ public class UserDetailsHelper {
      * @작성자	: KIMSEOKHOON
      * @메소드 내용	: 입력한 권한을 가지고 있는지 확인
      ********************************************************************/
-    public static boolean containsAuthority(String role) {
-        List<String> listAuth = new ArrayList<String>();
-
-        SecurityContext context = SecurityContextHolder.getContext();
-        Authentication authentication = context.getAuthentication();
-
-        if (authentication == null) {
-        	log.debug("## authentication object is null!!");
-            return Boolean.FALSE;
+    public static boolean containsAuthority(String ...roles) {
+        List<String> listAuth = getAuthorities();
+ 
+        for(String role : roles) {
+        	if(listAuth.contains(role)) {
+        		return true;
+        	}
         }
-        Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
-        Iterator<? extends GrantedAuthority> iter = authorities.iterator();
-        while(iter.hasNext()) {
-        	GrantedAuthority auth = iter.next();
-        	listAuth.add(auth.getAuthority());
-
-        	log.debug("## LoginUserDetailsHelper.getAuthorities : Authority is {}", auth.getAuthority());
-        }
-        return listAuth.contains(role);
+        return false;
     }
     
     /********************************************************************
@@ -154,8 +140,7 @@ public class UserDetailsHelper {
      * @메소드 내용	: 최상위 Role 타입 반환
      ********************************************************************/
     public static String getRoleType() {
-    	SecurityContext context = SecurityContextHolder.getContext();
-        Authentication authentication = context.getAuthentication();
+        Authentication authentication = getAuthentication();
 
         if (authentication == null) {
         	log.debug("## authentication object is null!!");
@@ -166,21 +151,16 @@ public class UserDetailsHelper {
         Object[] arr = authorities.toArray();
         GrantedAuthority auth = (GrantedAuthority) arr[0];
         
-        /*while(iter.hasNext()) {
-        	GrantedAuthority auth = iter.next();
-        	return auth.getAuthority();
-        }*/
 		return auth.getAuthority();
     }
 
     /********************************************************************
      * @메소드명	: isAuthenticated
      * @작성자	: KIMSEOKHOON
-     * @메소드 내용	: 인증된 사용자 여부
+     * @메소드 내용	: 사용자 인증 여부 (로그인 여부)
      ********************************************************************/
     public static Boolean isAuthenticated() {
-        SecurityContext context = SecurityContextHolder.getContext();
-        Authentication authentication = context.getAuthentication();
+        Authentication authentication = getAuthentication();
 
         if (authentication == null) {
         	log.debug("## authentication object is null!!");
@@ -198,6 +178,24 @@ public class UserDetailsHelper {
         return (Boolean.valueOf(principal != null));
     }
 
+    /********************************************************************
+     * @메소드명	: getAuthentication
+     * @작성자	: KIMSEOKHOON
+     * @메소드 내용	: Authentication 객체 조회
+     * @return Authentication
+     ********************************************************************/
+    private static Authentication getAuthentication() {
+    	SecurityContext context = SecurityContextHolder.getContext();
+        return context.getAuthentication();
+    }
+    
+    /********************************************************************
+     * @메소드명	: getEncodedPassword
+     * @작성자	: KIMSEOKHOON
+     * @메소드 내용	: 패스워드 BCrypt 인코딩
+     * @param Original Password
+     * @return Encoded Password
+     ********************************************************************/
     public static String getEncodedPassword(String password) {
     	BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 		String hashed = encoder.encode(password);

@@ -14,7 +14,7 @@
   <div class="login-box-body">
     <p class="login-box-msg">Sign in to start your session</p>
 
-    <form:form name='f' action="<%= com.flexink.config.web.WebSecurityConfigureAdapter.LOGIN_PROCESSING_URL%>" method='POST'>
+    <form:form name='f' action="${contextPath}${loginProcessingUrl}" method='POST'>
       <div class="form-group has-feedback">
         <input type='text' class="form-control" placeholder="Email" name="${securityUsername}" value='' />
         <span class="glyphicon glyphicon-envelope form-control-feedback"></span>

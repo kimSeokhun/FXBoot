@@ -10,22 +10,22 @@ import com.flexink.common.domain.BaseService;
 import com.flexink.config.web.security.user.UserDetailsHelper;
 import com.flexink.domain.sample.Board;
 import com.flexink.domain.sample.Comment;
-import com.flexink.domain.sample.CommentSampleRepository;
 import com.flexink.domain.sample.QBoard;
 import com.flexink.domain.sample.QComment;
+import com.flexink.domain.sample.repository.CommentSampleRepository;
 import com.flexink.vo.ParamsVo;
 
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Service
-public class CommentSampleService extends BaseService<Comment, Long>{
+public class CommentService extends BaseService<Comment, Long>{
 	
 	@Autowired
-	BoardSampleService boardSampleService;
+	BoardService boardSampleService;
 	
 	@Autowired
-	public CommentSampleService(CommentSampleRepository repository) {
+	public CommentService(CommentSampleRepository repository) {
 		super(Comment.class, repository);
 	}
 	
@@ -59,8 +59,11 @@ public class CommentSampleService extends BaseService<Comment, Long>{
 	 * @메소드 내용	: 댓글 수정
 	 ********************************************************************/
 	@Transactional
-	public void updateComment(Comment comment) {
-		update(qComment).set(qComment.content, comment.getContent()).where(qComment.id.eq(comment.getId())).execute();
+	public void updateComment(Comment commentVo) {
+		Comment comment = query().from(qComment).where(qComment.id.eq(commentVo.getId())).fetchOne();
+		if(comment.getCreatedBy().equals(UserDetailsHelper.getLoginUserDetails().getUsername()) || UserDetailsHelper.containsAuthority("ROLE_ADMIN", "ROLE_SYSTEM")) {
+			update(qComment).set(qComment.content, comment.getContent()).where(qComment.id.eq(comment.getId())).execute();
+		}
 	}
 	
 	/********************************************************************
@@ -71,7 +74,7 @@ public class CommentSampleService extends BaseService<Comment, Long>{
 	@Transactional
 	public void deleteComment(Long commentId) {
 		Comment comment = query().from(qComment).where(qComment.id.eq(commentId)).fetchOne();
-		if(comment.getCreatedBy().equals(UserDetailsHelper.getLoginUserDetails().getUsername()) || UserDetailsHelper.getAuthorities().contains("ROLE_ADMIN")) {
+		if(comment.getCreatedBy().equals(UserDetailsHelper.getLoginUserDetails().getUsername()) || UserDetailsHelper.containsAuthority("ROLE_ADMIN", "ROLE_SYSTEM")) {
 			delete(qComment).where(qComment.id.eq(commentId)).execute();
 		}
 	}

@@ -26,6 +26,7 @@
 	</c:if>
 </ul>
 
+<c:set var="contextPath" value="<%= request.getContextPath()%>"></c:set>
 <script src="${contextPath}/webjars/uri.js/1.17.1/src/URI.min.js"></script>
 <script>
 function movePage(page){

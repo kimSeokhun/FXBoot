@@ -29,6 +29,7 @@ import org.springframework.security.web.authentication.RememberMeServices;
 import org.springframework.security.web.authentication.rememberme.TokenBasedRememberMeServices;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
+import com.flexink.common.utils.HttpUtils;
 import com.flexink.common.utils.PhaseUtils;
 import com.flexink.config.web.security.AuthenticationFailureHandler;
 import com.flexink.config.web.security.AuthenticationSuccessHandler;
@@ -43,44 +44,36 @@ import lombok.extern.slf4j.Slf4j;
 @EnableWebSecurity
 public class WebSecurityConfigureAdapter extends WebSecurityConfigurerAdapter {
 
-	@Value("${spring.h2.console.enabled}")
-	boolean h2ConsoleEnabled;
 	@Value("${spring.h2.console.path}")
 	String h2ConsolePath;
 
+	
 	public static final String ROOT_PATH = "/";
 	public static final String SECURITY_PATH = "/security";
-
-	public static final String LOGIN_PAGE = SECURITY_PATH + "/login"; // 로그인 페이지 주소
-	public static final String LOGIN_PROCESSING_URL = SECURITY_PATH + "/sign_in"; // 로그인 프로세싱 주소 (로그인 폼 action)
-	public static final String FAILURE_URL = SECURITY_PATH + "/fail"; // 로그인 실패시 이동할 주소
-	public static final String USERNAME_PARAMETER = "username"; // 로그인 폼 Input name
-	public static final String PASSWORD_PARAMETER = "password"; // 로그인 폼 Input name
-	public static final String DEFAULT_SUCCESS_URL = ROOT_PATH + "sample"; // 로그인 성공시 이동할 기본 주소
-	public static final String LOGOUT_SUCCESS_URL = SECURITY_PATH + "/login"; // 로그아웃 성공시 이동할 주소
-	public static final String SESSION_EXPIRED_URL = LOGIN_PAGE + "?expred"; // 중복 로그인시 기존 로그인 사용자가 이동할 주소
-	public static final String SESSION_INVALIDSESSION_URL = LOGIN_PAGE + "?invalid"; // 세션이 유효하지않은경우 이동할 주소
-	public static final String LOGOUT_URL = SECURITY_PATH + "/logout"; // 로그아웃 프로세스 주소
-	public static final String LOGOUT_PAGE = "/"; // 로그아웃 페이지
+	
+	public static final String LOGIN_PAGE = SECURITY_PATH + "/login";				// 로그인 페이지 주소
+	
+	public static final String DEFAULT_SUCCESS_URL = "/sample";						// 로그인 성공시 이동할 기본 주소
+	public static final String LOGOUT_SUCCESS_URL = LOGIN_PAGE;						// 로그아웃 성공시 이동할 주소
+	public static final String FAILURE_URL = SECURITY_PATH + "/fail";				// 로그인 실패시 이동할 주소
+	
+	public static final String LOGIN_PROCESSING_URL = SECURITY_PATH + "/sign_in";	// 로그인 프로세싱 주소 (로그인 폼 action)
+	public static final String LOGOUT_URL = SECURITY_PATH + "/logout";				// 로그아웃 프로세스 주소
+	
+	public static final String SESSION_EXPIRED_URL = LOGIN_PAGE + "?expred";		// 중복 로그인시 기존 로그인 사용자가 이동할 주소
+	public static final String SESSION_INVALIDSESSION_URL = LOGIN_PAGE + "?invalid";// 세션이 유효하지않은경우 이동할 주소
+	
+	public static final String USERNAME_PARAMETER = "username";						// 로그인 폼 Input name
+	public static final String PASSWORD_PARAMETER = "password";						// 로그인 폼 Input name
+	
 	public static final String REMEMBER_ME_KEY = "REMEBMER_ME_KEY";
 	public static final String REMEMBER_ME_COOKE_NAME = "REMEMBER_ME_COOKE";
 
-	public final String[] ignorePages = new String[] { "/resources/**", "/static/**", "/images/**", "/webjars/**", "/error/**", };
-
-	/*@Autowired
-	private LoginUserDetailsService userDetailsService;*/
 	
-	@Autowired
-	UserDetailsService  userDetailService;
-
-	@Autowired
-	AuthenticationManager authenticationManager;
+	public final String[] ignorePages = new String[] { "/resources/**", "/static/**", "/images/**", "/webjars/**", "/error/**", };
 
 	@Override
 	public void configure(WebSecurity webSecurity) throws Exception {
-		if (h2ConsoleEnabled) {
-			webSecurity.ignoring().antMatchers(h2ConsolePath + "/**");
-		}
 		if (PhaseUtils.isDevelopmentMode()) {
 			webSecurity.ignoring().antMatchers("/security/encodePw/**", "/security/matches/**");
 		}
@@ -98,47 +91,60 @@ public class WebSecurityConfigureAdapter extends WebSecurityConfigurerAdapter {
 				.antMatchers(LOGIN_PAGE).permitAll()
 				.antMatchers(SECURITY_PATH + "/register").permitAll()
 				.antMatchers(h2ConsolePath + "/**").hasRole("SYSTEM")
+				.antMatchers("/actuator/**").hasRole("SYSTEM")
+
 				
 				.antMatchers("/system/**").hasRole("SYSTEM")
 				.antMatchers("/sample**").hasRole("ADMIN")
-				.antMatchers("/actuator/**").hasRole("SYSTEM")
 				.antMatchers("/admin/**").hasRole("ADMIN")
-				// .antMatchers("/board/**").hasAnyAuthority()
 				// .anyRequest().authenticated()
 				
+				.and()
+				.formLogin()
+				.usernameParameter(USERNAME_PARAMETER)
+				.passwordParameter(PASSWORD_PARAMETER)
+				.loginPage(LOGIN_PAGE)
+				.loginProcessingUrl(LOGIN_PROCESSING_URL)
+				.successHandler(authenticationSuccessHandler())
+				.failureUrl(FAILURE_URL)
+				.failureHandler(authenticationFailureHandler())
+				.permitAll()
+				
+				.and()
+				.logout()
+				.logoutUrl(LOGOUT_URL)
+				.deleteCookies(REMEMBER_ME_COOKE_NAME)
+				.deleteCookies("JSESSIONID")
+				.invalidateHttpSession(true)
+				.logoutSuccessUrl(LOGOUT_SUCCESS_URL)
+				.logoutRequestMatcher(new AntPathRequestMatcher(LOGOUT_URL))
+				.permitAll()
+
 				.and()
 				.sessionManagement().maximumSessions(1).expiredUrl(SESSION_EXPIRED_URL)
 				.maxSessionsPreventsLogin(false).and().sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
 				.invalidSessionUrl(SESSION_INVALIDSESSION_URL)
 				
-				.and()
-				.formLogin()
-				.loginPage(LOGIN_PAGE)
-				.loginProcessingUrl(LOGIN_PROCESSING_URL)
-				.failureUrl(FAILURE_URL)
-				.usernameParameter(USERNAME_PARAMETER)
-				.passwordParameter(PASSWORD_PARAMETER)
-				.defaultSuccessUrl(DEFAULT_SUCCESS_URL)
-				.failureHandler(authenticationFailureHandler())
-				.successHandler(authenticationSuccessHandler())
-				.permitAll()
-				
 				.and().csrf().disable().headers().frameOptions().disable()
-				.and().rememberMe().key(REMEMBER_ME_KEY).rememberMeServices(tokenBasedRememberMeServices())
+				.and().rememberMe().key(REMEMBER_ME_KEY).rememberMeServices(tokenBasedRememberMeServices());
 				
-				.and()
-				.logout().deleteCookies(REMEMBER_ME_COOKE_NAME).deleteCookies("JSESSIONID").logoutUrl(LOGOUT_URL)
-				.invalidateHttpSession(true).logoutSuccessUrl(LOGOUT_SUCCESS_URL)
-				// .logoutSuccessHandler(new LogoutSuccessHandler())
-				.logoutRequestMatcher(new AntPathRequestMatcher(LOGOUT_URL)).permitAll()
-				.and();
-				//.addFilter(filterSecurityInterceptor());
+				// 페이지 동적 권한 확인시 추가 (추후 구현)
+				//.and().addFilter(filterSecurityInterceptor());
 	}
 
 	/*@Override
 	protected LoginUserDetailsService userDetailsService() {
 		return userDetailsService;
 	}*/
+	
+	/*@Autowired
+	private LoginUserDetailsService userDetailsService;*/
+	
+	@Autowired
+	UserDetailsService  userDetailService;
+
+	@Autowired
+	AuthenticationManager authenticationManager;
 	
 	@Override
 	protected UserDetailsService userDetailsService() {
@@ -186,15 +192,10 @@ public class WebSecurityConfigureAdapter extends WebSecurityConfigurerAdapter {
 	}
 	
 
-	////////////////////////////////////////////////////////////////////////////////////////////////
-	// 커스텀 시큐리티 인텁셉터 하려면 아래를 사용하면된다
-	// 사용전에 httpSecurity쪽에 추가해줘야된다 .addFilterBefore(filterSecurityInterceptor(),
-	//////////////////////////////////////////////////////////////////////////////////////////////// UsernamePasswordAuthenticationFilter.class)
-	//////// http://aoruqjfu.fun25.co.kr/index.php/post/657
 	/********************************************************************
 	 * @메소드명	: filterSecurityInterceptor
 	 * @작성자	: KIMSEOKHOON
-	 * @메소드 내용	: 페이지 request마다 권한 확인 인터셉터
+	 * @메소드 내용	: 페이지 권한 확인 인터셉터
 	 ********************************************************************/
 	@Bean
 	public FilterSecurityInterceptor filterSecurityInterceptor() {
@@ -202,7 +203,6 @@ public class WebSecurityConfigureAdapter extends WebSecurityConfigurerAdapter {
 		filterSecurityInterceptor.setAuthenticationManager(authenticationManager);
 		filterSecurityInterceptor.setSecurityMetadataSource(filterMetadataSource());
 		filterSecurityInterceptor.setAccessDecisionManager(affirmativeBased());
-		//filterSecurityInterceptor.afterPropertiesSet();
 		return filterSecurityInterceptor;
 	}
 	

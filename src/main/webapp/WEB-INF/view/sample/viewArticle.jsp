@@ -139,10 +139,10 @@ function removeArticle() {
 							<c:choose>
 								<c:when test="${article.createdBy eq principal.username}">
 									<button type="button" class="btn btn-info" onclick="editArticle();">Update</button>
-			                	<button type="submit" class="btn btn-danger pull-right">delete</button>
+			                		<button type="submit" class="btn btn-danger pull-right">delete</button>
 								</c:when>
 								<c:otherwise>
-									<sec:authorize access="hasAnyRole('ROLE_USER, ROLE_ADMIN')">
+									<sec:authorize access="hasAnyRole('ROLE_ADMIN, ROLE_SYSTEM')">
 										<button type="submit" class="btn btn-danger pull-right">delete</button>
 									</sec:authorize>
 								</c:otherwise>

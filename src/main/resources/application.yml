@@ -91,6 +91,8 @@ logging:
 
 ---
 ###### 로컬 환경 ######
+server:
+  context-path: /fxboot
 spring:
   profiles: local
   jpa:

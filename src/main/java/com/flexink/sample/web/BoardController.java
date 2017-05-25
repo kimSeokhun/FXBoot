@@ -22,8 +22,8 @@ import com.flexink.common.file.service.CommonFileService;
 import com.flexink.common.utils.EditorUtils;
 import com.flexink.domain.sample.Board;
 import com.flexink.domain.sample.Comment;
-import com.flexink.sample.service.BoardSampleService;
-import com.flexink.sample.service.CommentSampleService;
+import com.flexink.sample.service.BoardService;
+import com.flexink.sample.service.CommentService;
 import com.flexink.vo.ParamsVo;
 
 import lombok.extern.slf4j.Slf4j;
@@ -31,13 +31,13 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @Controller
 @RequestMapping("/board")
-public class BoardSampleController {
+public class BoardController {
 
 	@Autowired
-	BoardSampleService boardSampleService;
+	BoardService boardSampleService;
 	
 	@Autowired
-	CommentSampleService commentSampleService;
+	CommentService commentSampleService;
 	
 	@Autowired
     private CommonFileService commonFileService;
