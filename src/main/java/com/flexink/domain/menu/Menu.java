@@ -5,6 +5,8 @@ import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -15,24 +17,27 @@ import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.databind.JsonNode;
 import com.flexink.common.domain.BaseJpaModel;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 @DynamicInsert
 @DynamicUpdate
 @Entity
 @EqualsAndHashCode(callSuper = true)
-@Table(name = "MENU_M")
-public class Menu extends BaseJpaModel<Long> implements Cloneable {
+@Table(name = "MENU")
+public class Menu extends BaseJpaModel<Long> {
 
     @Id
-    @Column(name = "MENU_ID", precision = 20, nullable = false)
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long menuId;
+    @Column(name = "MENU_ID")
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long id;
 
     @Column(name = "MENU_GRP_CD", length = 100)
     private String menuGrpCd;
@@ -53,38 +58,45 @@ public class Menu extends BaseJpaModel<Long> implements Cloneable {
     @Column(name = "SORT", precision = 10)
     private Integer sort;
 
-    @Column(name = "PROG_CD", length = 50)
-    private String progCd;
+    @Column(name = "PROG_URL")
+    private String progUrl;
+    
+    @Column(name="USE_YN")
+    @Enumerated(EnumType.STRING)
+    private UseYn useYn = UseYn.Y;
 
-    @Transient
-    private boolean open = false;
+    /*@Transient
+    private boolean open = false;*/
 
     @Transient
     private List<Menu> children = new ArrayList<>();
-
+    
+    @Transient
+    private String pid;
+    
+    @JsonProperty("pid")
+    public Long getPid() {
+        return parentId;
+    }
+    
     /*@ManyToOne
     @JoinColumn(name = "PROG_CD", referencedColumnName = "PROG_CD", insertable = false, updatable = false)
     private Program program;*/
 
-    @Override
-    public Long getId() {
-        return menuId;
-    }
-
-    @JsonProperty("name")
+    /*@JsonProperty("name")
     public String label() {
         return menuNm;
-    }
+    }*/
 
-    @JsonProperty("id")
+    /*@JsonProperty("id")
     public Long id() {
-        return menuId;
+        return id;
     }
 
     @JsonProperty("open")
     public boolean isOpen() {
         return open;
-    }
+    }*/
 
     public void addChildren(Menu menu) {
         children.add(menu);
@@ -101,18 +113,6 @@ public class Menu extends BaseJpaModel<Long> implements Cloneable {
         return null;
     }*/
 
-    public static Menu of(Long id, String menuGrpCd, String menuNm, JsonNode languageJson, Long parentId, int level, int sort, String progCd) {
-        Menu menu = new Menu();
-        menu.setMenuId(id);
-        menu.setMenuGrpCd(menuGrpCd);
-        menu.setMenuNm(menuNm);
-        //menu.setMultiLanguageJson(languageJson);
-        menu.setParentId(parentId);
-        menu.setLevel(level);
-        menu.setSort(sort);
-        menu.setProgCd(progCd);
-        return menu;
-    }
 
     /*@JsonIgnore
     public String getLocalizedMenuName(HttpServletRequest request) {
@@ -127,4 +127,8 @@ public class Menu extends BaseJpaModel<Long> implements Cloneable {
         }
         return menuNm;
     }*/
+    
+    public enum UseYn {
+    	Y, N
+    }
 }

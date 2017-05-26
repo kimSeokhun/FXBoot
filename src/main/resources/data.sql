@@ -141,4 +141,5 @@ INSERT INTO COMMON_CODE
 ('ZTEST_CODE_4',	'테스트 코드 4',	'12',		'12',	'14',	'Y'),
 ('ZTEST_CODE_4',	'테스트 코드 4',	'13',		'13',	'15',	'Y');
 
-
+INSERT INTO MENU(MENU_ID, MENU_NM, LEVEL, SORT, PROG_URL, USE_YN) VALUES (1, 'test', 1, 0, '/test', 'Y');
+INSERT INTO MENU(MENU_ID, PARENT_ID, MENU_NM, LEVEL, SORT, PROG_URL, USE_YN) VALUES (2, 1, 'test2', 1, 0, '/test2', 'Y');

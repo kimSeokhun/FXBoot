@@ -247,7 +247,7 @@
 		   	         	data: $.extend({}, fnObj.searchView.getData(), fnObj.gridView.getPageData()),
 		   	            success: function(res) {
 		   	            	console.log(res);
-		   	            	console.log(res.first);
+		   	            	console.log(res.content);
 		   	            	fnObj.gridView.setData(res);
 		   	            }
 		   	        });

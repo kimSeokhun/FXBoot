@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import com.flexink.domain.sample.Person;
+import com.flexink.vo.PersonVo;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -27,7 +27,7 @@ public class ValidateSampleController {
      * @메소드 내용	: validate 페이지
      ********************************************************************/
     @GetMapping("/valid")
-    public String showForm(Person person, ModelMap model) {
+    public String showForm(PersonVo person, ModelMap model) {
     	person.setName("AAA");
     	model.addAttribute("model", "modelA");
         return "/sample/form";
@@ -39,7 +39,7 @@ public class ValidateSampleController {
      * @메소드 내용	: 유효성 검증 및 리다이렉트
      ********************************************************************/
     @PostMapping("/valid")			// @Valid 객체는 BindingResult 바로 앞에 선언
-    public String checkPersonInfo(@Valid Person person, BindingResult bindingResult, RedirectAttributes redirectAttr) {
+    public String checkPersonInfo(@Valid PersonVo person, BindingResult bindingResult, RedirectAttributes redirectAttr) {
 
     	// 유효성 검증
         if (bindingResult.hasErrors()) {
@@ -58,7 +58,7 @@ public class ValidateSampleController {
      * @메소드 내용	: validate 결과
      ********************************************************************/
     @GetMapping("/result")
-    public String result(Person person, ModelMap model) {
+    public String result(PersonVo person, ModelMap model) {
         return "/sample/result";
     }
 }

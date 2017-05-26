@@ -95,19 +95,9 @@ public class BaseService<T, ID extends Serializable> extends QueryDslRepositoryS
 	 * @return
 	 * Page<T>
 	 ********************************************************************/
-    protected Page<?> readPage(JPAQuery<?> query, Pageable pageable) {
+	protected Page<T> readPage(JPAQuery<T> query, Pageable pageable) {
 		if (pageable == null) {
 			return readPage(query, new QPageRequest(0, Integer.MAX_VALUE));
-		}
-        long total = query.clone(super.getEntityManager()).fetchCount();
-		JPQLQuery<?> pagedQuery = getQuerydsl().applyPagination(pageable, query);
-		List<?> content = total > pageable.getOffset() ? pagedQuery.fetch() : Collections.emptyList();
-		return new PageImpl<>(content, pageable, total);
-	} 
-    
-	protected Page<T> readPageSafety(JPAQuery<T> query, Pageable pageable) {
-		if (pageable == null) {
-			return readPageSafety(query, new QPageRequest(0, Integer.MAX_VALUE));
 		}
         long total = query.clone(super.getEntityManager()).fetchCount();
 		JPQLQuery<T> pagedQuery = getQuerydsl().applyPagination(pageable, query);
@@ -115,6 +105,16 @@ public class BaseService<T, ID extends Serializable> extends QueryDslRepositoryS
 		return new PageImpl<>(content, pageable, total);
 	}
 	
+    protected Page<?> readPageToBean(JPAQuery<?> query, Pageable pageable) {
+		if (pageable == null) {
+			return readPageToBean(query, new QPageRequest(0, Integer.MAX_VALUE));
+		}
+        long total = query.clone(super.getEntityManager()).fetchCount();
+		JPQLQuery<?> pagedQuery = getQuerydsl().applyPagination(pageable, query);
+		List<?> content = total > pageable.getOffset() ? pagedQuery.fetch() : Collections.emptyList();
+		return new PageImpl<>(content, pageable, total);
+	} 
+    
 	protected Page<Map<String, Object>> readPageToMap(JPAQuery<Map<Expression<?>, ?>> jpaQuery, Pageable pageable) {
 		if (pageable == null) {
 			return readPageToMap(jpaQuery, new QPageRequest(0, Integer.MAX_VALUE));
