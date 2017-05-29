@@ -174,7 +174,7 @@
 		<dependency>
 		    <groupId>org.webjars.npm</groupId>
 		    <artifactId>ax5ui-grid</artifactId>
-		    <version>1.4.20</version>
+		    <version>1.4.65</version>
 		</dependency>
 		<dependency>
 		    <groupId>org.webjars.npm</groupId>

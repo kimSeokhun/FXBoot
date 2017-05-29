@@ -45,14 +45,11 @@ public class Menu extends BaseJpaModel<Long> {
     @Column(name = "MENU_NM", length = 100)
     private String menuNm;
 
-    /*@Column(name = "MULTI_LANGUAGE", length = 100)
-    @Convert(converter = JsonNodeConverter.class)
-    private JsonNode multiLanguageJson;*/
-
     @Column(name = "PARENT_ID", precision = 19)
     private Long parentId;
 
     @Column(name = "LEVEL", precision = 10)
+    @JsonProperty("__depth__")
     private Integer level;
 
     @Column(name = "SORT", precision = 10)
@@ -65,69 +62,28 @@ public class Menu extends BaseJpaModel<Long> {
     @Enumerated(EnumType.STRING)
     private UseYn useYn = UseYn.Y;
 
-    /*@Transient
-    private boolean open = false;*/
-
     @Transient
     private List<Menu> children = new ArrayList<>();
     
     @Transient
-    private String pid;
+    private String pId;
     
-    @JsonProperty("pid")
+    @JsonProperty("pId")
     public Long getPid() {
         return parentId;
     }
     
+    @Transient
+    private boolean hidden;
     /*@ManyToOne
     @JoinColumn(name = "PROG_CD", referencedColumnName = "PROG_CD", insertable = false, updatable = false)
     private Program program;*/
 
-    /*@JsonProperty("name")
-    public String label() {
-        return menuNm;
-    }*/
-
-    /*@JsonProperty("id")
-    public Long id() {
-        return id;
-    }
-
-    @JsonProperty("open")
-    public boolean isOpen() {
-        return open;
-    }*/
 
     public void addChildren(Menu menu) {
         children.add(menu);
     }
 
-    /*public Menu clone() {
-        try {
-            Menu menu = (Menu) super.clone();
-            menu.setChildren(new ArrayList<>());
-            return menu;
-        } catch (Exception e) {
-            // ignore
-        }
-        return null;
-    }*/
-
-
-    /*@JsonIgnore
-    public String getLocalizedMenuName(HttpServletRequest request) {
-        Locale locale = RequestUtils.getLocale(request);
-
-        if (getMultiLanguageJson() != null) {
-            JsonNode jsonNode = getMultiLanguageJson().findPath(locale.getLanguage());
-
-            if (jsonNode != null) {
-                return jsonNode.asText();
-            }
-        }
-        return menuNm;
-    }*/
-    
     public enum UseYn {
     	Y, N
     }

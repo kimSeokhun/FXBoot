@@ -18,8 +18,8 @@ import com.flexink.sample.service.MenuService;
 import com.flexink.vo.ParamsVo;
 
 @Controller
-@RequestMapping("/system/menus")
-public class MenuController {
+@RequestMapping("/system/menuMng")
+public class MenuCodeController {
 	
 	@Autowired
 	MenuService menuService;
@@ -29,16 +29,15 @@ public class MenuController {
 		return "/sample/menu";
 	}
 	
-	@GetMapping(consumes=MediaType.APPLICATION_JSON_UTF8_VALUE)
+	@GetMapping(value="menus", consumes=MediaType.APPLICATION_JSON_UTF8_VALUE)
 	@ResponseBody
 	public ResponseEntity<List<Menu>> getMenus(ParamsVo params) {
 		return new ResponseEntity<List<Menu>>(menuService.getMenus(params), HttpStatus.OK);
 	}
 	
-	@PutMapping(consumes=MediaType.APPLICATION_JSON_UTF8_VALUE)
+	@PutMapping(value="menus", consumes=MediaType.APPLICATION_JSON_UTF8_VALUE)
 	@ResponseBody
 	public boolean saveMenus(@RequestBody List<Menu> menus) {
-		System.out.println(menus);
 		menuService.saveMenus(menus);
 		return true;
 	}

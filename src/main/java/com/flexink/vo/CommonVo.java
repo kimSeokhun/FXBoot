@@ -2,14 +2,15 @@ package com.flexink.vo;
 
 import com.flexink.config.web.security.user.UserDetailsHelper;
 import com.flexink.domain.sec.LoginUserDetails;
+import com.flexink.security.SessionUserDetail;
 
 public class CommonVo {
 
-	private LoginUserDetails loginUserDetails;
+	private SessionUserDetail loginUserDetails;
 	
 	public CommonVo() {
 		if(UserDetailsHelper.getAuthenticatedUser() instanceof LoginUserDetails) {
-			this.loginUserDetails = (LoginUserDetails) UserDetailsHelper.getAuthenticatedUser();
+			this.loginUserDetails = (SessionUserDetail) UserDetailsHelper.getAuthenticatedUser();
 		} else {
 			this.loginUserDetails = null;
 		}
@@ -20,7 +21,7 @@ public class CommonVo {
 	 * @작성자	: KIMSEOKHOON
 	 * @메소드 내용	: 인증된 로그인정보 객체
 	 ********************************************************************/
-	public LoginUserDetails getUserDetails() {
+	public SessionUserDetail getUserDetails() {
 		return this.loginUserDetails;
 	}
 	
