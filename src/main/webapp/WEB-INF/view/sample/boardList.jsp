@@ -48,7 +48,7 @@ function search() {
 				                	
 			                		<tr>
 					                  <td><fx:row-number sort="desc" totalElements="${list.totalElements}" number="${list.number}" size="${list.size}" count="${status.count}"/></td>
-					                  <td><a href="article/${row.board.id}">
+					                  <td><a href="${contextPath}/board/${boardType}/article/${row.board.id}">
 					                  		<p>${row.board.title} ${row.commentCount gt 0 ? '(' : ''}${row.commentCount gt 0 ? row.commentCount : ''}${row.commentCount gt 0 ? ')' : ''}</p>
 					                  </a></td>
 					                  <td>${row.board.createdBy}</td>
@@ -74,7 +74,7 @@ function search() {
 					              	</div>
 					              	<div class="col-md-4 text-right">
 					              		<sec:authorize access="isAuthenticated()">
-					              			<button type="submit" class="btn btn-primary" onclick="location.href='article?type=${type}'">글쓰기</button>
+					              			<button type="submit" class="btn btn-primary" onclick="location.href='${contextPath}/board/${boardType}/article'">글쓰기</button>
 					              		</sec:authorize>
 									</div>
 								</div>

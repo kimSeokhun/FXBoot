@@ -62,7 +62,7 @@ public class CommentService extends BaseService<Comment, Long>{
 	public void updateComment(Comment commentVo) {
 		Comment comment = query().from(qComment).where(qComment.id.eq(commentVo.getId())).fetchOne();
 		if(comment.getCreatedBy().equals(UserDetailsHelper.getLoginUserDetails().getUsername()) || UserDetailsHelper.containsAuthority("ROLE_ADMIN", "ROLE_SYSTEM")) {
-			update(qComment).set(qComment.content, comment.getContent()).where(qComment.id.eq(comment.getId())).execute();
+			update(qComment).set(qComment.content, commentVo.getContent()).where(qComment.id.eq(comment.getId())).execute();
 		}
 	}
 	

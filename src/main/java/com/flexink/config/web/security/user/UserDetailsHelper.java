@@ -11,8 +11,7 @@ import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
-import com.flexink.domain.sec.LoginUserDetails;
-import com.flexink.security.SessionUserDetail;
+import com.flexink.security.SessionUser;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -38,12 +37,12 @@ public class UserDetailsHelper {
 			return new LoginUserDetails();
 		}
 	}*/
-	public static SessionUserDetail getLoginUserDetails() {
+	public static SessionUser getLoginUserDetails() {
 		Object obj = getAuthenticatedUser();
 		if(obj == null) {
 			return null;
-		} else if (obj instanceof SessionUserDetail) {
-			return (SessionUserDetail) obj;
+		} else if (obj instanceof SessionUser) {
+			return (SessionUser) obj;
 		} else {
 			return null;
 		}
@@ -72,8 +71,8 @@ public class UserDetailsHelper {
         } else {
         	return authentication.getPrincipal();
         }*/
-        if (authentication.getPrincipal() instanceof SessionUserDetail) {
-        	SessionUserDetail details = (SessionUserDetail) authentication.getPrincipal();
+        if (authentication.getPrincipal() instanceof SessionUser) {
+        	SessionUser details = (SessionUser) authentication.getPrincipal();
 
 
         	log.debug("## LoginUserDetailsHelper.getAuthenticatedUser : AuthenticatedUser is {}", details.getUsername());
@@ -139,7 +138,7 @@ public class UserDetailsHelper {
      * @작성자	: KIMSEOKHOON
      * @메소드 내용	: 최상위 Role 타입 반환
      ********************************************************************/
-    public static String getRoleType() {
+    /*public static String getRoleType() {
         Authentication authentication = getAuthentication();
 
         if (authentication == null) {
@@ -152,7 +151,7 @@ public class UserDetailsHelper {
         GrantedAuthority auth = (GrantedAuthority) arr[0];
         
 		return auth.getAuthority();
-    }
+    }*/
 
     /********************************************************************
      * @메소드명	: isAuthenticated

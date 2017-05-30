@@ -5,7 +5,9 @@ import java.util.Collections;
 import java.util.Comparator;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -21,6 +23,7 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 import com.flexink.common.file.service.CommonFileService;
 import com.flexink.common.utils.EditorUtils;
 import com.flexink.domain.board.Board;
+import com.flexink.domain.board.BoardType;
 import com.flexink.domain.board.Comment;
 import com.flexink.sample.service.BoardService;
 import com.flexink.sample.service.CommentService;
@@ -64,8 +67,8 @@ public class BoardController {
 	 * @작성자	: KIMSEOKHOON
 	 * @메소드 내용	: 글 쓰기 및 수정 페이지
 	 ********************************************************************/
-	@GetMapping(value="/article")
-	public String writeAriticle(Board board, ParamsVo params, ModelMap model) {
+	@GetMapping(value="/{boardType}/article")
+	public String writeAriticle(@PathVariable String boardType, Board board, ModelMap model) {
 		if(board.getId() != null) {
 			model.put("article", boardSampleService.getArticle(board));
 		}
@@ -77,19 +80,13 @@ public class BoardController {
 	 * @작성자	: KIMSEOKHOON
 	 * @메소드 내용	: 게시글 상세 (읽기 전용)
 	 ********************************************************************/
-	@GetMapping(value="/article/{id}")
-	public String viewArticle(@PathVariable long id, Board board, ParamsVo params, ModelMap model) {
+	@GetMapping(value="/{boardType}/article/{id}")
+	public String viewArticle(@PathVariable String boardType, @PathVariable long id, Board board, ParamsVo params, ModelMap model) {
 		board.setId(id);
+		board.setType(new BoardType(boardType));
 		Board article = boardSampleService.viewArticle(board);
 		model.put("article", article);
 		model.put("comments", commentSampleService.getComments(article));
-		/*model.put("comments", article.getComments());
-		Collections.sort(article.getComments(), new Comparator<Comment>() {
-			@Override
-			public int compare(Comment o1, Comment o2) {
-				return o2.getId().compareTo(o1.getId());
-			}
-		});*/
 		
 		return "/sample/viewArticle";
 	}
@@ -100,8 +97,9 @@ public class BoardController {
 	 * @작성자	: KIMSEOKHOON
 	 * @메소드 내용	: 글 등록 (form 전용, Input type=file 형식)
 	 ********************************************************************/
-	@PostMapping("/article")
-	public String saveAriticle(MultipartHttpServletRequest request, ParamsVo params, Board board) throws IOException {
+	@PostMapping("/{boardType}/article")
+	public String saveAriticle(@PathVariable String boardType, MultipartHttpServletRequest request, ParamsVo params, Board board) throws IOException {
+		board.setType(new BoardType(boardType));
 		if(params.getString("secret", "").equalsIgnoreCase("true")) {
 			board.setSecret(Board.Secret.Y);
 		} else {
@@ -128,7 +126,7 @@ public class BoardController {
         commonFileService.uploads(uploadParameters);*/
         
 		
-		return "redirect:/board/article/"+board.getId();
+		return "redirect:/board/" + boardType + "/article/" + board.getId();
 	}
 	
 	/********************************************************************
@@ -136,10 +134,10 @@ public class BoardController {
 	 * @작성자	: KIMSEOKHOON
 	 * @메소드 내용	: 글 삭제
 	 ********************************************************************/
-	@DeleteMapping(value="/article/{id}")
-	public String deleteAriticle(@PathVariable long id, Board board) {
+	@DeleteMapping(value="/{boardType}/article/{id}")
+	public String deleteAriticle(@PathVariable String boardType, @PathVariable long id, Board board) {
 		boardSampleService.deleteArticle(id);
-        return "redirect:/board/"+board.getType();
+        return "redirect:/board/"+boardType;
 	}
 	
 	/********************************************************************
@@ -201,11 +199,11 @@ public class BoardController {
 	 * @작성자	: KIMSEOKHOON
 	 * @메소드 내용	: 댓글 등록
 	 ********************************************************************/
-	@PostMapping(value="/article/comment", consumes=MediaType.APPLICATION_FORM_URLENCODED_VALUE)
+	@PostMapping(value="/article/comment")
 	@ResponseBody
-	public Comment saveComment(ParamsVo params, Comment comment) {
+	public boolean saveComment(ParamsVo params, Comment comment) {
 		commentSampleService.saveComment(params, comment);
-		return comment;
+		return true;
 	}
 	
 	/********************************************************************
@@ -227,6 +225,7 @@ public class BoardController {
 	@PutMapping(value="/article/comment/{id}", consumes=MediaType.APPLICATION_JSON_UTF8_VALUE)
 	@ResponseBody
 	public void updateComment(@PathVariable long id, @RequestBody Comment comment) {
+		comment.setId(id);
 		commentSampleService.updateComment(comment);
 	}
 }

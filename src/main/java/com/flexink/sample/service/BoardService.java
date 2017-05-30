@@ -99,7 +99,7 @@ public class BoardService extends BaseService<Board, Long>{
 		
 		// view count update
 		String cookieView = CookieUtils.getCookieValue("view_count");
-		String newCookieView = " | " + article.getType() + ":" + article.getId();
+		String newCookieView = " | " + article.getType().getType() + ":" + article.getId();
 		if(StringUtils.indexOfIgnoreCase(cookieView, newCookieView) < 0) {
 			article.setViewCount(article.getViewCount() + 1);
 			CookieUtils.addCookie("view_count", cookieView + newCookieView);
@@ -114,8 +114,14 @@ public class BoardService extends BaseService<Board, Long>{
 		 *	@ SpringData JPA
 		 *	Board article = repository.findOne(board.getId());
 		 ********************************************************************************************/
+		System.out.println("#############################################################");
+		System.out.println("#############################################################");
+		System.out.println("#############################################################");
 		// QueryDsl
 		Board article = query().from(qBoard).where(qBoard.id.eq(board.getId())).fetchOne();
+		System.out.println("#############################################################");
+		System.out.println("#############################################################");
+		System.out.println("#############################################################");
 		
 		return article;
 	}

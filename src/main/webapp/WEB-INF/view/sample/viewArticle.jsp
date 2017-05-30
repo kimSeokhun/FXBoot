@@ -65,7 +65,7 @@ function toggleComment(obj) {
 }
 
 function editArticle() {
-	location.href="${contextPath}/board/article?id=${article.id}";
+	location.href="${contextPath}/board/${boardType}/article?id=${article.id}";
 }
 
 function removeArticle() {
@@ -103,7 +103,6 @@ function removeArticle() {
 			            <!-- /.box-header -->
 			            <!-- form start -->
 			            <form:form method="delete" action="${article.id}" class="form-horizontal" onsubmit="return removeArticle();">
-			            	<input type="hidden" name="type" value="${article.type}" />
 			            	<div class="box-body">
 				                <div class="form-group">
 				                  <label for="title" class="col-sm-2 control-label">Title</label>
@@ -155,7 +154,6 @@ function removeArticle() {
 			          </div>
 		        </div>
 		    </div>
-
 
 			<div class="row">
 				<div class="col-md-12">

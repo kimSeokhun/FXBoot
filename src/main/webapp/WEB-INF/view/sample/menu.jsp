@@ -76,13 +76,31 @@
 			            	
 			            	<div class="row">
 		            			<div class="col-lg-12 col-xs-12" style="margin-bottom: 15px">
-						           	<div style="position: relative;height:600px;" id="grid-parent">
+						           	<div style="position: relative;height:700px;" id="grid-parent">
 										<div data-ax5grid="first-grid" data-ax5grid-config="{}" style="height: 100%;"></div>
 									</div>
 								</div>
 			            	</div>
-
-			            	<fx:menu-code menuGrpCd="SYSTEM"/>
+			            	
+			            	<%-- <fx:menu-code menuGrpCd="SYSTEM" var="menus"/>
+			            	<ol>
+			            		<c:forEach var="list" items="${menus}">
+			            			<c:if test="${list.useYn eq 'Y'}">
+				            			<li>${list.menuNm} : ${list.progUrl}
+					            			<c:if test="${fn:length(list.children) > 0}">
+					            				<ul>
+					            					<c:forEach var="sub" items="${list.children}">
+					            						<c:if test="${sub.useYn eq 'Y'}">
+					            							<li>${sub.menuNm} : ${sub.progUrl}</li>
+					            						</c:if>
+					            					</c:forEach>
+					            				</ul>
+					            			</c:if>
+				            			</li>
+				            		</c:if>
+			            		</c:forEach>
+			            	</ol> --%>
+			            	${principal}
 			            </div>
 			            <!-- /.box-body -->
 	            	</div>
@@ -125,9 +143,7 @@
 			                    	
 			                    	var target = this;
 			                    	var sortNum = thisSort;
-			                    	console.log("this sort : " + thisSort);
 			                    	_.forEach(sList, function(o) {
-			                    		console.log(o);
 			                    		if(o.id == id) {
 			                    			return;
 			                    		}
@@ -157,17 +173,23 @@
 				            {key: "id", label: "Menu ID", width: 70, align: "center", editor: {type: "text", disabled: function () {
 				                return true;
 				            }}},
-				            {key: "__depth__", label: "Level", width: 70, align: "center", editor: {type: "text"}},
+				            {key: "__depth__", label: "Level", width: 70, align: "center", editor: {type: "text", disabled: function () {
+				                return true;
+				            }}},
 				            {key: "menuNm", label: "Menu Name", width: 300, treeControl: true, editor: {type: "text"}},
 				            {key: "progUrl", label: "Program URL", width: 500, align: "left", editor: {type: "text"}},
 				            {key: "sort", label: "Sort", width: 70, align: "center", formatter: "money", editor: {type: "number"}},
+				            {key: "targetBlank", label: "새창 열기", width: 70, sortable: false, align: "center", editor: {
+				                type: "checkbox", config: {trueValue: "Y", falseValue: "N"}
+				            }},
+				            {key: "viewAnony", label: "VIEW ANONY", width: 100, sortable: false, align: "center", editor: {
+				                type: "checkbox", config: {trueValue: "Y", falseValue: "N"}
+				            }},
 				            {key: "useYn", label: "UseYN", width: 70, sortable: false, align: "center", editor: {
 				                type: "checkbox", config: {trueValue: "Y", falseValue: "N"}
 				            }},
 				            {key: "data1", label: "Data1", width: 70, align: "left", editor: {type: "text"}},
-				            {key: "data2", label: "Data2", width: 70, align: "left", editor: {type: "text"}},
-				            {key: "data3", label: "Data3", width: 70, align: "left", editor: {type: "text"}},
-				            {key: "data4", label: "Data4", width: 70, align: "left", editor: {type: "text"}}
+				            {key: "data2", label: "Data2", width: 70, align: "left", editor: {type: "text"}}
 				        ]
 				    });
 					return this;
@@ -218,7 +240,6 @@
 			        this.target.addRow(rowObj, index);
 			    },
 			    updateRow: function() {
-			    	console.log(this.target);
 			    },
 			    delRow: function delRow(_type) {
 			        this.target.deleteRow(_type);
@@ -266,7 +287,6 @@
 		   	         	data: $.extend({}, fnObj.searchView.getData()),
 		   	            success: function(res) {
 		   	            	var a = $.extend({}, res);
-		   	            	console.log(a);
 		   	            	fnObj.gridView.setData(res);
 		   	            }
 		   	        });

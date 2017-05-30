@@ -40,11 +40,11 @@ insert  into ROLE_RESOURCE(ROLE_RESOURCE_ID, ROLE_ID, RESOURCES_ID) values (8,1,
 insert  into ROLE_RESOURCE(ROLE_RESOURCE_ID, ROLE_ID, RESOURCES_ID) values (9,3,5);
 
 insert  into AUTHORITIES(AUTHORITIES_ID, USERNAME, ROLE_ID) values (1,'ksh',2);
-insert  into AUTHORITIES(AUTHORITIES_ID, USERNAME, ROLE_ID) values (2,'system',1);
+insert  into AUTHORITIES(AUTHORITIES_ID, USERNAME, ROLE_ID) values (2,'system',2);
 insert  into AUTHORITIES(AUTHORITIES_ID, USERNAME, ROLE_ID) values (3,'admin',2);
 insert  into AUTHORITIES(AUTHORITIES_ID, USERNAME, ROLE_ID) values (4,'user',3);
-
-
+insert  into AUTHORITIES(AUTHORITIES_ID, USERNAME, ROLE_ID) values (5,'system',1);
+insert  into AUTHORITIES(AUTHORITIES_ID, USERNAME, ROLE_ID) values (6,'system',3);
 
 
 --INSERT INTO AUTHORITY
@@ -141,5 +141,30 @@ INSERT INTO COMMON_CODE
 ('ZTEST_CODE_4',	'테스트 코드 4',	'12',		'12',	'14',	'Y'),
 ('ZTEST_CODE_4',	'테스트 코드 4',	'13',		'13',	'15',	'Y');
 
-INSERT INTO MENU(MENU_ID, MENU_GRP_CD, PARENT_ID, MENU_NM, LEVEL, SORT, PROG_URL, USE_YN) VALUES (1, 'SYSTEM', null, 'test', 0, 0, '/test', 'Y');
-INSERT INTO MENU(MENU_ID, MENU_GRP_CD, PARENT_ID, MENU_NM, LEVEL, SORT, PROG_URL, USE_YN) VALUES (2, 'SYSTEM', 1, 'test2', 0, 0, '/test2', 'Y');
+INSERT INTO MENU(MENU_ID, MENU_GRP_CD, PARENT_ID, LEVEL, SORT, USE_YN, TARGET_BLANK, VIEW_ANONY, MENU_NM, PROG_URL) VALUES
+(1,		'SYSTEM', null,	0, 0,	'Y', 'N', 'Y', 'Main', '/sample'),
+(2,		'SYSTEM', null, 0, 1,	'Y', 'N', 'N', 'Menu Mng', '/system/menuMng'),
+(3,		'SYSTEM', null, 0, 2,	'Y', 'N', 'N', 'Board Mng', '/system/boardMng'),
+(4,		'SYSTEM', null, 0, 3,	'Y', 'N', 'N', 'Board', '/board/SAMPLE'),
+(5,		'SYSTEM', null, 0, 4,	'Y', 'N', 'N', 'Pagination', '/sample/paging'),
+(6,		'SYSTEM', null, 0, 5,	'Y', 'N', 'N', 'Locale', '/sample/locale'),
+(7,		'SYSTEM', null, 0, 6,	'Y', 'N', 'N', 'Validate', '/sample/valid'),
+(8,		'SYSTEM', null, 0, 7,	'Y', 'N', 'N', 'CommonCode Mng', '/system/code'),
+(9,		'SYSTEM', null,	0, 8,	'Y', 'N', 'N', 'EhCache', '/sample/cache'),
+(10,	'SYSTEM', null, 0, 9,	'Y', 'N', 'N', 'File', '/sample/file'),
+(11,	'SYSTEM', null, 0, 10,	'Y', 'Y', 'N', 'H2 Console', '/h2-console'),
+(12,	'SYSTEM', null, 0, 11,	'Y', 'N', 'N', 'Actuator', '#'),
+(13,	'SYSTEM', 12,	1, 0,	'Y', 'Y', 'N', 'Health', '/actuator/health'),
+(14,	'SYSTEM', 12,	1, 1,	'Y', 'Y', 'N', 'Mappings', '/actuator/mappings'),
+(15,	'SYSTEM', 12,	1, 2,	'Y', 'Y', 'N', 'dump', '/actuator/dump'),
+(16,	'SYSTEM', 12,	1, 3,	'Y', 'Y', 'N', 'beans', '/actuator/beans'),
+(17,	'SYSTEM', 12,	1, 4,	'Y', 'Y', 'N', 'autoConfig', '/actuator/autoconfig'),
+(18,	'SYSTEM', 12,	1, 5,	'Y', 'Y', 'N', 'env', '/actuator/env'),
+(19,	'SYSTEM', 12,	1, 6,	'Y', 'Y', 'N', 'info', '/actuator/info'),
+(20,	'SYSTEM', 12,	1, 7,	'Y', 'Y', 'N', 'trace', '/actuator/trace'),
+(21,	'SYSTEM', 12,	1, 8,	'Y', 'Y', 'N', 'auditevents', '/actuator/auditevents'),
+(22,	'SYSTEM', 12,	1, 9,	'Y', 'Y', 'N', 'metrics', '/actuator/metrics'),
+(23,	'SYSTEM', 12,	1, 10,	'Y', 'Y', 'N', 'loggers', '/actuator/loggers'),
+(24,	'SYSTEM', 12,	1, 11,	'Y', 'Y', 'N', 'configprops', '/actuator/configprops');
+
+

@@ -93,7 +93,7 @@
 			                
 			              </div>
 			              <!-- /.box-footer -->
-			              <input type="hidden" name="type" value="${empty board.type ? article.type : board.type}" />
+			              <%-- <input type="hidden" name="type" value="${boardType}" /> --%>
 			              <input type="hidden" id="boardId" name="id" value="${article.id}" />
 			            </form:form>
 			          </div>
@@ -157,7 +157,7 @@
         	$.extend(axFileConfig, config);
         	axfile.init();
         	if(!_.isEmpty("${article.id}")) {
-        		axfile.setUploadedFiles({targetType:'${article.type}', targetId:'${article.id}'});
+        		axfile.setUploadedFiles({targetType:'${boardType}', targetId:'${article.id}'});
         	}
         	
         });

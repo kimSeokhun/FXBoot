@@ -21,7 +21,7 @@
 		<section class="content">
 			${person} ${model}
 												<!-- commandName = @Valid 객체 이름 -->
-			<form:form action="valid" method="post" commandName="person">
+			<form:form action="valid" method="post" commandName="personVo">
 				<table>
 					<tr>
 						<td>Name:</td>

@@ -12,7 +12,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.flexink.security.SessionUserDetail;
+import com.flexink.security.SessionUser;
 import com.flexink.security.domain.Authorities;
 import com.flexink.security.domain.User;
 import com.flexink.security.repository.UserRepository;
@@ -51,7 +51,8 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 		log.info("username : {} , role : {} : ", username, userRoles);
 		
 
-		return new SessionUserDetail(user, userRoles, simpleGrantedAuthorities);
+		//return new SessionUserDetail(user, userRoles, simpleGrantedAuthorities);
+		return new SessionUser(user, simpleGrantedAuthorities);
 		//return user;
 	}
 }

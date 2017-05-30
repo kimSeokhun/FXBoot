@@ -4,6 +4,9 @@ import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -14,23 +17,22 @@ import com.flexink.domain.menu.repository.MenuRepository;
 import com.flexink.vo.ParamsVo;
 import com.querydsl.core.BooleanBuilder;
 
+@EnableCaching
 @Service
-public class MenuService extends BaseService<Menu, Long>{
+public class MenuCodeService extends BaseService<Menu, Long>{
 
 	@Autowired
-	public MenuService(MenuRepository repository) {
+	public MenuCodeService(MenuRepository repository) {
 		super(Menu.class, repository);
 	}
 	
 	QMenu qMenu = QMenu.menu;
 	
-	/*public List<Menu> getMenus(ParamsVo params) {
-		Menu menu = new Menu();
-		if(StringUtils.isNotBlank(params.getString("menuGrpCd"))) {
-			menu.setMenuGrpCd(params.getString("menuGrpCd"));
-		}
-		return getMenus(menu);
-	}*/
+	/********************************************************************
+	 * @메소드명	: getMenus
+	 * @작성자	: KIMSEOKHOON
+	 * @메소드 내용	: 메뉴코드 리스트 조회
+	 ********************************************************************/
 	public List<Menu> getMenus(ParamsVo params) {
 		BooleanBuilder builder = new BooleanBuilder();
 		if(StringUtils.isNotBlank(params.getString("menuGrpCd"))) {
@@ -58,9 +60,31 @@ public class MenuService extends BaseService<Menu, Long>{
 	}
 	
 	
+	/********************************************************************
+	 * @메소드명	: getTagLibMenus
+	 * @작성자	: KIMSEOKHOON
+	 * @메소드 내용	: taglib용 메뉴코드 리스트 조회
+	 ********************************************************************/
+	@Cacheable(cacheNames="menuCode", key="#menu.menuGrpCd")
+	public List<Menu> getTagLibMenus(Menu menu) {
+		List<Menu> list = query().from(qMenu)
+				.where(qMenu.menuGrpCd.eq(menu.getMenuGrpCd())
+				.and(qMenu.useYn.eq(menu.getUseYn())
+				.and(qMenu.level.eq(0))))
+				.orderBy(qMenu.level.asc(), qMenu.sort.asc())
+				.fetch(); 
+		return list;
+	}
 	
 	
+	
+	/********************************************************************
+	 * @메소드명	: saveMenus
+	 * @작성자	: KIMSEOKHOON
+	 * @메소드 내용	: 그리드용 메뉴코드 CUD
+	 ********************************************************************/
 	@Transactional
+	@CacheEvict(cacheNames="menuCode", allEntries=true)
     public void saveMenus(List<Menu> menus) {
         save(menus);
     }

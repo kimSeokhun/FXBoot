@@ -3,16 +3,23 @@ package com.flexink.domain.menu;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.Cacheable;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
@@ -30,6 +37,7 @@ import lombok.NoArgsConstructor;
 @DynamicInsert
 @DynamicUpdate
 @Entity
+//@Cache(usage=CacheConcurrencyStrategy.READ_WRITE, region="jpaMenu")
 @EqualsAndHashCode(callSuper = true)
 @Table(name = "MENU")
 public class Menu extends BaseJpaModel<Long> {
@@ -61,8 +69,21 @@ public class Menu extends BaseJpaModel<Long> {
     @Column(name="USE_YN")
     @Enumerated(EnumType.STRING)
     private UseYn useYn = UseYn.Y;
+    
+    @Column(name="TARGET_BLANK")
+    @Enumerated(EnumType.STRING)
+    private UseYn targetBlank = UseYn.N;
+    
+    @Column(name="VIEW_ANONY")
+    @Enumerated(EnumType.STRING)
+    private UseYn viewAnony = UseYn.N;
 
-    @Transient
+    /*@ManyToOne(fetch=FetchType.LAZY, optional=true)
+    @JoinColumn(name="PARENT_MENU_ID")
+    private Menu parent;*/
+    
+//    @Cache(usage=CacheConcurrencyStrategy.READ_WRITE)
+    @OneToMany(fetch=FetchType.EAGER, mappedBy="parentId")
     private List<Menu> children = new ArrayList<>();
     
     @Transient
@@ -75,9 +96,6 @@ public class Menu extends BaseJpaModel<Long> {
     
     @Transient
     private boolean hidden;
-    /*@ManyToOne
-    @JoinColumn(name = "PROG_CD", referencedColumnName = "PROG_CD", insertable = false, updatable = false)
-    private Program program;*/
 
 
     public void addChildren(Menu menu) {

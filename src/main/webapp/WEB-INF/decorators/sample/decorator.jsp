@@ -284,38 +284,34 @@ desired effect
       <ul class="sidebar-menu">
         <li class="header">HEADER</li>
         <!-- Optionally, you can add icons to the links -->
-        <li class="active"><a href="${contextPath}/sample"><i class="fa fa-link"></i> <span>Main</span></a></li>
-        <li><a href="${contextPath}/system/menuMng"><i class="fa fa-link"></i> <span>Menu Mng</span></a></li>
-        <li><a href="${contextPath}/system/boardMng"><i class="fa fa-link"></i> <span>Board Mng</span></a></li>
-        <li><a href="${contextPath}/board/SAMPLE"><i class="fa fa-link"></i> <span>Board</span></a></li>
-        <li><a href="${contextPath}/sample/paging"><i class="fa fa-link"></i> <span>Pagination</span></a></li>
-        <li><a href="${contextPath}/sample/locale"><i class="fa fa-link"></i> <span>Locale</span></a></li>
-        <li><a href="${contextPath}/sample/valid"><i class="fa fa-link"></i> <span>Valid</span></a></li>
-        <li><a href="${contextPath}/system/code"><i class="fa fa-link"></i> <span>CommonCode Mng</span></a></li>
-        <li><a href="${contextPath}/sample/cache"><i class="fa fa-link"></i> <span>EhCache</span></a></li>
-        <li><a href="${contextPath}/sample/file"><i class="fa fa-link"></i> <span>file</span></a></li>
-        <li><a href="${contextPath}/h2-console" target="_blank"><i class="fa fa-link"></i> <span>H2 Console</span></a></li>
-        <li class="treeview">
-          <a href="#"><i class="fa fa-link"></i> <span>Actuator</span>
-            <span class="pull-right-container">
-              <i class="fa fa-angle-left pull-right"></i>
-            </span>
-          </a>
-          <ul class="treeview-menu">
-            <li><a href="/actuator/health" target="_blank">Health</a></li>
-            <li><a href="/actuator/mappings" target="_blank">mappings</a></li>
-            <li><a href="/actuator/dump" target="_blank">dump</a></li>
-            <li><a href="/actuator/beans" target="_blank">beans</a></li>
-            <li><a href="/actuator/autoconfig" target="_blank">autoconfig</a></li>
-            <li><a href="/actuator/env" target="_blank">env</a></li>
-            <li><a href="/actuator/info" target="_blank">info</a></li>
-            <li><a href="/actuator/trace" target="_blank">trace</a></li>
-            <li><a href="/actuator/auditevents" target="_blank">auditevents</a></li>
-            <li><a href="/actuator/metrics" target="_blank">metrics</a></li>
-            <li><a href="/actuator/loggers" target="_blank">loggers</a></li>
-            <li><a href="/actuator/configprops" target="_blank">configprops</a></li>
-          </ul>
-        </li>
+        
+        <!-- 메뉴 리스트 출력 -->
+      	<fx:menu-code menuGrpCd="SYSTEM" var="menus"/>
+        <c:forEach var="menus" items="${menus}">
+        	<c:if test="${menus.useYn eq 'Y'}">
+        		<c:choose>
+        			<c:when test="${fn:length(menus.children) > 0}">
+        				<li class="treeview">
+				          <a href="#"><i class="fa fa-link"></i> <span>${menus.menuNm}</span>
+				            <span class="pull-right-container">
+				              <i class="fa fa-angle-left pull-right"></i>
+				            </span>
+				          </a>
+				          <ul class="treeview-menu">
+				          	<c:forEach var="sub" items="${menus.children}">
+				          		<c:if test="${sub.useYn eq 'Y'}">
+				          			<li><a href="${contextPath}${sub.progUrl}" ${sub.targetBlank eq 'Y' ? 'target="_blank"' : ''}> ${sub.menuNm}</a></li>
+				          		</c:if>
+				          	</c:forEach>
+				          </ul>
+				        </li>
+        			</c:when>
+        			<c:otherwise>
+        				<li><a href="${contextPath}${menus.progUrl}" ${menus.targetBlank eq 'Y' ? 'target="_blank"' : ''}><i class="fa fa-link"></i> <span>${menus.menuNm}</span></a></li>
+        			</c:otherwise>
+        		</c:choose>
+        	</c:if>
+        </c:forEach>
       </ul>
       <!-- /.sidebar-menu -->
     </section>
