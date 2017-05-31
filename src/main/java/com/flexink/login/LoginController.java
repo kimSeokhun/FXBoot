@@ -21,11 +21,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.flexink.config.web.WebSecurityConfigureAdapter;
-import com.flexink.config.web.security.user.LoginUserValidator;
 import com.flexink.config.web.security.user.Role;
 import com.flexink.config.web.security.user.UserDetailsHelper;
-import com.flexink.domain.sec.LoginUserDetails;
 import com.flexink.login.service.LoginUserService;
+import com.flexink.security.domain.User;
+import com.flexink.validator.UserValidator;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -61,7 +61,7 @@ public class LoginController {
 			// 사용자 권한에 맞는 Page 이동
 			if(UserDetailsHelper.containsAuthority(Role.ROLE_ADMIN.toString(), Role.ROLE_SYSTEM.toString())) {
 				log.debug("redirect To Admin Page");
-				return "redirect:"+WebSecurityConfigureAdapter.ROOT_PATH;
+				return "redirect:"+WebSecurityConfigureAdapter.DEFAULT_SUCCESS_URL;
 			} else {
 				log.debug("redirect To User Page");
 				return "redirect:/";
@@ -76,15 +76,14 @@ public class LoginController {
 	 * @메소드 내용	: 사용자 등록 페이지
 	 ********************************************************************/
 	@GetMapping("/security/register")
-	public String registerPage(Model model) {
-		model.addAttribute("loginUserDetails", new LoginUserDetails());
+	public String registerPage(Model model, User user) {
 		return "/login/register";
 	}
 
 	@InitBinder
 	protected void initBinder(WebDataBinder binder) {
 		// Custom LoginUserValidator 적용
-		binder.setValidator(new LoginUserValidator());
+		binder.setValidator(new UserValidator());
 	}
 	
 	/********************************************************************
@@ -93,7 +92,7 @@ public class LoginController {
 	 * @메소드 내용	: 사용자 신규 등록 Process
 	 ********************************************************************/
 	@PostMapping("/security/register")
-	public String registerMember(@Valid LoginUserDetails user, BindingResult bindingResult) {
+	public String registerMember(@Valid User user, BindingResult bindingResult) {
 		
 		// 유효성 검증
         if (bindingResult.hasErrors()) {

@@ -23,6 +23,7 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.flexink.common.domain.BaseJpaModel;
 
@@ -37,7 +38,7 @@ import lombok.NoArgsConstructor;
 @DynamicInsert
 @DynamicUpdate
 @Entity
-//@Cache(usage=CacheConcurrencyStrategy.READ_WRITE, region="jpaMenu")
+@Cache(usage=CacheConcurrencyStrategy.READ_WRITE, region="jpaMenu")
 @EqualsAndHashCode(callSuper = true)
 @Table(name = "MENU")
 public class Menu extends BaseJpaModel<Long> {
@@ -78,12 +79,9 @@ public class Menu extends BaseJpaModel<Long> {
     @Enumerated(EnumType.STRING)
     private UseYn viewAnony = UseYn.N;
 
-    /*@ManyToOne(fetch=FetchType.LAZY, optional=true)
-    @JoinColumn(name="PARENT_MENU_ID")
-    private Menu parent;*/
-    
 //    @Cache(usage=CacheConcurrencyStrategy.READ_WRITE)
-    @OneToMany(fetch=FetchType.EAGER, mappedBy="parentId")
+    @JsonIgnore
+    @OneToMany(fetch=FetchType.LAZY, mappedBy="parentId")
     private List<Menu> children = new ArrayList<>();
     
     @Transient
@@ -94,10 +92,6 @@ public class Menu extends BaseJpaModel<Long> {
         return parentId;
     }
     
-    @Transient
-    private boolean hidden;
-
-
     public void addChildren(Menu menu) {
         children.add(menu);
     }

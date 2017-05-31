@@ -27,16 +27,6 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class UserDetailsHelper {
 
-	/*public static LoginUserDetails getLoginUserDetails() {
-		Object obj = getAuthenticatedUser();
-		if(obj == null) {
-			return new LoginUserDetails();
-		} else if (obj instanceof LoginUserDetails) {
-			return (LoginUserDetails) obj;
-		} else {
-			return new LoginUserDetails();
-		}
-	}*/
 	public static SessionUser getLoginUserDetails() {
 		Object obj = getAuthenticatedUser();
 		if(obj == null) {
@@ -61,25 +51,11 @@ public class UserDetailsHelper {
             return null;
         }
 
-        /*if (authentication.getPrincipal() instanceof LoginUserDetails) {
-        	LoginUserDetails details = (LoginUserDetails) authentication.getPrincipal();
-
-
-        	log.debug("## LoginUserDetailsHelper.getAuthenticatedUser : AuthenticatedUser is {}", details.getUsername());
-
-	        return details;
-        } else {
-        	return authentication.getPrincipal();
-        }*/
         if (authentication.getPrincipal() instanceof SessionUser) {
         	SessionUser details = (SessionUser) authentication.getPrincipal();
-
-
-        	log.debug("## LoginUserDetailsHelper.getAuthenticatedUser : AuthenticatedUser is {}", details.getUsername());
-
 	        return details;
         } else {
-        	log.debug("## #############################");
+        	log.debug("## LoginUserDetailsHelper.getAuthenticatedUser : AuthenticatedUser is Not SessionUser");
         	return authentication.getPrincipal();
         }
     }

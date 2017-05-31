@@ -1,7 +1,6 @@
 package com.flexink.common.utils;
 
 import org.apache.commons.collections.map.ListOrderedMap;
-import org.apache.ibatis.type.Alias;
 
 public class EgovMap extends ListOrderedMap{
 

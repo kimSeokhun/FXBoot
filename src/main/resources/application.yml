@@ -37,7 +37,21 @@ spring:
   # Profile
   profiles:
     active: local                                               # profile 수동 설정
-      
+  # JPA
+  jpa:
+    properties:
+      hibernate: 
+        cache: 
+          use_second_level_cache: true
+          use_query_cache: true
+          region: 
+            factory_class: org.hibernate.cache.ehcache.EhCacheRegionFactory
+        generate_statistics: true
+      javax: 
+        persistence: 
+          sharedCache: 
+            mode: ALL
+    
 # Security
 security:
   basic:
@@ -88,7 +102,6 @@ logging:
     com.flexink: DEBUG
     jdbc.sqlonly: DEBUG
     jdbc.resultsettable: DEBUG
-
 ---
 ###### 로컬 환경 ######
 server:
@@ -99,6 +112,7 @@ spring:
     hibernate:
       ddl-auto: create-drop
     show-sql: false
+    database-platform: org.hibernate.dialect.H2Dialect #dialect
   devtools:
     livereload:
       enabled: true
@@ -110,7 +124,6 @@ spring:
     url: jdbc:log4jdbc:h2:~/test/db
     username: sa
     password: 
-
     
 ---
 ###### 개발 환경 ######

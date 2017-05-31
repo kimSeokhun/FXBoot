@@ -18,7 +18,7 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Service
-public class BoardTypeService extends BaseService<BoardType, Long>{
+public class BoardTypeService extends BaseService<BoardType, String>{
 	
 	@Autowired
 	public BoardTypeService(BoardTypeRepository repository) {
@@ -48,6 +48,18 @@ public class BoardTypeService extends BaseService<BoardType, Long>{
 	
 	public void saveBoardType(List<BoardType> boardTypes) {
 		save(boardTypes);
+	}
+	
+	
+	
+	public void saveBt(BoardType boardType) {
+		getEntityManager().persist(boardType);
+		//insert(boardType);
+	}
+	
+	public BoardType getBt(String id) {
+		return repository.findOne(id);
+				
 	}
 
 	

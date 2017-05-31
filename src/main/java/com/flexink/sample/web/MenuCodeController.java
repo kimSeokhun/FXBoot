@@ -3,9 +3,7 @@ package com.flexink.sample.web;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -31,7 +29,7 @@ public class MenuCodeController {
 	 ********************************************************************/
 	@GetMapping
 	public String viewMenu() {
-		return "/sample/menu";
+		return "/sample/menuMng";
 	}
 	
 	/********************************************************************
@@ -41,8 +39,8 @@ public class MenuCodeController {
 	 ********************************************************************/
 	@GetMapping(value="menus", consumes=MediaType.APPLICATION_JSON_UTF8_VALUE)
 	@ResponseBody
-	public ResponseEntity<List<Menu>> getMenus(ParamsVo params) {
-		return new ResponseEntity<List<Menu>>(menuService.getMenus(params), HttpStatus.OK);
+	public List<Menu> getMenus(ParamsVo params) {
+		return menuService.getMenus(params);
 	}
 	
 	/********************************************************************

@@ -15,7 +15,7 @@
   <div class="register-box-body">
     <p class="login-box-msg">Register a new membership</p>
 
-    <form:form action="register" method="post" commandName="loginUserDetails">
+    <form:form action="register" method="post" commandName="user">
       <div class="form-group has-feedback <form:errors path="${securityUsername}">has-error</form:errors>">
         <form:input type="text" class="form-control" placeholder="User ID" path="${securityUsername}" />
         <span class="glyphicon glyphicon-user form-control-feedback"></span>

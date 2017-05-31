@@ -8,7 +8,6 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.catalina.Context;
 import org.apache.tomcat.util.http.LegacyCookieProcessor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.embedded.ConfigurableEmbeddedServletContainer;
 import org.springframework.boot.context.embedded.EmbeddedServletContainerCustomizer;
 import org.springframework.boot.context.embedded.tomcat.TomcatContextCustomizer;
@@ -35,23 +34,18 @@ import org.springframework.web.servlet.i18n.LocaleChangeInterceptor;
 import org.springframework.web.servlet.i18n.SessionLocaleResolver;
 
 import com.flexink.common.error.ErrorController;
-import com.flexink.common.interceptor.MultipartInterceptor;
+import com.flexink.common.interceptor.LogInterceptor;
 import com.flexink.config.resolver.ParamsVoArgumentResolver;
 
 
 @Configuration
 public class WebConfig extends WebMvcConfigurerAdapter {
 	
-	@Autowired
-	private MultipartInterceptor multipartInterceptor;
-	
 	@Override
 	public void addViewControllers(ViewControllerRegistry registry) {
-		//registry.addViewController("/security/login").setViewName("/login/login");
 		registry.addViewController("/").setViewName("/index.jsp");
 	}
 	
-
 	/********************************************************************
 	 * @메소드명	: siteMeshFilter
 	 * @작성자	: KIMSEOKHOON
@@ -71,9 +65,9 @@ public class WebConfig extends WebMvcConfigurerAdapter {
 	 ********************************************************************/
 	@Override
 	public void addInterceptors(InterceptorRegistry registry) {
-		registry.addInterceptor(multipartInterceptor).addPathPatterns("/**");
 		registry.addInterceptor(csrfTokenAddingInterceptor()).addPathPatterns("/**");
 		registry.addInterceptor(localeChangeInterceptor()).addPathPatterns("/**");
+		registry.addInterceptor(new LogInterceptor()).addPathPatterns("/**");
 	}
 	
 	/********************************************************************
@@ -114,14 +108,6 @@ public class WebConfig extends WebMvcConfigurerAdapter {
 	 * @return
 	 * ResourceBundleMessageSource
 	 ********************************************************************/
-	/*@Bean
-	public ResourceBundleMessageSource messageSource() {
-		ResourceBundleMessageSource messageSource = new ResourceBundleMessageSource();
-		messageSource.setBasename("messages/messages");
-		messageSource.setDefaultEncoding("UTF-8");
-		return messageSource;
-	}*/
-	
 	@Bean
 	public ReloadableResourceBundleMessageSource messageSource(){
 		ReloadableResourceBundleMessageSource messageSource = new ReloadableResourceBundleMessageSource();
@@ -141,7 +127,6 @@ public class WebConfig extends WebMvcConfigurerAdapter {
 	 ********************************************************************/
 	@Bean
 	public MessageSourceAccessor messageSourceAccessor(){
-		//ResourceBundleMessageSource messageSource = messageSource();
 		ReloadableResourceBundleMessageSource messageSource = messageSource();
 		return new MessageSourceAccessor(messageSource);
 	}
@@ -205,24 +190,6 @@ public class WebConfig extends WebMvcConfigurerAdapter {
 		};
     }
 	
-	/*@Bean
-	public CommonsMultipartResolver filterMultipartResolver() {
-		CommonsMultipartResolver multipartResolver = new CommonsMultipartResolver();
-		multipartResolver.setDefaultEncoding("UTF-8");
-		return multipartResolver;
-	}*/
-	/*@Bean
-	MultipartConfigElement MultipartConfigElement() {
-	    MultipartConfigFactory factory = new MultipartConfigFactory();
-
-	    return factory.createMultipartConfig();
-	}
-
-	@Bean
-	public MultipartResolver multipartResolver() {
-	    return new StandardServletMultipartResolver();
-	}*/
-
 	
 	/********************************************************************
 	 * @메소드명	: addResourceHandlers

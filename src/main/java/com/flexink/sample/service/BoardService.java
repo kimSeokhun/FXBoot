@@ -16,6 +16,7 @@ import com.flexink.config.web.security.user.UserDetailsHelper;
 import com.flexink.domain.board.Board;
 import com.flexink.domain.board.BoardType;
 import com.flexink.domain.board.QBoard;
+import com.flexink.domain.board.QBoardType;
 import com.flexink.domain.board.QComment;
 import com.flexink.domain.board.repository.BoardSampleRepository;
 import com.flexink.domain.file.CommonFile;
@@ -42,6 +43,7 @@ public class BoardService extends BaseService<Board, Long>{
 	
 	QBoard qBoard = QBoard.board;
 	QComment qComment = QComment.comment;
+	QBoardType qBoardType = QBoardType.boardType;
 	
 	/********************************************************************
 	 * @메소드명	: getList
@@ -114,14 +116,8 @@ public class BoardService extends BaseService<Board, Long>{
 		 *	@ SpringData JPA
 		 *	Board article = repository.findOne(board.getId());
 		 ********************************************************************************************/
-		System.out.println("#############################################################");
-		System.out.println("#############################################################");
-		System.out.println("#############################################################");
 		// QueryDsl
-		Board article = query().from(qBoard).where(qBoard.id.eq(board.getId())).fetchOne();
-		System.out.println("#############################################################");
-		System.out.println("#############################################################");
-		System.out.println("#############################################################");
+		Board article = query().from(qBoard).join(qBoard.type, qBoardType).fetchJoin().where(qBoard.id.eq(board.getId())).fetchOne();
 		
 		return article;
 	}

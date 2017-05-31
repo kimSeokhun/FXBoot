@@ -12,7 +12,6 @@
 	/>
 	
 	<cache name="SampleCache"
-		   maxEntriesLocalHeap="200"
 		   timeToLiveSeconds="600"
 	/>
 	
@@ -33,7 +32,15 @@
 	/>
 	
 	<cache name="jpaMenu"
-		   maxElementsInMemory="10000"
+		   maxElementsInMemory="1000"
+		   eternal="false"
+		   timeToIdleSeconds="600"
+		   timeToLiveSeconds="600"
+		   overflowToDisk="false"
+	/>
+	
+	<cache name="com.flexink.domain.board.BoardType"
+		   maxElementsInMemory="1000"
 		   eternal="false"
 		   timeToIdleSeconds="600"
 		   timeToLiveSeconds="600"

@@ -12,7 +12,6 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.flexink.common.code.FxBootType;
 import com.flexink.common.code.FxBootType.Used;
 import com.flexink.common.domain.BaseService;
 import com.flexink.domain.code.CommonCode;

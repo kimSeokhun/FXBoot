@@ -67,7 +67,7 @@ public class Board extends BaseJpaModel<Long> {
 	@Column(name="DEL_YN", length=1)
 	private DelYn delYn = DelYn.N;
 	
-	@OneToMany(mappedBy="board", orphanRemoval=true, cascade=CascadeType.ALL, fetch=FetchType.EAGER)
+	@OneToMany(mappedBy="board", orphanRemoval=true, cascade=CascadeType.ALL, fetch=FetchType.LAZY)
 	@JsonBackReference
 	private List<Comment> comments = new ArrayList<Comment>();
 	
@@ -78,10 +78,6 @@ public class Board extends BaseJpaModel<Long> {
 		this.comments.add(comment);
 	}
 
-	public enum Type {
-		SAMPLE
-	}
-	
 	public enum Secret {
 		Y, N
 	}

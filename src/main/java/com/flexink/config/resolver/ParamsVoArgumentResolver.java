@@ -12,12 +12,12 @@ import com.flexink.vo.ParamsVo;
 public class ParamsVoArgumentResolver implements HandlerMethodArgumentResolver {
     @Override
     public boolean supportsParameter(MethodParameter parameter) {
-        return CommonVo.class.isAssignableFrom(parameter.getParameterType());
+        return ParamsVo.class.isAssignableFrom(parameter.getParameterType());
     }
 
     @Override
     public Object resolveArgument(MethodParameter parameter, ModelAndViewContainer mavContainer, NativeWebRequest webRequest, WebDataBinderFactory binderFactory) throws Exception {
-        ParamsVo paramsVo = new ParamsVo();;
+        ParamsVo paramsVo = new ParamsVo();
         paramsVo.setParameterMap(webRequest.getParameterMap());
         return paramsVo;
     }

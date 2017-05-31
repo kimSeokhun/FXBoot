@@ -8,8 +8,9 @@ public class CommonVo {
 	private SessionUser sessionUser;
 	
 	public CommonVo() {
-		if(UserDetailsHelper.getAuthenticatedUser() instanceof SessionUser) {
-			this.sessionUser = (SessionUser) UserDetailsHelper.getAuthenticatedUser();
+		Object authenticatedObj = UserDetailsHelper.getAuthenticatedUser();
+		if(authenticatedObj instanceof SessionUser) {
+			this.sessionUser = (SessionUser) authenticatedObj;
 		} else {
 			this.sessionUser = null;
 		}

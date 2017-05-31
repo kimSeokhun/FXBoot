@@ -202,6 +202,8 @@ public class BoardController {
 	@PostMapping(value="/article/comment")
 	@ResponseBody
 	public boolean saveComment(ParamsVo params, Comment comment) {
+		System.out.println(params);
+		System.out.println(comment);
 		commentSampleService.saveComment(params, comment);
 		return true;
 	}

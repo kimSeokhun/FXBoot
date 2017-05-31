@@ -6,7 +6,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
-import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -17,7 +16,6 @@ import com.flexink.domain.menu.repository.MenuRepository;
 import com.flexink.vo.ParamsVo;
 import com.querydsl.core.BooleanBuilder;
 
-@EnableCaching
 @Service
 public class MenuCodeService extends BaseService<Menu, Long>{
 
@@ -46,7 +44,6 @@ public class MenuCodeService extends BaseService<Menu, Long>{
 			builder.and(qMenu.menuNm.likeIgnoreCase(filter));
 			builder.and(qMenu.progUrl.likeIgnoreCase(filter));
 		}
-		
 		return query().from(qMenu).where(builder).orderBy(qMenu.level.asc(), qMenu.sort.asc()).fetch();
 		
 	}
@@ -67,12 +64,13 @@ public class MenuCodeService extends BaseService<Menu, Long>{
 	 ********************************************************************/
 	@Cacheable(cacheNames="menuCode", key="#menu.menuGrpCd")
 	public List<Menu> getTagLibMenus(Menu menu) {
-		List<Menu> list = query().from(qMenu)
+		QMenu sMenu = new QMenu("sMenu");
+		List<Menu> list = query().distinct().from(qMenu).leftJoin(qMenu.children, sMenu).fetchJoin()
 				.where(qMenu.menuGrpCd.eq(menu.getMenuGrpCd())
 				.and(qMenu.useYn.eq(menu.getUseYn())
 				.and(qMenu.level.eq(0))))
 				.orderBy(qMenu.level.asc(), qMenu.sort.asc())
-				.fetch(); 
+				.fetch();
 		return list;
 	}
 	

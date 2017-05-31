@@ -1,5 +1,6 @@
 package com.flexink.domain.board;
 
+import javax.persistence.Cacheable;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -19,6 +20,7 @@ import lombok.NoArgsConstructor;
 @DynamicInsert
 @DynamicUpdate
 @EqualsAndHashCode(callSuper = true)
+@Cacheable
 @Entity
 @Table(name="BOARD_TYPE")
 public class BoardType extends BaseJpaModel<String> {

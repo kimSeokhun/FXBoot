@@ -15,7 +15,7 @@ import com.flexink.common.utils.ArrayUtils;
 import lombok.ToString;
 
 @ToString
-public class ParamsVo extends CommonVo {
+public class ParamsVo {
 
 	private Map<String, Object> map;
 	private List<Sort.Order> sortOrders = new ArrayList<>();

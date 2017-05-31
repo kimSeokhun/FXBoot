@@ -9,7 +9,10 @@ import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 import javax.persistence.UniqueConstraint;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 import lombok.Data;
 import lombok.ToString;
@@ -20,12 +23,26 @@ import lombok.ToString;
 @ToString(exclude = "userRoles")
 public class User {
 
+	public User() {
+		this.accountNonExpired = true;
+		this.accountNonLocked = true;
+		this.credentialsNonExpired = true;
+		this.enabled = true;
+	}
+	
+	@Size(min=2, max=20)
+	@NotNull
 	@Id
 	@Column(name="USERNAME", unique=true, length=50)
 	private String username;
 
+	@Size(min=4)
+	@NotNull
 	@Column(name="PASSWORD", length=200)
 	private String password;
+	
+	@Transient
+	private String retypePassword;
 	
 	@Column(name="EMAIL", length=100)
 	private String email;

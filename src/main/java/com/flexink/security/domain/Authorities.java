@@ -27,7 +27,6 @@ public class Authorities {
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "USERNAME")
   private User user;
-  //private LoginUserDetails user;
 
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "ROLE_ID")

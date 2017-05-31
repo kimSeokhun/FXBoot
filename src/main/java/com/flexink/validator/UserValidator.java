@@ -1,4 +1,4 @@
-package com.flexink.config.web.security.user;
+package com.flexink.validator;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -8,10 +8,10 @@ import org.springframework.validation.Errors;
 import org.springframework.validation.ValidationUtils;
 import org.springframework.validation.Validator;
 
-import com.flexink.domain.sec.LoginUserDetails;
+import com.flexink.security.domain.User;
 
 /**************************************************************
- * @FileName	: LoginUserValidator.java
+ * @FileName	: UserValidator.java
  * @Project		: fxBoot
  * @Package_Name: com.flexink.config.web.security.user
  * @Date		: 2017. 3. 23. 
@@ -19,12 +19,12 @@ import com.flexink.domain.sec.LoginUserDetails;
  * @변경이력		:
  * @프로그램 설명 	: 사용자 커스텀 validator
  **************************************************************/
-public class LoginUserValidator implements Validator{
+public class UserValidator implements Validator{
 
 	@Override
 	public boolean supports(Class<?> clazz) {
 		// TODO Auto-generated method stub
-		return LoginUserDetails.class.isAssignableFrom(clazz);
+		return User.class.isAssignableFrom(clazz);
 	}
 
 	@Override
@@ -33,7 +33,7 @@ public class LoginUserValidator implements Validator{
 		ValidationUtils.rejectIfEmptyOrWhitespace(errors, "username", "common.required.msg", new Object[]{"ID"});
 		ValidationUtils.rejectIfEmptyOrWhitespace(errors, "password", "common.required.msg", new Object[]{"password"});
 		
-		LoginUserDetails user = (LoginUserDetails) target;
+		User user = (User) target;
 		
 		if(!user.getPassword().equals(user.getRetypePassword())) {
 			errors.rejectValue("retypePassword", "fail.user.passwordUpdate2", "password unmatchie");
