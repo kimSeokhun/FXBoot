@@ -3,9 +3,11 @@ package com.flexink.sample.service;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
+import org.hibernate.jpa.QueryHints;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.flexink.common.domain.BaseService;
 import com.flexink.domain.board.BoardType;
@@ -33,7 +35,7 @@ public class BoardTypeService extends BaseService<BoardType, String>{
 	}
 	
 	public BoardType getBoardType(BoardType boardType) {
-		return query().from(qBoardType).where(qBoardType.type.eq(boardType.getType())).fetchOne();
+		return query().from(qBoardType).where(qBoardType.type.eq(boardType.getType())).setHint(QueryHints.HINT_CACHEABLE, true).fetchOne();
 				
 	}
 	
@@ -43,7 +45,7 @@ public class BoardTypeService extends BaseService<BoardType, String>{
 		if(StringUtils.isNotBlank(filter)) {
 			builder.and(qBoardType.type.eq(filter));
 		}
-		return (Page<BoardType>) readPage(query().from(qBoardType).where(builder), params.getPageable());
+		return (Page<BoardType>) readPage(query().from(qBoardType).where(builder).setHint(QueryHints.HINT_CACHEABLE, true), params.getPageable());
 	}
 	
 	public void saveBoardType(List<BoardType> boardTypes) {
@@ -52,14 +54,17 @@ public class BoardTypeService extends BaseService<BoardType, String>{
 	
 	
 	
+	@Transactional
 	public void saveBt(BoardType boardType) {
-		getEntityManager().persist(boardType);
+		//getEntityManager().persist(boardType);
 		//insert(boardType);
+		repository.save(boardType);
 	}
 	
+	@Transactional
 	public BoardType getBt(String id) {
-		return repository.findOne(id);
-				
+		//return repository.findOne(id);
+		return query().from(qBoardType).where(qBoardType.type.eq(id)).setHint(QueryHints.HINT_CACHEABLE, true).fetchOne();
 	}
 
 	

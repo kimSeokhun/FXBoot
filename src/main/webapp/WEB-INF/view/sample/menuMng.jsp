@@ -299,7 +299,7 @@
 			   	     	if(o.parentId == "top") {
 		   	        		o.parentId = null;	
 	   	        		}
-		   	     	});		   	        
+		   	     	});
 		   	        $.ajax({
 		   	        	method: "PUT",
 		   	            url: API_SERVER + "/system/menuMng/menus",

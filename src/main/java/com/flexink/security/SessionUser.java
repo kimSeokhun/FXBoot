@@ -8,15 +8,12 @@ import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.hierarchicalroles.RoleHierarchyImpl;
 import org.springframework.security.core.CredentialsContainer;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.SpringSecurityCoreVersion;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.util.Assert;
 
-import com.flexink.config.web.security.user.UserDetailsHelper;
 import com.flexink.security.domain.User;
 
 import lombok.AllArgsConstructor;
@@ -26,12 +23,8 @@ import lombok.Data;
 @AllArgsConstructor
 public class SessionUser implements UserDetails, CredentialsContainer{
 
-	@Autowired
-	RoleHierarchyImpl roleHierarchyImpl;
-	
 	private static final long serialVersionUID = SpringSecurityCoreVersion.SERIAL_VERSION_UID;
 	
-	//private User user;
 	private String password;
 	private final String username;
 	private final Set<GrantedAuthority> authorities;
@@ -41,7 +34,6 @@ public class SessionUser implements UserDetails, CredentialsContainer{
 	private final boolean enabled;
 	
 	public SessionUser(User user, Collection<? extends GrantedAuthority> authorities) {
-		//this.user = user;
 		this.password = user.getPassword();
 		this.username = user.getUsername();
 		this.enabled = user.isEnabled();

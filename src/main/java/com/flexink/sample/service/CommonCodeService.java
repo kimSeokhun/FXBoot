@@ -3,6 +3,7 @@ package com.flexink.sample.service;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
+import org.hibernate.jpa.QueryHints;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
@@ -90,7 +91,7 @@ public class CommonCodeService extends BaseService<CommonCode, CommonCodeId> {
         
         //List<Tuple> result = query().select(qCommonCode.data1, qCommonCode.data2).from(qCommonCode).fetch();
         
-        Page<CommonCode> list = (Page<CommonCode>) readPage(query().from(qCommonCode).where(builder), paramsVo.getPageable());
+        Page<CommonCode> list = (Page<CommonCode>) readPage(query().from(qCommonCode).where(builder).setHint(QueryHints.HINT_CACHEABLE, true), paramsVo.getPageable());
         return list;
     }
     

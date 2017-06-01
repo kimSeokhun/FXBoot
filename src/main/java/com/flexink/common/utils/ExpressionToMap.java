@@ -56,7 +56,7 @@ public class ExpressionToMap {
 			String getKey = getKey(newKey); 
 			map.put(getKey, value);
 		}
-		log.debug(map.toString());
+		//log.debug(map.toString());
 		return map;
 	}
 	

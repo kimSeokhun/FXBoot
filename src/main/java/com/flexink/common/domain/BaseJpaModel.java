@@ -79,7 +79,6 @@ public abstract class BaseJpaModel<PK extends Serializable> extends FxBootCrudMo
     	SessionUser user = null;
     	Object obj = UserDetailsHelper.getAuthenticatedUser();
     	if(obj != null && !obj.equals("anonymousUser")) {
-    		//user = (LoginUserDetails) obj;
     		user = (SessionUser) obj;
     	}
     	return user == null ? "anonymous" : user.getUsername();

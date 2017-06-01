@@ -3,6 +3,7 @@ package com.flexink.sample.service;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
+import org.hibernate.jpa.QueryHints;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
@@ -44,7 +45,7 @@ public class MenuCodeService extends BaseService<Menu, Long>{
 			builder.and(qMenu.menuNm.likeIgnoreCase(filter));
 			builder.and(qMenu.progUrl.likeIgnoreCase(filter));
 		}
-		return query().from(qMenu).where(builder).orderBy(qMenu.level.asc(), qMenu.sort.asc()).fetch();
+		return query().from(qMenu).where(builder).orderBy(qMenu.level.asc(), qMenu.sort.asc()).setHint(QueryHints.HINT_CACHEABLE, true).fetch();
 		
 	}
 	
@@ -65,11 +66,13 @@ public class MenuCodeService extends BaseService<Menu, Long>{
 	@Cacheable(cacheNames="menuCode", key="#menu.menuGrpCd")
 	public List<Menu> getTagLibMenus(Menu menu) {
 		QMenu sMenu = new QMenu("sMenu");
-		List<Menu> list = query().distinct().from(qMenu).leftJoin(qMenu.children, sMenu).fetchJoin()
+		List<Menu> list = query().distinct().from(qMenu)
+				.leftJoin(qMenu.children, sMenu)
+				.fetchJoin()
 				.where(qMenu.menuGrpCd.eq(menu.getMenuGrpCd())
-				.and(qMenu.useYn.eq(menu.getUseYn())
+				.and(qMenu.useYn.eq(Menu.UseYn.Y)
 				.and(qMenu.level.eq(0))))
-				.orderBy(qMenu.level.asc(), qMenu.sort.asc())
+				.orderBy(qMenu.level.asc(), qMenu.sort.asc(), sMenu.level.asc(), sMenu.sort.asc())
 				.fetch();
 		return list;
 	}

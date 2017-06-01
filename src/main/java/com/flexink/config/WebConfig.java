@@ -43,7 +43,7 @@ public class WebConfig extends WebMvcConfigurerAdapter {
 	
 	@Override
 	public void addViewControllers(ViewControllerRegistry registry) {
-		registry.addViewController("/").setViewName("/index.jsp");
+		registry.addViewController("/").setViewName("/index");
 	}
 	
 	/********************************************************************

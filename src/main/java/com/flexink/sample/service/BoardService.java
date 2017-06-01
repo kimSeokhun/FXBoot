@@ -50,6 +50,7 @@ public class BoardService extends BaseService<Board, Long>{
 	 * @작성자	: KIMSEOKHOON
 	 * @메소드 내용	: 글목록 조회
 	 ********************************************************************/
+	@Transactional
 	public Page<Map<String, Object>> getList(ParamsVo params) {
 		BoardType boardType = boardTypeService.getBoardType(params.getString("type"));
 		BooleanBuilder builder = new BooleanBuilder();
@@ -73,7 +74,6 @@ public class BoardService extends BaseService<Board, Long>{
 				.where(builder.and(qBoard.delYn.eq(Board.DelYn.N)))
 				.orderBy(qBoard.id.desc())
 				, params.getPageable());
-		log.debug("Page<Map<String, Object>> : " + mapList.getContent());
 		
 		// Page<vo>
 		//Page<BoardVo> voList = (Page<BoardVo>) readPage(query().select(Projections.bean(BoardVo.class, qBoard.title, qBoard.content, qBoard.comments.size().as("commentCount"))).from(qBoard).where(builder).orderBy(qBoard.id.desc()),  params.getPageable());

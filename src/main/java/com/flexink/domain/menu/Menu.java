@@ -3,7 +3,6 @@ package com.flexink.domain.menu;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.persistence.Cacheable;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -12,33 +11,21 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Transient;
-
-import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
-import org.hibernate.annotations.DynamicInsert;
-import org.hibernate.annotations.DynamicUpdate;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.flexink.common.domain.BaseJpaModel;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
-@AllArgsConstructor
-@DynamicInsert
-@DynamicUpdate
 @Entity
-@Cache(usage=CacheConcurrencyStrategy.READ_WRITE, region="jpaMenu")
 @EqualsAndHashCode(callSuper = true)
 @Table(name = "MENU")
 public class Menu extends BaseJpaModel<Long> {
@@ -79,7 +66,6 @@ public class Menu extends BaseJpaModel<Long> {
     @Enumerated(EnumType.STRING)
     private UseYn viewAnony = UseYn.N;
 
-//    @Cache(usage=CacheConcurrencyStrategy.READ_WRITE)
     @JsonIgnore
     @OneToMany(fetch=FetchType.LAZY, mappedBy="parentId")
     private List<Menu> children = new ArrayList<>();
@@ -91,6 +77,9 @@ public class Menu extends BaseJpaModel<Long> {
     public Long getPid() {
         return parentId;
     }
+    
+    @Transient
+    public boolean hidden;
     
     public void addChildren(Menu menu) {
         children.add(menu);

@@ -16,7 +16,6 @@ import org.hibernate.annotations.DynamicUpdate;
 import com.flexink.common.code.FxBootType;
 import com.flexink.common.domain.BaseJpaModel;
 
-import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -27,7 +26,6 @@ import lombok.Setter;
 @Entity
 @Table(name = "COMMON_CODE")
 @IdClass(CommonCodeId.class)
-@EqualsAndHashCode
 public class CommonCode extends BaseJpaModel<CommonCodeId> {
 
     @Id

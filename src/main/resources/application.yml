@@ -36,7 +36,7 @@ spring:
       connection-init-sql: SELECT 1
   # Profile
   profiles:
-    active: local                                               # profile 수동 설정
+    active: development                                               # profile 수동 설정
   # JPA
   jpa:
     properties:
@@ -51,6 +51,7 @@ spring:
         persistence: 
           sharedCache: 
             mode: ALL
+    open-in-view: false
     
 # Security
 security:
@@ -102,6 +103,7 @@ logging:
     com.flexink: DEBUG
     jdbc.sqlonly: DEBUG
     jdbc.resultsettable: DEBUG
+    
 ---
 ###### 로컬 환경 ######
 server:
@@ -132,11 +134,13 @@ spring:
   jpa:
     hibernate:
       ddl-auto: validate
+    database-platform: org.hibernate.dialect.MySQLDialect
   # DB 정보    
   datasource:
-    url: 
-    username: 
-    password: 
+    driver-class-name: com.mysql.jdbc.Driver
+    url: jdbc:mysql://192.168.0.238:3306/sample
+    username: root
+    password: Mkdo7860!
 
 # Log Level
 logging:

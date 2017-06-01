@@ -57,7 +57,6 @@ public class BoardController {
 	public String view(@PathVariable String boardType, ParamsVo params, ModelMap model) {
 		params.put("type", boardType);
 		model.put("list", boardSampleService.getList(params));
-		model.put("type", boardType);
 		return "/sample/boardList";
 	}
 	
@@ -95,7 +94,7 @@ public class BoardController {
 	/********************************************************************
 	 * @메소드명	: saveAriticle
 	 * @작성자	: KIMSEOKHOON
-	 * @메소드 내용	: 글 등록 (form 전용, Input type=file 형식)
+	 * @메소드 내용	: 글 등록 및 수정
 	 ********************************************************************/
 	@PostMapping("/{boardType}/article")
 	public String saveAriticle(@PathVariable String boardType, MultipartHttpServletRequest request, ParamsVo params, Board board) throws IOException {
@@ -140,59 +139,6 @@ public class BoardController {
         return "redirect:/board/"+boardType;
 	}
 	
-	/********************************************************************
-	 * @메소드명	: saveAriticle
-	 * @작성자	: KIMSEOKHOON
-	 * @메소드 내용	: 글 등록 및 수정 (AxFile 용)
-	 ********************************************************************/
-	/*@PostMapping(value="/article", consumes=MediaType.APPLICATION_FORM_URLENCODED_VALUE)
-	public ResponseEntity<Board> saveAriticle(ParamsVo params, Board board) throws IOException {
-		
-		if(params.getString("secret", "").equalsIgnoreCase("true")) {
-			board.setSecret(Board.Secret.Y);
-		} else {
-			board.setSecret(Board.Secret.N);
-		}
-        
-        boardSampleService.saveArticle(board);
-        
-        // editor에 업로드된 이미지 tempDir -> 디렉토리 수정
-        commonFileService.filePathUpdate(EditorUtils.getImgIds(board.getContent()), editorImgPathKey);
-        
-        // Axfile tempDir -> 디렉토리 수정
-        if(params.getArray("fileIds") != null && params.getArray("fileIds").size() > 0) {
-        	commonFileService.filePathUpdate(params.getArray("fileIds"), fileSavePathKey, board.getType(), board.getId());
-        }
-        
-		return new ResponseEntity<Board>(board, HttpStatus.OK);
-	}*/
-	
-	
-	
-	/********************************************************************
-	 * @메소드명	: updateAriticle
-	 * @작성자	: KIMSEOKHOON
-	 * @메소드 내용	: 글 수정  (form 전용, Input type=file 형식)
-	 ********************************************************************/
-	/*@PostMapping("/formArticle/update")
-	public String updateAriticle(ParamsVo params, @Valid Board board, BindingResult bindingResult) {
-		if(params.getString("secret", "").equalsIgnoreCase("true")) {
-			board.setSecret(Board.Secret.Y);
-		} else {
-			board.setSecret(Board.Secret.N);
-		}
-		
-		// 유효성 검증
-        if (bindingResult.hasErrors()) {
-        	log.debug("Validator Errors : {} ", bindingResult.getAllErrors());
-            return "/sample/boardDetail";
-        }
-        
-        boardSampleService.saveArticle(board);
-		
-        return "redirect:/sample/viewArticle?id="+board.getId();
-	}*/
-	
 	
 	/********************************************************************
 	 * @메소드명	: saveComment
@@ -202,8 +148,6 @@ public class BoardController {
 	@PostMapping(value="/article/comment")
 	@ResponseBody
 	public boolean saveComment(ParamsVo params, Comment comment) {
-		System.out.println(params);
-		System.out.println(comment);
 		commentSampleService.saveComment(params, comment);
 		return true;
 	}

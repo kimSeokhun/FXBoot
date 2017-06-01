@@ -32,30 +32,9 @@ public class BoardTypeController {
 		return "/sample/boardMng";
 	}
     
-    @GetMapping(value="/test")
-    public void test() {
-    	BoardType bt = new BoardType("a");
-    	boardTypeService.saveBt(bt);
-    	
-    	boardTypeService.getBt(bt.getId());
-    	
-    	int size = net.sf.ehcache.CacheManager.ALL_CACHE_MANAGERS.get(0).getCache("com.flexink.domain.board.BoardType").getSize();
-    	System.out.println("!@@@@@@@@@@@@@@@@@@@@@@@@");
-    	System.out.println(size);
-    	System.out.println("!@@@@@@@@@@@@@@@@@@@@@@@@");
-    }
-    
-
     @GetMapping(value="/boardTypes", produces = "application/json; charset=UTF-8")
     @ResponseBody
 	public Page<BoardType> list(ParamsVo paramsVo) {
-    	System.out.println("##############################################");
-    	System.out.println("##############################################");
-    	boardTypeService.getBoardType("SAMPLE");
-    	boardTypeService.getBoardType("SAMPLE");
-    	System.out.println("##############################################");
-    	System.out.println("##############################################");
-    	
         return boardTypeService.getBoardTypes(paramsVo);
     }
 

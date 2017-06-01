@@ -31,22 +31,7 @@
 		   overflowToDisk="false"
 	/>
 	
-	<cache name="jpaMenu"
-		   maxElementsInMemory="1000"
-		   eternal="false"
-		   timeToIdleSeconds="600"
-		   timeToLiveSeconds="600"
-		   overflowToDisk="false"
-	/>
-	
-	<cache name="com.flexink.domain.board.BoardType"
-		   maxElementsInMemory="1000"
-		   eternal="false"
-		   timeToIdleSeconds="600"
-		   timeToLiveSeconds="600"
-		   overflowToDisk="false"
-	/>
-	
+
 	
 	
 </ehcache>
