@@ -33,10 +33,10 @@ spring:
     driver-class-name: net.sf.log4jdbc.sql.jdbcapi.DriverSpy    # query로그 정렬
     hikari:
       idle-timeout: 10000
-      connection-init-sql: SELECT 1
+      connection-init-sql: SELECT 1 FROM DUAL
   # Profile
   profiles:
-    active: development                                               # profile 수동 설정
+    active: local                                               # profile 수동 설정
   # JPA
   jpa:
     properties:
@@ -103,7 +103,17 @@ logging:
     com.flexink: DEBUG
     jdbc.sqlonly: DEBUG
     jdbc.resultsettable: DEBUG
-    
+
+
+#database-platform: org.hibernate.dialect.Oracle10gDialect
+#url: jdbc:log4jdbc:oracle:thin:@192.168.0.238:1521:orcl
+
+#database-platform: org.hibernate.dialect.MySQLDialect
+#url: jdbc:log4jdbc:mysql://192.168.0.238:3306/sample?characterEncoding=UTF-8
+
+#database-platform: org.hibernate.dialect.H2Dialect
+#url: jdbc:log4jdbc:h2:~/test/db
+
 ---
 ###### 로컬 환경 ######
 server:
@@ -123,32 +133,33 @@ spring:
   # DB 정보    
   datasource:
     initialize: true
+    continue-on-error: false
     url: jdbc:log4jdbc:h2:~/test/db
     username: sa
     password: 
-    
+
 ---
 ###### 개발 환경 ######
 spring:
   profiles: development
   jpa:
     hibernate:
-      ddl-auto: validate
+      ddl-auto: create
     database-platform: org.hibernate.dialect.MySQLDialect
   # DB 정보    
   datasource:
-    driver-class-name: com.mysql.jdbc.Driver
-    url: jdbc:mysql://192.168.0.238:3306/sample
+    initialize: false
+    url: jdbc:log4jdbc:mysql://192.168.0.238:3306/sample?characterEncoding=UTF-8
     username: root
     password: Mkdo7860!
-
+    
 # Log Level
 logging:
-  level:
-    root: ERROR
-    org.springframework.web: ERROR
+  level: 
+    root: WARN
+    org.springframework.web: WARN
     org.hibernate.SQLQuery: ERROR
-    com.flexink: ERROR
+    com.flexink: DEBUG
     jdbc.sqlonly: ERROR
     jdbc.resultsettable: ERROR
     

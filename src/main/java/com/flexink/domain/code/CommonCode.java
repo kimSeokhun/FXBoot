@@ -14,6 +14,7 @@ import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
 import com.flexink.common.code.FxBootType;
+import com.flexink.common.code.FxBootType.Used;
 import com.flexink.common.domain.BaseJpaModel;
 
 import lombok.Getter;
@@ -24,7 +25,7 @@ import lombok.Setter;
 @DynamicInsert
 @DynamicUpdate
 @Entity
-@Table(name = "COMMON_CODE")
+@Table(name = "T_COMMON_CODE")
 @IdClass(CommonCodeId.class)
 public class CommonCode extends BaseJpaModel<CommonCodeId> {
 
@@ -73,8 +74,8 @@ public class CommonCode extends BaseJpaModel<CommonCodeId> {
 
     @Column(name = "USE_YN", length = 1)
     @Enumerated(EnumType.STRING)
-    private FxBootType.Used useYn = FxBootType.Used.Y;
-
+    private FxBootType.Used useYn = Used.Y;
+    
     @Override
     public CommonCodeId getId() {
         return CommonCodeId.of(groupCd, code);

@@ -18,7 +18,6 @@ import org.springframework.data.domain.Persistable;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.flexink.config.web.security.user.UserDetailsHelper;
-import com.flexink.domain.sec.LoginUserDetails;
 import com.flexink.security.SessionUser;
 
 import lombok.Getter;
@@ -52,10 +51,10 @@ public abstract class BaseJpaModel<PK extends Serializable> extends FxBootCrudMo
     protected String updatedBy;
 
     @Transient
-    protected LoginUserDetails createdUser;
+    protected SessionUser createdUser;
 
     @Transient
-    protected LoginUserDetails modifiedUser;
+    protected SessionUser modifiedUser;
 
     @PrePersist
     protected void onPersist() {

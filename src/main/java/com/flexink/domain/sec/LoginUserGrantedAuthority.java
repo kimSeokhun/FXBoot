@@ -1,7 +1,6 @@
-package com.flexink.domain.sec;
+/*package com.flexink.domain.sec;
 
 import javax.persistence.Column;
-import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -13,7 +12,7 @@ import org.springframework.security.core.GrantedAuthority;
 import lombok.Data;
 
 @Data
-@Entity
+//@Entity
 @Table(name = "AUTHORITY", uniqueConstraints={
 		@UniqueConstraint(columnNames={"USERNAME", "AUTHORITY"})
 })
@@ -41,3 +40,4 @@ public class LoginUserGrantedAuthority implements GrantedAuthority {
 	
 
 }
+*/

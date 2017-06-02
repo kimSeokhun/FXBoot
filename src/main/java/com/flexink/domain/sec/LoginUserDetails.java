@@ -1,4 +1,4 @@
-package com.flexink.domain.sec;
+/*package com.flexink.domain.sec;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -21,18 +21,18 @@ import org.springframework.security.core.userdetails.UserDetails;
 import lombok.Data;
 
 @Data
-@Entity
+//@Entity
 @Table(name = "USER2")
 public class LoginUserDetails implements UserDetails, Serializable{
 
 	private static final long serialVersionUID = -8507239908294868883L;
 	
-	/*public LoginUserDetails() {
+	public LoginUserDetails() {
 		this.accountNonExpired = true;
 		this.accountNonLocked = true;
 		this.credentialsNonExpired = true;
 		this.enabled = true;
-	}*/
+	}
 
 	@Size(min=2, max=20)
 	@NotNull
@@ -77,3 +77,4 @@ public class LoginUserDetails implements UserDetails, Serializable{
 	}
 
 }
+*/

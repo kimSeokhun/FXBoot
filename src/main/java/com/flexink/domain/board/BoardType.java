@@ -17,7 +17,7 @@ import lombok.NoArgsConstructor;
 @EqualsAndHashCode(callSuper = true)
 @Cacheable
 @Entity
-@Table(name="BOARD_TYPE")
+@Table(name="T_BOARD_TYPE")
 public class BoardType extends BaseJpaModel<String> {
 	
 	public BoardType(String type) {
@@ -31,7 +31,7 @@ public class BoardType extends BaseJpaModel<String> {
 	@Column(length=100)
 	private String name;
 	
-	@Column
+	@Column(name="TYPE_DESC")
 	private String desc;
 
 	@Override

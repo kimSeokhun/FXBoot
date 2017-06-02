@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.Column;
+import javax.persistence.Convert;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.Id;
@@ -14,11 +15,13 @@ import javax.persistence.UniqueConstraint;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
+import com.flexink.converter.BooleanConverter;
+
 import lombok.Data;
 import lombok.ToString;
 
 @Entity
-@Table(name = "USER", uniqueConstraints = @UniqueConstraint(columnNames = "USERNAME"))
+@Table(name = "T_USER", uniqueConstraints = @UniqueConstraint(columnNames = "USERNAME"))
 @Data
 @ToString(exclude = "userRoles")
 public class User {
@@ -51,15 +54,19 @@ public class User {
 	private String phone;
 
 	@Column(name="ACCOUNTNONEXPIRED")
+	@Convert(converter=BooleanConverter.class)
 	private boolean accountNonExpired; 			// 계정 만료 여부 (true:만료되지 않음, false: 만료)
 
 	@Column(name="ACCOUNTNONLOCKED")
+	@Convert(converter=BooleanConverter.class)
 	private boolean accountNonLocked; 			// 계정 잠김 여부 (true:잠기지 않음, false: 잠김)
 
 	@Column(name="CREDENTIALSNONEXPIRED")
+	@Convert(converter=BooleanConverter.class)
 	private boolean credentialsNonExpired;		// 패스워드 만료 여부 (true:만료되지 않음, false:만료)
 
 	@Column(name="ENABLED")
+	@Convert(converter=BooleanConverter.class)
 	private boolean enabled; 					// 계정 사용 여부 (true:사용가능, false:사용불가능)
 
 	@OneToMany(fetch=FetchType.LAZY, mappedBy="user")

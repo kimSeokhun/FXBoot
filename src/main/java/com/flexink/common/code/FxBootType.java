@@ -4,11 +4,11 @@ public class FxBootType {
 	public static final String Y = "Y";
     public static final String N = "N";
 
-    public enum Used {
+    public static enum Used {
         Y, N
     }
 
-    public enum Deleted {
+    public static enum Deleted {
         Y, N;
         
         public static Deleted get(String delYn) {
@@ -21,7 +21,7 @@ public class FxBootType {
     }
     
 
-    public enum DataStatus {
+    public static enum DataStatus {
         CREATED,
         MODIFIED,
         DELETED,

@@ -13,8 +13,10 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.Table;
 import javax.persistence.Transient;
 
 import org.hibernate.validator.constraints.NotEmpty;
@@ -31,8 +33,9 @@ import lombok.ToString;
 @Data
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = true)
-@Entity
 @ToString(exclude={"comments"})
+@Entity
+@Table(name="T_BOARD")
 public class Board extends BaseJpaModel<Long> {
 
 	public Board(Long id) {
@@ -53,7 +56,8 @@ public class Board extends BaseJpaModel<Long> {
 	private String title;
 	
 	@NotEmpty
-	@Column(name="CONTENT", columnDefinition="TEXT")
+	@Column(name="CONTENT")
+	@Lob
 	private String content;
 	
 	@Column(name="VIEW_COUNT")

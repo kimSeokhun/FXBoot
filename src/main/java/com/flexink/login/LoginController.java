@@ -56,6 +56,7 @@ public class LoginController {
 	 ********************************************************************/
 	@GetMapping("/security/login")
 	public String loginPage() {
+		System.out.println("#######################");
 		// 로그인된 사용자면 페이지 Redirect
 		if(UserDetailsHelper.isAuthenticated()) {
 			// 사용자 권한에 맞는 Page 이동

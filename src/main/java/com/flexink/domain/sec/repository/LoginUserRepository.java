@@ -1,4 +1,4 @@
-
+/*
 package com.flexink.domain.sec.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -12,3 +12,4 @@ public interface LoginUserRepository extends JpaRepository<LoginUserDetails, Str
     LoginUserDetails findByUsernameAndPassword(String username, String password);
     
 }
+*/

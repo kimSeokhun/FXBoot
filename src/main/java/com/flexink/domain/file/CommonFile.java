@@ -34,7 +34,7 @@ import lombok.ToString;
 @DynamicUpdate
 @Entity
 @EqualsAndHashCode(callSuper = true)
-@Table(name = "FILE")
+@Table(name = "T_FILE")
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class CommonFile extends BaseJpaModel<Long>{
 	
@@ -50,7 +50,7 @@ public class CommonFile extends BaseJpaModel<Long>{
 	
     @Id
     @Column(name="ID")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
     @Column(name="TARGET_TYPE", length=50)
@@ -61,11 +61,11 @@ public class CommonFile extends BaseJpaModel<Long>{
     //Comment(value = "타겟 ID")
     private String targetId;
 
-    @Column(name="FILE_NM", columnDefinition="TEXT")
+    @Column(name="FILE_NM")
     //Comment(value = "실제 파일명")
     private String fileNm;
 
-    @Column(name="SAVE_NM", columnDefinition="TEXT")
+    @Column(name="SAVE_NM")
     //Comment(value = "저장 파일명")
     private String saveNm;
     
@@ -89,7 +89,7 @@ public class CommonFile extends BaseJpaModel<Long>{
     //Comment(value = "삭제여부")
     private Deleted delYn = Deleted.N;
 
-    @Column(name="FILE_DESC", columnDefinition = "TEXT")
+    @Column(name="FILE_DESC")
     //Comment(value = "설명")
     private String desc;
 

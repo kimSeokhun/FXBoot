@@ -18,7 +18,7 @@ import lombok.ToString;
 @Data
 @ToString(exclude = {"authorities", "roleResources"})
 @Entity
-@Table(name="ROLE")
+@Table(name="T_ROLE")
 public class Role {
 
 	@Id

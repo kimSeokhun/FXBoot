@@ -27,7 +27,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Entity
 @EqualsAndHashCode(callSuper = true)
-@Table(name = "MENU")
+@Table(name = "T_MENU")
 public class Menu extends BaseJpaModel<Long> {
 
     @Id
@@ -44,7 +44,7 @@ public class Menu extends BaseJpaModel<Long> {
     @Column(name = "PARENT_ID", precision = 19)
     private Long parentId;
 
-    @Column(name = "LEVEL", precision = 10)
+    @Column(name = "D_LEVEL", precision = 10)
     @JsonProperty("__depth__")
     private Integer level;
 

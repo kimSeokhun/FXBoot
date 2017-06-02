@@ -10,7 +10,9 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 
 import com.flexink.common.domain.BaseJpaModel;
 
@@ -20,6 +22,7 @@ import lombok.EqualsAndHashCode;
 @Data
 @EqualsAndHashCode(callSuper = true)
 @Entity
+@Table(name="T_COMMENT")
 public class Comment extends BaseJpaModel<Long> {
 
 	@Id
@@ -33,7 +36,8 @@ public class Comment extends BaseJpaModel<Long> {
 	@Column(name="PASSWORD", length=100)
 	private String password;
 	
-	@Column(name="CONTENT", columnDefinition="TEXT", nullable=false)
+	@Column(name="CONTENT", nullable=false)
+	@Lob
 	private String content;
 	
 	@Enumerated(EnumType.STRING)
