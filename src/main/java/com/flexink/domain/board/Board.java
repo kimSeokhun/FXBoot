@@ -22,6 +22,8 @@ import javax.persistence.Transient;
 import org.hibernate.validator.constraints.NotEmpty;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.flexink.common.code.FxBootType.Deleted;
+import com.flexink.common.code.FxBootType.Secret;
 import com.flexink.common.domain.BaseJpaModel;
 import com.flexink.domain.file.CommonFile;
 
@@ -69,7 +71,7 @@ public class Board extends BaseJpaModel<Long> {
 	
 	@Enumerated(EnumType.STRING)
 	@Column(name="DEL_YN", length=1)
-	private DelYn delYn = DelYn.N;
+	private Deleted delYn = Deleted.N;
 	
 	@OneToMany(mappedBy="board", orphanRemoval=true, cascade=CascadeType.ALL, fetch=FetchType.LAZY)
 	@JsonBackReference
@@ -82,12 +84,5 @@ public class Board extends BaseJpaModel<Long> {
 		this.comments.add(comment);
 	}
 
-	public enum Secret {
-		Y, N
-	}
-	
-	public enum DelYn {
-		Y, N
-	}
 	
 }

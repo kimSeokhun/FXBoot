@@ -20,6 +20,10 @@ public class FxBootType {
         }
     }
     
+    public static enum Secret {
+		Y, N
+	}
+    
 
     public static enum DataStatus {
         CREATED,

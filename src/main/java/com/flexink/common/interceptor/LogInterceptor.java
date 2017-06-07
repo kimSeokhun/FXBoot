@@ -6,9 +6,8 @@ import javax.servlet.http.HttpServletResponse;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
-import com.flexink.common.utils.HttpUtils;
 import com.flexink.config.web.security.user.UserDetailsHelper;
-import com.flexink.security.SessionUser;
+import com.flexink.security.SessionUserDetail;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -19,7 +18,7 @@ public class LogInterceptor extends HandlerInterceptorAdapter {
 	@Override
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object obj) throws Exception {
 		if (log.isDebugEnabled()) {
-			SessionUser sessionUser = UserDetailsHelper.getLoginUserDetails();
+			SessionUserDetail sessionUser = UserDetailsHelper.getLoginUserDetails();
 			log.debug("======================================          START         ======================================");
 			log.debug("Request URI \t:  " + request.getRequestURI());
 			//log.debug("Request IP Address :  " + HttpUtils.getRemoteAddress(request));

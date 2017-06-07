@@ -1,18 +1,18 @@
 package com.flexink.vo;
 
 import com.flexink.config.web.security.user.UserDetailsHelper;
-import com.flexink.security.SessionUser;
+import com.flexink.security.SessionUserDetail;
 
 public class CommonVo {
 
-	private SessionUser sessionUser;
+	private SessionUserDetail sessionUserDetail;
 	
 	public CommonVo() {
 		Object authenticatedObj = UserDetailsHelper.getAuthenticatedUser();
-		if(authenticatedObj instanceof SessionUser) {
-			this.sessionUser = (SessionUser) authenticatedObj;
+		if(authenticatedObj instanceof SessionUserDetail) {
+			this.sessionUserDetail = (SessionUserDetail) authenticatedObj;
 		} else {
-			this.sessionUser = null;
+			this.sessionUserDetail = null;
 		}
 	}
 	
@@ -21,8 +21,8 @@ public class CommonVo {
 	 * @작성자	: KIMSEOKHOON
 	 * @메소드 내용	: 인증된 로그인정보 객체
 	 ********************************************************************/
-	public SessionUser getUserDetails() {
-		return this.sessionUser;
+	public SessionUserDetail getUserDetails() {
+		return this.sessionUserDetail;
 	}
 	
 	/********************************************************************
@@ -31,10 +31,10 @@ public class CommonVo {
 	 * @메소드 내용	: 인증된 사용자 ID
 	 ********************************************************************/
 	public String getLoginId() {
-		if(sessionUser != null && !sessionUser.equals("anonymousUser")) {
-			return sessionUser.getUsername();
+		if(sessionUserDetail != null && !sessionUserDetail.equals("anonymousUser")) {
+			return sessionUserDetail.getUsername();
 		}
-		return "system";
+		return null;
 	}
 
 	

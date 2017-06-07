@@ -14,6 +14,8 @@ import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import com.flexink.common.code.FxBootType.Deleted;
+import com.flexink.common.code.FxBootType.Secret;
 import com.flexink.common.domain.BaseJpaModel;
 
 import lombok.Data;
@@ -46,7 +48,7 @@ public class Comment extends BaseJpaModel<Long> {
 	
 	@Enumerated(EnumType.STRING)
 	@Column(name="DEL_YN", length=1)
-	private DelYn delYn = DelYn.N;
+	private Deleted delYn = Deleted.N;
 	
 	@ManyToOne(cascade=CascadeType.ALL, fetch=FetchType.LAZY)
 	@JoinColumn(name="BOARD_ID")
@@ -57,11 +59,4 @@ public class Comment extends BaseJpaModel<Long> {
 		this.board = board;
 	}
 	
-	public enum Secret {
-		Y, N
-	}
-	
-	public enum DelYn {
-		Y, N
-	}
 }

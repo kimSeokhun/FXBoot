@@ -1,7 +1,6 @@
 package com.flexink.config.web.security.user;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 
@@ -11,7 +10,7 @@ import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
-import com.flexink.security.SessionUser;
+import com.flexink.security.SessionUserDetail;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -27,12 +26,12 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class UserDetailsHelper {
 
-	public static SessionUser getLoginUserDetails() {
+	public static SessionUserDetail getLoginUserDetails() {
 		Object obj = getAuthenticatedUser();
 		if(obj == null) {
 			return null;
-		} else if (obj instanceof SessionUser) {
-			return (SessionUser) obj;
+		} else if (obj instanceof SessionUserDetail) {
+			return (SessionUserDetail) obj;
 		} else {
 			return null;
 		}
@@ -51,8 +50,8 @@ public class UserDetailsHelper {
             return null;
         }
 
-        if (authentication.getPrincipal() instanceof SessionUser) {
-        	SessionUser details = (SessionUser) authentication.getPrincipal();
+        if (authentication.getPrincipal() instanceof SessionUserDetail) {
+        	SessionUserDetail details = (SessionUserDetail) authentication.getPrincipal();
 	        return details;
         } else {
         	log.debug("## LoginUserDetailsHelper.getAuthenticatedUser : AuthenticatedUser is Not SessionUser");

@@ -7,6 +7,9 @@ import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.support.MessageSourceAccessor;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -21,9 +24,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.flexink.config.web.WebSecurityConfigureAdapter;
-import com.flexink.config.web.security.user.Role;
 import com.flexink.config.web.security.user.UserDetailsHelper;
 import com.flexink.login.service.LoginUserService;
+import com.flexink.security.Role;
+import com.flexink.security.SessionUserDetail;
 import com.flexink.security.domain.User;
 import com.flexink.validator.UserValidator;
 
@@ -101,8 +105,14 @@ public class LoginController {
             return "/login/register";
         }
         loginUserService.regUser(user);
+        
+        // 회원가입후 바로 로그인 인증 처리
+        SessionUserDetail sessionUser = new SessionUserDetail(user);
+        Authentication authentication = new UsernamePasswordAuthenticationToken(sessionUser, null, sessionUser.getAuthorities());
+        SecurityContextHolder.getContext().setAuthentication(authentication);
 
-        return "redirect:/security/login";
+        return "redirect:"+WebSecurityConfigureAdapter.DEFAULT_SUCCESS_URL;
+        //return "redirect:/security/login";
 	}
 	
 	

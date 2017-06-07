@@ -4,17 +4,6 @@ INSERT INTO T_USER (USERNAME, PASSWORD, ACCOUNTNONEXPIRED, ACCOUNTNONLOCKED, CRE
 INSERT INTO T_USER (USERNAME, PASSWORD, ACCOUNTNONEXPIRED, ACCOUNTNONLOCKED, CREDENTIALSNONEXPIRED, ENABLED) VALUES ('ksh', '$2a$10$9Uraz7S4LZTFttdqJgE5v.rrIW54wZgFh3nQ7e0hCs9CiPhckfoG.',	'Y', 'Y', 'Y', 'Y');
 INSERT INTO T_USER (USERNAME, PASSWORD, ACCOUNTNONEXPIRED, ACCOUNTNONLOCKED, CREDENTIALSNONEXPIRED, ENABLED) VALUES ('user', '$2a$10$9Uraz7S4LZTFttdqJgE5v.rrIW54wZgFh3nQ7e0hCs9CiPhckfoG.', 'Y', 'Y', 'Y', 'Y');
 
---INSERT INTO USER
---(USERNAME,		PASSWORD) VALUES
---('system',      '$2a$10$9Uraz7S4LZTFttdqJgE5v.rrIW54wZgFh3nQ7e0hCs9CiPhckfoG.'),
---('admin',      '$2a$10$9Uraz7S4LZTFttdqJgE5v.rrIW54wZgFh3nQ7e0hCs9CiPhckfoG.'),
---('ksh',       	'$2a$10$9Uraz7S4LZTFttdqJgE5v.rrIW54wZgFh3nQ7e0hCs9CiPhckfoG.'),
---('aaa', 		'$2a$10$9Uraz7S4LZTFttdqJgE5v.rrIW54wZgFh3nQ7e0hCs9CiPhckfoG.'),
---('bbb', 		'$2a$10$9Uraz7S4LZTFttdqJgE5v.rrIW54wZgFh3nQ7e0hCs9CiPhckfoG.'),
---('ccc', 		'$2a$10$9Uraz7S4LZTFttdqJgE5v.rrIW54wZgFh3nQ7e0hCs9CiPhckfoG.'),
---('ddd', 		'$2a$10$9Uraz7S4LZTFttdqJgE5v.rrIW54wZgFh3nQ7e0hCs9CiPhckfoG.'),
---('visualkhh',	'1234'),
---('hhk',			'1234');
 
 insert  into T_RESOURCES (RESOURCES_ID, URL) values (1,'/user');
 insert  into T_RESOURCES (RESOURCES_ID, URL) values (2,'/admin');

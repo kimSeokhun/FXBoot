@@ -9,6 +9,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.flexink.common.code.FxBootType;
 import com.flexink.common.domain.BaseService;
 import com.flexink.common.file.service.CommonFileService;
 import com.flexink.common.utils.CookieUtils;
@@ -71,7 +72,7 @@ public class BoardService extends BaseService<Board, Long>{
 				query().select(Projections.map(qBoard, qComment.id.count().as("commentCount")))
 				.from(qBoard).leftJoin(qBoard.comments, qComment)
 				.groupBy(qBoard.id)
-				.where(builder.and(qBoard.delYn.eq(Board.DelYn.N)))
+				.where(builder.and(qBoard.delYn.eq(FxBootType.Deleted.N)))
 				.orderBy(qBoard.id.desc())
 				, params.getPageable());
 		
@@ -186,7 +187,7 @@ public class BoardService extends BaseService<Board, Long>{
 			if(article.getCreatedBy().equals(UserDetailsHelper.getLoginUserDetails().getUsername()) || UserDetailsHelper.containsAuthority("ROLE_ADMIN", "ROLE_SYSTEM")) {
 				// QueryDsl
 				//delete(qBoard).where(qBoard.id.eq(boardId)).execute();
-				update(qBoard).set(qBoard.delYn, Board.DelYn.Y).where(qBoard.id.eq(boardId)).execute();
+				update(qBoard).set(qBoard.delYn, FxBootType.Deleted.Y).where(qBoard.id.eq(boardId)).execute();
 			}
 			
 		}

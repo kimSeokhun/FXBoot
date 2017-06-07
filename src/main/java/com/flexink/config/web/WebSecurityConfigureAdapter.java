@@ -29,11 +29,10 @@ import org.springframework.security.web.authentication.RememberMeServices;
 import org.springframework.security.web.authentication.rememberme.TokenBasedRememberMeServices;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
-import com.flexink.common.utils.HttpUtils;
 import com.flexink.common.utils.PhaseUtils;
 import com.flexink.config.web.security.AuthenticationFailureHandler;
 import com.flexink.config.web.security.AuthenticationSuccessHandler;
-import com.flexink.config.web.security.user.Role;
+import com.flexink.security.Role;
 import com.flexink.security.filter.FilterMetadataSource;
 
 import lombok.extern.slf4j.Slf4j;
@@ -95,6 +94,7 @@ public class WebSecurityConfigureAdapter extends WebSecurityConfigurerAdapter {
 
 				
 				.antMatchers("/system/**").hasRole("SYSTEM")
+				.antMatchers("/sample*").hasRole("ADMIN")
 				.antMatchers("/sample**").hasRole("ADMIN")
 				.antMatchers("/admin/**").hasRole("ADMIN")
 				// .anyRequest().authenticated()
@@ -125,21 +125,14 @@ public class WebSecurityConfigureAdapter extends WebSecurityConfigurerAdapter {
 				.maxSessionsPreventsLogin(false).and().sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
 				.invalidSessionUrl(SESSION_INVALIDSESSION_URL)
 				
-				.and().csrf().disable().headers().frameOptions().disable()
+				.and().csrf().ignoringAntMatchers(h2ConsolePath + "/**")
+				.and().headers().frameOptions().disable()
 				.and().rememberMe().key(REMEMBER_ME_KEY).rememberMeServices(tokenBasedRememberMeServices());
 				
 				// 페이지 동적 권한 확인시 추가 (추후 구현)
 				//.and().addFilter(filterSecurityInterceptor());
 	}
 
-	/*@Override
-	protected LoginUserDetailsService userDetailsService() {
-		return userDetailsService;
-	}*/
-	
-	/*@Autowired
-	private LoginUserDetailsService userDetailsService;*/
-	
 	@Autowired
 	UserDetailsService  userDetailService;
 
@@ -247,23 +240,27 @@ public class WebSecurityConfigureAdapter extends WebSecurityConfigurerAdapter {
 	/********************************************************************
 	 * @메소드명 : tokenBasedRememberMeServices
 	 * @작성자 : KIMSEOKHOON
-	 * @메소드 내용 : 리멤버미 토큰 생성 서비스
+	 * @메소드 내용 : 리멤버미 토큰 (쿠키용)
 	 ********************************************************************/
 	@Bean
 	public RememberMeServices tokenBasedRememberMeServices() {
 		TokenBasedRememberMeServices tokenBasedRememberMeServices = new TokenBasedRememberMeServices(REMEMBER_ME_KEY, userDetailsService());
-		tokenBasedRememberMeServices.setAlwaysRemember(true);
+		//tokenBasedRememberMeServices.setAlwaysRemember(true);
 		tokenBasedRememberMeServices.setTokenValiditySeconds(60 * 60 * 24 * 31);
 		tokenBasedRememberMeServices.setCookieName(REMEMBER_ME_COOKE_NAME);
 		return tokenBasedRememberMeServices;
 	}
 
-	// REMEMBER ME를 위한.
-	// @Bean
-	// public PersistentTokenRepository persistentTokenRepository() {
-	// JdbcTokenRepositoryImpl tokenRepositoryImpl = new
-	// JdbcTokenRepositoryImpl();
-	// tokenRepositoryImpl.setDataSource(dataSource);
-	// return tokenRepositoryImpl;
-	// }
+	
+	/********************************************************************
+	 * @메소드명	: persistentTokenRepository
+	 * @작성자	: KIMSEOKHOON
+	 * @메소드 내용	: 리멤버미 토큰 (DB 저장용)
+	 ********************************************************************/
+	/*@Bean
+	public PersistentTokenRepository persistentTokenRepository() {
+		JdbcTokenRepositoryImpl tokenRepositoryImpl = new JdbcTokenRepositoryImpl();
+		tokenRepositoryImpl.setDataSource(dataSource);
+		return tokenRepositoryImpl;
+	}*/
 }

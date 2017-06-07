@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.flexink.common.code.FxBootType;
 import com.flexink.common.domain.BaseService;
 import com.flexink.config.web.security.user.UserDetailsHelper;
 import com.flexink.domain.board.Board;
@@ -34,7 +35,7 @@ public class CommentService extends BaseService<Comment, Long>{
 	
 
 	public List<Comment> getComments(Board board) {
-		List<Comment> comments = query().from(qComment).where(qComment.board.eq(board).and(qComment.delYn.eq(Comment.DelYn.N))).fetch();
+		List<Comment> comments = query().from(qComment).where(qComment.board.eq(board).and(qComment.delYn.eq(FxBootType.Deleted.N))).fetch();
 		return comments;
 	}
 	

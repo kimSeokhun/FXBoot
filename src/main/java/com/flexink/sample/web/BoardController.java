@@ -1,13 +1,9 @@
 package com.flexink.sample.web;
 
 import java.io.IOException;
-import java.util.Collections;
-import java.util.Comparator;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -20,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
+import com.flexink.common.code.FxBootType;
 import com.flexink.common.file.service.CommonFileService;
 import com.flexink.common.utils.EditorUtils;
 import com.flexink.domain.board.Board;
@@ -100,9 +97,9 @@ public class BoardController {
 	public String saveAriticle(@PathVariable String boardType, MultipartHttpServletRequest request, ParamsVo params, Board board) throws IOException {
 		board.setType(new BoardType(boardType));
 		if(params.getString("secret", "").equalsIgnoreCase("true")) {
-			board.setSecret(Board.Secret.Y);
+			board.setSecret(FxBootType.Secret.Y);
 		} else {
-			board.setSecret(Board.Secret.N);
+			board.setSecret(FxBootType.Secret.N);
 		}
 		
         boardSampleService.saveArticle(board);
