@@ -52,6 +52,9 @@ public class User {
 	
 	@Column(name="PHONE", length=20)
 	private String phone;
+	
+	@Column(name="ADDRESS", length=120)
+	private String address;
 
 	@Column(name="ACCOUNTNONEXPIRED")
 	@Convert(converter=BooleanConverter.class)
