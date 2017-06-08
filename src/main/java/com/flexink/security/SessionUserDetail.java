@@ -10,9 +10,11 @@ import com.flexink.security.domain.User;
 
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 @Getter
 @Setter
+@ToString(callSuper=true)
 public class SessionUserDetail extends org.springframework.security.core.userdetails.User {
 
 	private String email;
