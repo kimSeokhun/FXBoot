@@ -36,7 +36,7 @@ spring:
       connection-init-sql: SELECT 1 FROM DUAL
   # Profile
   profiles:
-    active: development                                               # profile 수동 설정
+    active: local                                               # profile 수동 설정
   # JPA
   jpa:
     properties:
@@ -104,7 +104,11 @@ logging:
     jdbc.sqlonly: DEBUG
     jdbc.resultsettable: DEBUG
 
-
+# flyway
+flyway:
+  enabled: false
+  
+  
 #database-platform: org.hibernate.dialect.Oracle10gDialect
 #url: jdbc:log4jdbc:oracle:thin:@192.168.0.238:1521:orcl
 
@@ -134,7 +138,7 @@ spring:
   datasource:
     initialize: true
     continue-on-error: false
-    url: jdbc:log4jdbc:h2:~/test/db
+    url: jdbc:log4jdbc:h2:~/test/db;MODE=mysql
     username: sa
     password: 
 
@@ -155,19 +159,17 @@ spring:
     
 flyway:
   enabled: true
-  check-location: true # 마이그레이션 스크립트 파일이 존재하는지 여부를 확인
-  locations: classpath:db/migration # 마이그레이션 스크립트 위치
-  encoding: UTF-8
-  #baseline-on-migrate: true
+  locations: classpath:db/migration/mysql
+  #baseline-on-migrate: true  #초기 구동시에만 true
   
 # Log Level
 logging:
   level: 
-    root: WARN
-    org.springframework.web: WARN
-    org.hibernate.SQLQuery: ERROR
-    com.flexink: DEBUG
-    jdbc.sqlonly: DEBUG
+    root: warn
+    org.springframework.web: warn
+    org.hibernate.SQLQuery: error
+    com.flexink: debug
+    jdbc.sqlonly: debug
     jdbc.resultsettable: debug
     
 ---
@@ -177,32 +179,30 @@ spring:
   jpa:
     hibernate:
       ddl-auto: none    
+    database-platform: org.hibernate.dialect.Oracle10gDialect
   h2:
     console:
       enabled: false
   # DB 정보    
-  datasource:
-    url: 
-    username: 
-    password: 
-  
-# Actuator 비활성화
-management: 
-  security: 
-    enabled: false
-endpoints:
-  actuator:
-    enabled: false
+  datasource: 
+    url: jdbc:log4jdbc:oracle:thin:@192.168.0.238:1521:orcl
+    username: fxboot
+    password: fxboot
 
+flyway:
+  enabled: true
+  locations: classpath:db/migration/oracle
+  baseline-on-migrate: true  #초기 구동시에만 true
+    
 # Log Level
 logging:
   level:
-    root: ERROR
-    org.springframework.web: ERROR
-    org.hibernate: ERROR
-    com.flexink: ERROR
-    jdbc.sqlonly: ERROR
-    jdbc.resultsettable: ERROR
+    root: warn
+    org.springframework.web: warn
+    org.hibernate.SQLQuery: error
+    com.flexink: warn
+    jdbc.sqlonly: warn
+    jdbc.resultsettable: warn
 
     
 #profile 환경설정   http://jsonobject.tistory.com/220
