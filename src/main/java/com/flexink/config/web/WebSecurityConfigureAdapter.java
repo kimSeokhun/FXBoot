@@ -125,8 +125,7 @@ public class WebSecurityConfigureAdapter extends WebSecurityConfigurerAdapter {
 				.maxSessionsPreventsLogin(false).and().sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
 				.invalidSessionUrl(SESSION_INVALIDSESSION_URL)
 				
-				.and().csrf().ignoringAntMatchers(h2ConsolePath + "/**")
-				.and().headers().frameOptions().disable()
+				.and().csrf().disable().headers().frameOptions().disable()
 				.and().rememberMe().key(REMEMBER_ME_KEY).rememberMeServices(tokenBasedRememberMeServices());
 				
 				// 페이지 동적 권한 확인시 추가 (추후 구현)

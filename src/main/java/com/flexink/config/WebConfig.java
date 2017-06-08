@@ -163,6 +163,11 @@ public class WebConfig extends WebMvcConfigurerAdapter {
 					ModelAndView view) {
 				CsrfToken token = (CsrfToken) request.getAttribute(CsrfToken.class.getName());
 				if (token != null && null != view) {
+					System.out.println(token.getParameterName());
+					System.out.println(token.getParameterName());
+					System.out.println(token.getParameterName());
+					System.out.println(token.getParameterName());
+					System.out.println(token.getParameterName());
 					view.addObject(token.getParameterName(), token);
 				}
 			}
