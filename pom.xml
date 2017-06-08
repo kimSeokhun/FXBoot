@@ -73,7 +73,7 @@
 			<artifactId>h2</artifactId>
 			<scope>runtime</scope>
 		</dependency>
-		<dependency>
+		<!-- <dependency>
 		    <groupId>com.oracle</groupId>
 		    <artifactId>ojdbc6</artifactId>
 		    <version>11.1.0.7.0</version>
@@ -81,8 +81,9 @@
 		<dependency>
 		    <groupId>mysql</groupId>
 		    <artifactId>mysql-connector-java</artifactId>
-		</dependency>
+		</dependency> -->
 		
+
 		<dependency>
 		    <groupId>org.flywaydb</groupId>
 		    <artifactId>flyway-core</artifactId>
@@ -190,7 +191,7 @@
 		<dependency>
 		    <groupId>org.webjars.npm</groupId>
 		    <artifactId>ax5ui-grid</artifactId>
-		    <version>1.4.65</version>
+		    <version>1.4.20</version>
 		</dependency>
 		<dependency>
 		    <groupId>org.webjars.npm</groupId>
