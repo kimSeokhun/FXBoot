@@ -3,16 +3,13 @@ package com.flexink.sample.service;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
-import org.hibernate.jpa.QueryHints;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
-import com.flexink.common.domain.BaseService;
 import com.flexink.domain.board.BoardType;
 import com.flexink.domain.board.QBoardType;
-import com.flexink.domain.board.repository.BoardTypeRepository;
+import com.flexink.domain.board.repository.BoardTypeRepositorySupport;
 import com.flexink.vo.ParamsVo;
 import com.querydsl.core.BooleanBuilder;
 
@@ -20,22 +17,15 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Service
-public class BoardTypeService extends BaseService<BoardType, String>{
+public class BoardTypeService {
 	
 	@Autowired
-	public BoardTypeService(BoardTypeRepository repository) {
-		super(BoardType.class, repository);
-	}
+	BoardTypeRepositorySupport boardTypeRepositorySupport;
 	
 	QBoardType qBoardType = QBoardType.boardType;
 	
-	
-	public BoardType getBoardType(String type) {
-		return getBoardType(new BoardType(type)); 
-	}
-	
 	public BoardType getBoardType(BoardType boardType) {
-		return query().from(qBoardType).where(qBoardType.type.eq(boardType.getType())).setHint(QueryHints.HINT_CACHEABLE, true).fetchOne();
+		return boardTypeRepositorySupport.getRepository().findOne(boardType.getId());
 				
 	}
 	
@@ -45,27 +35,13 @@ public class BoardTypeService extends BaseService<BoardType, String>{
 		if(StringUtils.isNotBlank(filter)) {
 			builder.and(qBoardType.type.eq(filter));
 		}
-		return (Page<BoardType>) readPage(query().from(qBoardType).where(builder).setHint(QueryHints.HINT_CACHEABLE, true), params.getPageable());
+		return boardTypeRepositorySupport.getBoardTypes(builder, params.getPageable());
 	}
 	
 	public void saveBoardType(List<BoardType> boardTypes) {
-		save(boardTypes);
+		boardTypeRepositorySupport.save(boardTypes);
 	}
 	
 	
-	
-	@Transactional
-	public void saveBt(BoardType boardType) {
-		//getEntityManager().persist(boardType);
-		//insert(boardType);
-		repository.save(boardType);
-	}
-	
-	@Transactional
-	public BoardType getBt(String id) {
-		//return repository.findOne(id);
-		return query().from(qBoardType).where(qBoardType.type.eq(id)).setHint(QueryHints.HINT_CACHEABLE, true).fetchOne();
-	}
-
 	
 }

@@ -126,7 +126,7 @@ spring:
   profiles: local
   jpa:
     hibernate:
-      ddl-auto: create-drop
+      ddl-auto: update
     show-sql: false
     database-platform: org.hibernate.dialect.H2Dialect #dialect
   devtools:
@@ -136,7 +136,7 @@ spring:
       enabled: true
   # DB 정보    
   datasource:
-    initialize: true
+    initialize: false
     continue-on-error: false
     url: jdbc:log4jdbc:h2:~/test/db;MODE=mysql
     username: sa

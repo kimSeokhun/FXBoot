@@ -22,6 +22,7 @@ import com.flexink.common.utils.EditorUtils;
 import com.flexink.domain.board.Board;
 import com.flexink.domain.board.BoardType;
 import com.flexink.domain.board.Comment;
+import com.flexink.domain.board.repository.BoardRepositorySupport;
 import com.flexink.sample.service.BoardService;
 import com.flexink.sample.service.CommentService;
 import com.flexink.vo.ParamsVo;
@@ -38,6 +39,9 @@ public class BoardController {
 	
 	@Autowired
 	CommentService commentSampleService;
+	
+	@Autowired
+	BoardRepositorySupport boardRepositorySupport;
 	
 	@Autowired
     private CommonFileService commonFileService;
@@ -66,7 +70,7 @@ public class BoardController {
 	@GetMapping(value="/{boardType}/article")
 	public String writeAriticle(@PathVariable String boardType, Board board, ModelMap model) {
 		if(board.getId() != null) {
-			model.put("article", boardSampleService.getArticle(board));
+			model.put("article", boardRepositorySupport.getArticle(board));
 		}
 		return "/sample/boardDetail";
 	}

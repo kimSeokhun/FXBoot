@@ -13,30 +13,29 @@ import com.flexink.domain.board.Board;
 import com.flexink.domain.board.Comment;
 import com.flexink.domain.board.QBoard;
 import com.flexink.domain.board.QComment;
-import com.flexink.domain.board.repository.CommentSampleRepository;
+import com.flexink.domain.board.repository.BoardRepositorySupport;
+import com.flexink.domain.board.repository.CommentRepository;
+import com.flexink.domain.board.repository.CommentRepositorySupport;
 import com.flexink.vo.ParamsVo;
 
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Service
-public class CommentService extends BaseService<Comment, Long>{
+public class CommentService {
 	
 	@Autowired
-	BoardService boardSampleService;
+	BoardRepositorySupport boardRepositorySupport;
 	
 	@Autowired
-	public CommentService(CommentSampleRepository repository) {
-		super(Comment.class, repository);
-	}
+	CommentRepositorySupport commentRepositorySupport; 
 	
 	QBoard qBoard = QBoard.board;
 	QComment qComment = QComment.comment;
 	
 
 	public List<Comment> getComments(Board board) {
-		List<Comment> comments = query().from(qComment).where(qComment.board.eq(board).and(qComment.delYn.eq(FxBootType.Deleted.N))).fetch();
-		return comments;
+		return commentRepositorySupport.getComments(board);
 	}
 	
 	/********************************************************************
@@ -47,9 +46,9 @@ public class CommentService extends BaseService<Comment, Long>{
 	@Transactional
 	public Comment saveComment(ParamsVo params, Comment comment) {
 		
-		Board board = boardSampleService.getArticle(new Board(params.getLong("boardId")));
+		Board board = boardRepositorySupport.getArticle(params.getLong("boardId"));
 		comment.setBoard(board);
-		insert(comment);
+		commentRepositorySupport.insert(comment);
 		
 		return comment;
 	}
@@ -61,9 +60,10 @@ public class CommentService extends BaseService<Comment, Long>{
 	 ********************************************************************/
 	@Transactional
 	public void updateComment(Comment commentVo) {
-		Comment comment = query().from(qComment).where(qComment.id.eq(commentVo.getId())).fetchOne();
+		Comment comment = commentRepositorySupport.getRepository().findOne(commentVo.getId());
 		if(comment.getCreatedBy().equals(UserDetailsHelper.getLoginUserDetails().getUsername()) || UserDetailsHelper.containsAuthority("ROLE_ADMIN", "ROLE_SYSTEM")) {
-			update(qComment).set(qComment.content, commentVo.getContent()).where(qComment.id.eq(comment.getId())).execute();
+			//update(qComment).set(qComment.content, commentVo.getContent()).where(qComment.id.eq(comment.getId())).execute();
+			comment.setContent(commentVo.getContent());
 		}
 	}
 	
@@ -74,9 +74,10 @@ public class CommentService extends BaseService<Comment, Long>{
 	 ********************************************************************/
 	@Transactional
 	public void deleteComment(Long commentId) {
-		Comment comment = query().from(qComment).where(qComment.id.eq(commentId)).fetchOne();
+		Comment comment = commentRepositorySupport.getRepository().findOne(commentId);
 		if(comment.getCreatedBy().equals(UserDetailsHelper.getLoginUserDetails().getUsername()) || UserDetailsHelper.containsAuthority("ROLE_ADMIN", "ROLE_SYSTEM")) {
-			delete(qComment).where(qComment.id.eq(commentId)).execute();
+			//delete(qComment).where(qComment.id.eq(commentId)).execute();
+			commentRepositorySupport.getRepository().delete(comment);
 		}
 	}
 

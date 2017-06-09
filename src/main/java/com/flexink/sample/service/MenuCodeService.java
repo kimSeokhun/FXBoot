@@ -3,27 +3,23 @@ package com.flexink.sample.service;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
-import org.hibernate.jpa.QueryHints;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.flexink.common.domain.BaseService;
 import com.flexink.domain.menu.Menu;
 import com.flexink.domain.menu.QMenu;
-import com.flexink.domain.menu.repository.MenuRepository;
+import com.flexink.domain.menu.repository.MenuRepositorySupport;
 import com.flexink.vo.ParamsVo;
 import com.querydsl.core.BooleanBuilder;
 
 @Service
-public class MenuCodeService extends BaseService<Menu, Long>{
+public class MenuCodeService {
 
 	@Autowired
-	public MenuCodeService(MenuRepository repository) {
-		super(Menu.class, repository);
-	}
+	MenuRepositorySupport menuRepositorySupport;
 	
 	QMenu qMenu = QMenu.menu;
 	
@@ -45,7 +41,7 @@ public class MenuCodeService extends BaseService<Menu, Long>{
 			builder.and(qMenu.menuNm.likeIgnoreCase(filter));
 			builder.and(qMenu.progUrl.likeIgnoreCase(filter));
 		}
-		return query().from(qMenu).where(builder).orderBy(qMenu.level.asc(), qMenu.sort.asc()).setHint(QueryHints.HINT_CACHEABLE, true).fetch();
+		return menuRepositorySupport.getMenus(builder);
 		
 	}
 	
@@ -65,18 +61,8 @@ public class MenuCodeService extends BaseService<Menu, Long>{
 	 ********************************************************************/
 	@Cacheable(cacheNames="menuCode", key="#menu.menuGrpCd")
 	public List<Menu> getTagLibMenus(Menu menu) {
-		QMenu sMenu = new QMenu("sMenu");
-		List<Menu> list = query().distinct().from(qMenu)
-				.leftJoin(qMenu.children, sMenu)
-				.fetchJoin()
-				.where(qMenu.menuGrpCd.eq(menu.getMenuGrpCd())
-				.and(qMenu.useYn.eq(Menu.UseYn.Y)
-				.and(qMenu.level.eq(0))))
-				.orderBy(qMenu.level.asc(), qMenu.sort.asc(), sMenu.level.asc(), sMenu.sort.asc())
-				.fetch();
-		return list;
+		return menuRepositorySupport.getTagLibMenus(menu);
 	}
-	
 	
 	
 	/********************************************************************
@@ -87,7 +73,7 @@ public class MenuCodeService extends BaseService<Menu, Long>{
 	@Transactional
 	@CacheEvict(cacheNames="menuCode", allEntries=true)
     public void saveMenus(List<Menu> menus) {
-        save(menus);
+		menuRepositorySupport.save(menus);
     }
 
 }

@@ -31,17 +31,15 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.flexink.common.code.FxBootType;
 import com.flexink.common.code.Types;
-import com.flexink.common.domain.BaseService;
 import com.flexink.common.utils.ArrayUtils;
 import com.flexink.common.utils.EncodeUtils;
 import com.flexink.common.utils.PropertyUtils;
 import com.flexink.domain.file.CommonFile;
 import com.flexink.domain.file.QCommonFile;
-import com.flexink.domain.file.repository.CommonFileRepository;
+import com.flexink.domain.file.repository.CommonFileRepositorySupport;
 import com.flexink.vo.ParamsVo;
 import com.flexink.vo.file.UploadParameters;
 import com.querydsl.core.BooleanBuilder;
-import com.querydsl.jpa.impl.JPAUpdateClause;
 
 import lombok.extern.slf4j.Slf4j;
 import net.coobird.thumbnailator.Thumbnails;
@@ -50,8 +48,7 @@ import net.coobird.thumbnailator.name.Rename;
 
 @Service
 @Slf4j
-public class CommonFileService extends BaseService<CommonFile, Long> implements InitializingBean {
-    private CommonFileRepository commonFileRepository;
+public class CommonFileService implements InitializingBean {
     
     QCommonFile qCommonFile = QCommonFile.commonFile;
 
@@ -59,10 +56,8 @@ public class CommonFileService extends BaseService<CommonFile, Long> implements 
     public String uploadTempDir;
 
     @Autowired
-    public CommonFileService(CommonFileRepository commonFileRepository) {
-    	super(CommonFile.class, commonFileRepository);
-        this.commonFileRepository = commonFileRepository;
-    }
+    CommonFileRepositorySupport commonFileRepositorySupport;
+    
 
     public void createBaseDirectory() {
         try {
@@ -189,7 +184,7 @@ public class CommonFileService extends BaseService<CommonFile, Long> implements 
 
         FileUtils.deleteQuietly(uploadFile);
 
-        repository.save(commonFile);
+        commonFileRepositorySupport.getRepository().save(commonFile);
 
         return commonFile;
     }
@@ -215,14 +210,12 @@ public class CommonFileService extends BaseService<CommonFile, Long> implements 
     }
 
     public ResponseEntity<byte[]> downloadById(Long id) throws IOException {
-        //CommonFile commonFile = commonFileRepository.findOne(id);
-    	CommonFile commonFile = query().from(qCommonFile).where(qCommonFile.id.eq(id)).fetchOne();
+    	CommonFile commonFile = commonFileRepositorySupport.getRepository().findOne(id);
         return download(commonFile);
     }
 
     public ResponseEntity<byte[]> downloadByTargetTypeAndTargetId(String targetType, String targetId) throws IOException {
-        //CommonFile commonFile = commonFileRepository.findByTargetTypeAndTargetId(targetType, targetId);
-        CommonFile commonFile = from(qCommonFile).where(qCommonFile.targetType.eq(targetType).and(qCommonFile.targetId.eq(targetId))).fetchOne();
+        CommonFile commonFile = commonFileRepositorySupport.getCommonFile(targetType, targetId);
         return download(commonFile);
     }
     
@@ -243,7 +236,7 @@ public class CommonFileService extends BaseService<CommonFile, Long> implements 
     }
 
     public void preview(HttpServletResponse response, Long id, String type) throws IOException {
-        CommonFile commonFile = commonFileRepository.findOne(id);
+        CommonFile commonFile = commonFileRepositorySupport.getRepository().findOne(id);
 
         if (commonFile == null)
             return;
@@ -350,11 +343,11 @@ public class CommonFileService extends BaseService<CommonFile, Long> implements 
         	builder.and(qCommonFile.targetId.in(_ids));
         }
 
-        return commonFileRepository.findAll(builder, pageable);
+        return commonFileRepositorySupport.getRepository().findAll(builder, pageable);
     }
     
     public List<CommonFile> getList(String targetType, String targetId) {
-    	List<CommonFile> files = query().from(qCommonFile).where(qCommonFile.targetType.eq(targetType).and(qCommonFile.targetId.eq(targetId))).fetch();
+    	List<CommonFile> files = commonFileRepositorySupport.getCommonFiles(targetType, targetId);
     	return files;
     }
 
@@ -385,21 +378,17 @@ public class CommonFileService extends BaseService<CommonFile, Long> implements 
 
     @Transactional
     public void deleteFile(Long id) {
-    	commonFileRepository.delete(id);
+    	commonFileRepositorySupport.getRepository().delete(id);
     }
 
     @Transactional
     public void deleteByTargetTypeAndTargetIds(String targetType, Set<String> targetIds) {
-    	//Iterable<CommonFile> list = commonFileRepository.findAll(qCommonFile.targetType.eq(targetType).and(qCommonFile.targetId.in(targetIds)));
-    	//commonFileRepository.delete(list);
-    	delete(qCommonFile).where(qCommonFile.targetType.eq(targetType).and(qCommonFile.targetId.in(targetIds))).execute();
+    	commonFileRepositorySupport.deleteByTargetTypeAndTargetIds(targetType, targetIds);
     }
 
     @Transactional
     private void deleteByTargetTypeAndTargetId(String targetType, String targetId) {
-        //CommonFile file = commonFileRepository.findOne(qCommonFile.targetType.eq(targetType).and(qCommonFile.targetId.eq(targetId)));
-        //commonFileRepository.delete(file);
-        delete(qCommonFile).where(qCommonFile.targetType.eq(targetType).and(qCommonFile.targetId.eq(targetId))).execute();
+    	commonFileRepositorySupport.deleteByTargetTypeAndTargetId(targetType, targetId);
     }
     
     
@@ -423,7 +412,8 @@ public class CommonFileService extends BaseService<CommonFile, Long> implements 
     public void filePathUpdate(List<String> ids, String savePathKey, String targetType, Long targetId) {
     	String savePath = PropertyUtils.getSavePathProperty(savePathKey) + "/";
     	for(String id : ids) {
-    		CommonFile file = query().from(qCommonFile).where(qCommonFile.id.eq(Long.valueOf(id))).fetchOne();
+    		//CommonFile file = query().from(qCommonFile).where(qCommonFile.id.eq(Long.valueOf(id))).fetchOne();
+    		CommonFile file = commonFileRepositorySupport.getRepository().findOne(Long.valueOf(id));
     		File sourceFile = FileUtils.getFile(file.getSavePath()+file.getSaveNm());
     		if(file.getSavePath().equals(savePath)) {
     			return;
@@ -458,7 +448,8 @@ public class CommonFileService extends BaseService<CommonFile, Long> implements 
             if (file.isDeleted()) {
                 deleteFile(file.getId());
             } else {
-            	update(qCommonFile).set(qCommonFile.targetType, file.getTargetType()).set(qCommonFile.targetId, file.getTargetId()).where(qCommonFile.id.eq(file.getId())).execute();
+            	//update(qCommonFile).set(qCommonFile.targetType, file.getTargetType()).set(qCommonFile.targetId, file.getTargetId()).where(qCommonFile.id.eq(file.getId())).execute();
+            	commonFileRepositorySupport.updateCommonFile(file);
             }
         }
     }

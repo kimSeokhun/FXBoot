@@ -21,7 +21,7 @@ public class SecondCacheTest {
 	
 	@Test
     public void test() throws Exception {
-        BoardType b1 = boardTypeService.getBoardType("SAMPLE");
-        BoardType b2 = boardTypeService.getBoardType("SAMPLE");
+        /*BoardType b1 = boardTypeService.getBoardType("SAMPLE");
+        BoardType b2 = boardTypeService.getBoardType("SAMPLE");*/
     }
 }

@@ -9,8 +9,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.flexink.common.code.FxBootType;
-import com.flexink.common.domain.BaseService;
 import com.flexink.common.file.service.CommonFileService;
 import com.flexink.common.utils.CookieUtils;
 import com.flexink.config.web.security.user.UserDetailsHelper;
@@ -19,28 +17,28 @@ import com.flexink.domain.board.BoardType;
 import com.flexink.domain.board.QBoard;
 import com.flexink.domain.board.QBoardType;
 import com.flexink.domain.board.QComment;
-import com.flexink.domain.board.repository.BoardSampleRepository;
+import com.flexink.domain.board.repository.BoardRepository;
+import com.flexink.domain.board.repository.BoardRepositorySupport;
+import com.flexink.domain.board.repository.BoardTypeRepositorySupport;
 import com.flexink.domain.file.CommonFile;
+import com.flexink.domain.file.repository.CommonFileRepositorySupport;
 import com.flexink.vo.ParamsVo;
 import com.querydsl.core.BooleanBuilder;
-import com.querydsl.core.types.Projections;
 
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Service
-public class BoardService extends BaseService<Board, Long>{
+public class BoardService {
 	
 	@Autowired
-	CommonFileService commonFileService;
+	CommonFileRepositorySupport commonFileRepositorySupport;
 	
 	@Autowired
-	BoardTypeService boardTypeService;
+	BoardTypeRepositorySupport boardTypeRepositorySupport;
 	
 	@Autowired
-	public BoardService(BoardSampleRepository repository) {
-		super(Board.class, repository);
-	}
+	BoardRepositorySupport boardRepositorySupport;
 	
 	QBoard qBoard = QBoard.board;
 	QComment qComment = QComment.comment;
@@ -53,39 +51,14 @@ public class BoardService extends BaseService<Board, Long>{
 	 ********************************************************************/
 	@Transactional
 	public Page<Map<String, Object>> getList(ParamsVo params) {
-		BoardType boardType = boardTypeService.getBoardType(params.getString("type"));
+		
+		BoardType boardType = boardTypeRepositorySupport.getRepository().findOne(params.getString("type"));
 		BooleanBuilder builder = new BooleanBuilder();
 		if(StringUtils.isNotEmpty(params.getString("type"))) {
 			builder.and(qBoard.type.eq(boardType));
 		}
 		
-		/********************************************************************************************
-		 *  ### 페이징 처리 ###
-		 *	@ SpringData JPA
-		 *	Page<Board> list = repository.findAll(builder, params.getPageable());	
-		 ********************************************************************************************/
-		// QueryDsl	(Page<Entity>)
-		//Page<Board> list = (Page<Board>) readPage(query().from(qBoard).where(builder).orderBy(qBoard.id.desc()), params.getPageable());
-
-		// Page<Map>
-		Page<Map<String, Object>> mapList = readPageToMap(
-				query().select(Projections.map(qBoard, qComment.id.count().as("commentCount")))
-				.from(qBoard).leftJoin(qBoard.comments, qComment)
-				.groupBy(qBoard.id)
-				.where(builder.and(qBoard.delYn.eq(FxBootType.Deleted.N)))
-				.orderBy(qBoard.id.desc())
-				, params.getPageable());
-		
-		// Page<vo>
-		//Page<BoardVo> voList = (Page<BoardVo>) readPage(query().select(Projections.bean(BoardVo.class, qBoard.title, qBoard.content, qBoard.comments.size().as("commentCount"))).from(qBoard).where(builder).orderBy(qBoard.id.desc()),  params.getPageable());
-		//log.debug("Page<BoardVo> : " + voList.getContent());
-		
-		// List
-		//List<Tuple> tuple = query().select(qBoard, qBoard.comments.size().as("size")).from(qBoard).where(builder).orderBy(qBoard.id.desc()).fetch();
-		//List<Map<Expression<?>, ?>> expList = query().select(Projections.map(qBoard.title, qBoard.content, qBoard.comments.size().as("count"), qBoard.viewCount)).from(qBoard).where(builder).orderBy(qBoard.id.desc()).fetch();
-		//List<BoardVo> l = query().select(Projections.bean(BoardVo.class, qBoard.title, qBoard.content, qBoard.comments.size().as("count"))).from(qBoard).where(builder).orderBy(qBoard.id.desc()).fetch();
-		
-		return mapList;
+		return boardRepositorySupport.getBoardPage(builder, params.getPageable());
 	}
 	
 
@@ -96,8 +69,8 @@ public class BoardService extends BaseService<Board, Long>{
 	 ********************************************************************/
 	@Transactional
 	public Board viewArticle(Board board) {
-		Board article = getArticle(board);
-		List<CommonFile> files = commonFileService.getList(article.getType().getType(), String.valueOf(article.getId()));
+		Board article = boardRepositorySupport.getArticle(board);
+		List<CommonFile> files = commonFileRepositorySupport.getCommonFiles(article.getType().getType(), String.valueOf(article.getId()));
 		article.setFiles(files);
 		
 		// view count update
@@ -111,17 +84,6 @@ public class BoardService extends BaseService<Board, Long>{
 		return article;
 	}
 	
-	public Board getArticle(Board board) {
-		/********************************************************************************************
-		 * 	### 단건 조회 ###
-		 *	@ SpringData JPA
-		 *	Board article = repository.findOne(board.getId());
-		 ********************************************************************************************/
-		// QueryDsl
-		Board article = query().from(qBoard).join(qBoard.type, qBoardType).fetchJoin().where(qBoard.id.eq(board.getId())).fetchOne();
-		
-		return article;
-	}
 	
 	/********************************************************************
 	 * @메소드명	: saveArticle
@@ -142,8 +104,7 @@ public class BoardService extends BaseService<Board, Long>{
 			 * 	@ QueryDsl
 			 * 	Insert 메소드 없음
 			 ********************************************************************************************/
-			// EntityManager
-			insert(board);
+			boardRepositorySupport.insert(board);
 		} else {
 			/********************************************************************************************
 			 * 	#### Entity 수정 ###
@@ -153,13 +114,8 @@ public class BoardService extends BaseService<Board, Long>{
 			 *  @ EntityManager 직접 이용
 			 *	getEntityManager().merge(board)  
 			 ********************************************************************************************/
-			Board article = query().from(qBoard).where(qBoard.id.eq(board.getId())).fetchOne();
+			Board article = boardRepositorySupport.getArticle(board);
 			if(article.getCreatedBy().equals(UserDetailsHelper.getLoginUserDetails().getUsername())) {
-				// QueryDsl
-				/*update(qBoard).where(qBoard.id.eq(board.getId()))
-					.set(qBoard.title, board.getTitle())
-					.set(qBoard.content, board.getContent())
-					.set(qBoard.secret, board.getSecret()).execute();*/
 				article.setTitle(board.getTitle());
 				article.setContent(board.getContent());
 				article.setSecret(board.getSecret());
@@ -175,19 +131,9 @@ public class BoardService extends BaseService<Board, Long>{
 	@Transactional
 	public void deleteArticle(Long boardId) {
 		if(boardId != null) {
-			/********************************************************************************************
-			 * 	### Entity 삭제 ###
-			 * 	@ EntityManager 직접 이용
-			 *	getEntityManager().remove(board);
-			 *
-			 *	@ SpringData JPA
-			 *	repository.delete(board.getId());
-			 ********************************************************************************************/
-			Board article = query().from(qBoard).where(qBoard.id.eq(boardId)).fetchOne();
+			Board article = boardRepositorySupport.getArticle(boardId);
 			if(article.getCreatedBy().equals(UserDetailsHelper.getLoginUserDetails().getUsername()) || UserDetailsHelper.containsAuthority("ROLE_ADMIN", "ROLE_SYSTEM")) {
-				// QueryDsl
-				//delete(qBoard).where(qBoard.id.eq(boardId)).execute();
-				update(qBoard).set(qBoard.delYn, FxBootType.Deleted.Y).where(qBoard.id.eq(boardId)).execute();
+				boardRepositorySupport.delete(boardId);
 			}
 			
 		}
