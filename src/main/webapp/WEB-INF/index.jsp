@@ -1,2 +1,4 @@
 <%@ page contentType="text/html; charset=UTF-8" %>
-<jsp:forward page="/sample" />
+<%
+	response.sendRedirect(request.getContextPath() + "/sample");
+%>
