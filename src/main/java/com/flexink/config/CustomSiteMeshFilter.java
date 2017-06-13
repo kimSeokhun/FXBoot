@@ -9,14 +9,16 @@ public class CustomSiteMeshFilter extends ConfigurableSiteMeshFilter {
 	
 	@Override
 	protected void applyCustomConfiguration(SiteMeshFilterBuilder builder) {
+		
 		builder.addDecoratorPath("/*", "/WEB-INF/decorators/sample/decorator.jsp")
+			.addDecoratorPath("/sample**", "/WEB-INF/decorators/sample/decorator.jsp")
 			.addDecoratorPath("/security/login*", "/WEB-INF/decorators/sample/header.jsp")
 			.addDecoratorPath("/security/register*", "/WEB-INF/decorators/sample/header.jsp")
 			.addDecoratorPath("/error/**", "/WEB-INF/decorators/sample/header.jsp")
 			.addExcludedPath("/h2-console/**")
 			.addExcludedPath("/security/**")
 			.addExcludedPath("/popup/**")
-			.addExcludedPath("/files/**")
-			.addExcludedPath("/");
+			.addExcludedPath("/files/**");
+			//.addExcludedPath("/");
     }
 }
