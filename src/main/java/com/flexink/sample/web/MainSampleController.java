@@ -12,10 +12,7 @@ public class MainSampleController {
 
 	@GetMapping()
 	public String pagingSampleView(ParamsVo vo) {
-		System.out.println("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
-		System.out.println("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
-		System.out.println("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
-		System.out.println("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
+		
 		return "/sample/main";
 	}
 }

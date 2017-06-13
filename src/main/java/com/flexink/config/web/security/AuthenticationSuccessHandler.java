@@ -73,10 +73,6 @@ public class AuthenticationSuccessHandler
      * @메소드 내용	: 기본설정된 URL로 이동
      ********************************************************************/
     private void sendRedirectDefaultUrl(HttpServletRequest request,	HttpServletResponse response) throws IOException {
-    	System.out.println("#############################");
-    	System.out.println("#############################");
-    	System.out.println("#############################");
-    	System.out.println("#############################");
         redirectStrategy.sendRedirect(request, response, WebSecurityConfigureAdapter.DEFAULT_SUCCESS_URL);
     }
     
