@@ -1,6 +1,9 @@
 package com.flexink;
 
+import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.builder.SpringApplicationBuilder;
+import org.springframework.boot.web.support.SpringBootServletInitializer;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Bean;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
@@ -16,17 +19,17 @@ import com.flexink.security.service.ResourceMetaService;
 @EnableScheduling
 @EnableCaching
 @EnableJpaRepositories
-public class FXBootApplication {
+public class FXBootApplication extends SpringBootServletInitializer {
 	
 	/********************************************************************
 	 * @메소드명	: filterMetadataSource
 	 * @작성자	: KIMSEOKHOON
 	 * @메소드 내용	: Role Authorities 정보
 	 ********************************************************************/
-	/*@Bean
+	@Bean
 	public FilterMetadataSource filterMetadataSource() {
 		return new FilterMetadataSource();
-	}*/
+	}
 
 	/********************************************************************
 	 * @메소드명	: authoritiesCacheManager
@@ -46,5 +49,9 @@ public class FXBootApplication {
 	@Bean
 	public ResourceMetaService resourceMetaService() {
 		return new ResourceMetaService();
+	}
+
+	public static void main(String[] args) {
+		SpringApplication.run(FXBootApplication.class, args);
 	}
 }

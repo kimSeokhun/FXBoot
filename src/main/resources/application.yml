@@ -172,6 +172,7 @@ logging:
     com.flexink: debug
     jdbc.sqlonly: debug
     jdbc.resultsettable: debug
+  path: /logs/base/%d{yyyy-MM}/applicatoin.%d{yyyy-MM-dd}.log
     
 ---
 ###### 운영 환경 ######
